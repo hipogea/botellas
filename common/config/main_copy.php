@@ -1,0 +1,16 @@
+<?php 
+ return [ 'components' =>['db' =>['class'=>'yii\db\Connection',
+'dsn'=>'mysql:host=localhost;dbname=geus',
+'username'=>'root',
+'password'=>'',
+'charset'=>'utf8',
+'tablePrefix'=>'im18y_',
+],
+'mailer' =>['class'=>'common\components\Mailer',
+'viewPath'=>'@common/mail',
+'useFileTransport'=>true,
+],
+'settings' =>['class'=>'yii2mod\settings\components\Settings',
+],
+],
+];  ?>

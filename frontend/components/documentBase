@@ -1,0 +1,41 @@
+<?php
+namespace frontend\components;
+use common\models\Documents;
+use yii\db\ActiveRecord;
+
+
+class documentBase extends ActiveRecord implements documentBaseInterface {
+  private $_title;
+  private $_number; 
+  private $documento;
+  
+  public function __construct(Documents $documentox, $codigo){
+      $this->documento=$documentox::findOne($codigo);   
+      
+  }
+  
+  public function gettTitle(){
+      return $this->documento->desdocu;
+  }  
+  public function gettClase(){
+      return $this->documento->clase;
+  }
+  public function gettAbreviatura(){
+      return $this->documento->abreviatura;
+  }
+  public function gettPrefijo(){
+      return $this->documento->prefijo;
+  }
+  public function isComprobante(){
+      return ($this->documento->escomprobante=='1')?true:false;
+   }
+  public function gettTipo(){
+      return $this->documento->tipo;
+  }  
+    public function printDocument();
+    public function viewDocument();
+    public function gettCentro();    
+    public function gettEstado();
+    public function hasChilds();
+    public function getNumber();
+}

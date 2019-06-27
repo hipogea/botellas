@@ -1,0 +1,228 @@
+<?php
+
+namespace frontend\modules\report\controllers;
+
+use Yii;
+use frontend\modules\report\models\Reporte;
+use frontend\modules\report\models\Reportedetalle;
+use frontend\modules\report\models\ReportedetalleSearch;
+use frontend\modules\report\models\ReporteSearch;
+use common\controllers\base\baseController;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+
+/**
+ * MakeController implements the CRUD actions for Reporte model.
+ */
+class MakeController extends baseController
+{
+   public $nameSpaces = ['frontend\modules\report\models'];
+    
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Reporte models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+      // echo \common\helpers\FileHelper::getShortName("//hipogeA.xls");die();
+        
+        $searchModel = new ReporteSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single Reporte model.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Reporte model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Reporte();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Updates an existing Reporte model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+//var_dump($model->existsChildField('deslarga'));die();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
+      
+        /*Para el edit en caliente */
+        if ($this->is_editable())
+            return $this->editField();
+        
+        /*Para crear el detalle */
+        if(!$model->hasChilds())
+          $this->CreaDetalle($id);
+      
+        /*Para renderizar el grilla*/
+          $searchModel = new ReportedetalleSearch();
+       $dataProvider = $searchModel->searchByReporte(
+               Yii::$app->request->queryParams,
+               $model->id
+               
+               );
+
+        
+        
+        /*if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->codocu]);
+        }*/
+
+        return $this->render('update', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+        ]);
+        
+       
+    }
+
+    /**
+     * Deletes an existing Reporte model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+
+        return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Reporte model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Reporte the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Reporte::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('report.messages', 'The requested page does not exist.'));
+    }
+    
+    
+    public function CreaDetalle($id){
+		$modeloreporte=$this->findModel($id);
+		$nombremodelo=$modeloreporte->modelo;
+		$modeloareportar=new $nombremodelo;
+                $columnas=$modeloareportar->getTableSchema()->columns;
+		$contador=0; 
+              foreach($columnas as $nameField=>$oBCol){                    
+			if(!$modeloreporte->existsChildField($nameField) ){ //SI NO ESTA , ENTONCES INSERTARLO
+				 //echo "vale;".$nameField."<br>";
+                             Reportedetalle::firstOrCreateStatic(Reportedetalle::prepareValues($id,
+                                    $modeloreporte->codocu, 
+                                    $nameField,
+                                    $modeloareportar->getAttributeLabel($nameField), 
+                                    $oBCol->size, 
+                                    $oBCol->dbType));
+                                 $contador+=1;
+			}
+		} 
+        /* foreach( array_diff(
+               array_keys(get_object_vars ($modeloareportar)),
+               array_keys($modeloareportar->attributes)
+                            ) as $campoadicional){        
+           if(!$modeloreporte->existsChildField($campoadicional) ) { //SI NO ESTA , ENTONCES INSERTARLO
+                           Reportedetalle::firstOrCreateStatic(Reportedetalle::prepareValues($id,
+                                    $modeloreporte->codocu, 
+                                    $campoadicional,
+                                    $campoadicional, 
+                                    40, 
+                                    'varchar(40)'));
+               $contador+=1;
+           }
+       }*/
+        if($contador > 0 ){
+                yii::$app->session->setFlash('success',yii::t('report.messages','Se agregaron '.$contador.' registros hijos '));
+		}else {
+			yii::$app->session->setFlash('notice',yii::t('report.messages', 'No se agregaron registros hijos ya existen todos'));
+		}
+		$this->redirect(array('update','id'=>$modeloreporte->id));
+	}
+
+  public function actionUpdatedetallerepo($id){
+         $this->layout = "install";
+        //$modelReporte = $this->findModel($id);
+        $model = Reportedetalle::findOne($id);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
+            $this->closeModal('buscarvalor','detallerepoGrid');
+        } elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_detalle', [
+                        'model' => $model,
+                        'id' => $id,
+                            //'vendorsForCombo'=>  $vendorsForCombo,
+                            //'aditionalParams'=>$aditionalParams
+            ]);
+        } else {
+            
+            return $this->render('_detalle', [
+                        'model' => $model,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+        }
+  } 
+  
+  public function actionCreareporte(){
+      
+  }
+}
