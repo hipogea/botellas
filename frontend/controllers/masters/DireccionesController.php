@@ -1,18 +1,18 @@
 <?php
 
-namespace frontend\modules\bigitems\controllers;
+namespace frontend\controllers\masters;
 
 use Yii;
-use frontend\modules\bigitems\models\Activos;
-use frontend\modules\bigitems\models\ActivosSearch;
-use yii\web\Controller;
+use common\models\masters\Direcciones;
+use common\models\masters\DireccionesSearch;
+use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * ActivosController implements the CRUD actions for Activos model.
+ * DireccionesController implements the CRUD actions for Direcciones model.
  */
-class ActivosController extends Controller
+class DireccionesController extends baseController
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class ActivosController extends Controller
     }
 
     /**
-     * Lists all Activos models.
+     * Lists all Direcciones models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new ActivosSearch();
+        $searchModel = new DireccionesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class ActivosController extends Controller
     }
 
     /**
-     * Displays a single Activos model.
+     * Displays a single Direcciones model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,14 +58,13 @@ class ActivosController extends Controller
     }
 
     /**
-     * Creates a new Activos model.
+     * Creates a new Direcciones model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        //var_dump(yii::$app->getModule(Yii::$app->controller->module->id)::withPlaces());die();
-        $model = new Activos();
+        $model = new Direcciones();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -77,7 +76,7 @@ class ActivosController extends Controller
     }
 
     /**
-     * Updates an existing Activos model.
+     * Updates an existing Direcciones model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -85,7 +84,6 @@ class ActivosController extends Controller
      */
     public function actionUpdate($id)
     {
-        //\backend\components\Installer::createSettings();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -98,7 +96,7 @@ class ActivosController extends Controller
     }
 
     /**
-     * Deletes an existing Activos model.
+     * Deletes an existing Direcciones model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -112,18 +110,18 @@ class ActivosController extends Controller
     }
 
     /**
-     * Finds the Activos model based on its primary key value.
+     * Finds the Direcciones model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Activos the loaded model
+     * @return Direcciones the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Activos::findOne($id)) !== null) {
+        if (($model = Direcciones::findOne($id)) !== null) {
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        throw new NotFoundHttpException(Yii::t('base.names', 'The requested page does not exist.'));
     }
 }

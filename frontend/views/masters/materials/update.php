@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = Yii::t('base.names', 'Update');
 ?>
 <div class="maestrocompo-update">
-
+<div class="box box-success">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_formfirme', [
@@ -22,3 +22,4 @@ $this->params['breadcrumbs'][] = Yii::t('base.names', 'Update');
             ]) ?>
 
 </div>
+    </div>

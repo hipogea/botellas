@@ -101,7 +101,7 @@ class Settings extends Component
     public function get($section, $key, $default = null)
     {
         $items = $this->getSettingsConfig();
-
+ 
         if (isset($items[$section][$key])) {
             $this->setting = ArrayHelper::getValue($items[$section][$key], 'value');
             $type = ArrayHelper::getValue($items[$section][$key], 'type');
@@ -109,7 +109,7 @@ class Settings extends Component
         } else {
             $this->setting = $default;
         }
-
+        
         return $this->setting;
     }
 

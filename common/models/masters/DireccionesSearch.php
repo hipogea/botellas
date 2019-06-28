@@ -4,10 +4,10 @@ namespace common\models\masters;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\masters\Contactos;
+use common\models\masters\Direcciones;
 
 /**
- * CliproSearch represents the model behind the search form of `common\models\masters\Clipro`.
+ * DireccionesSearch represents the model behind the search form of `common\models\masters\Direcciones`.
  */
 class DireccionesSearch extends Direcciones
 {
@@ -17,7 +17,8 @@ class DireccionesSearch extends Direcciones
     public function rules()
     {
         return [
-            [['direc', 'nomlug', 'departamento', 'provincia', 'distrito', 'codpro'], 'safe'],
+            [['id'], 'integer'],
+            [['direc', 'nomlug', 'distrito', 'provincia', 'departamento', 'latitud', 'meridiano', 'codpro'], 'safe'],
         ];
     }
 
@@ -56,17 +57,23 @@ class DireccionesSearch extends Direcciones
         }
 
         // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+        ]);
+
         $query->andFilterWhere(['like', 'direc', $this->direc])
+            ->andFilterWhere(['like', 'nomlug', $this->nomlug])
             ->andFilterWhere(['like', 'distrito', $this->distrito])
             ->andFilterWhere(['like', 'provincia', $this->provincia])
-            ->andFilterWhere(['like', 'departamento',$this->departamento])
-            ->andFilterWhere(['like', 'codpro', $this->codpro])
-            ->andFilterWhere(['like', 'latitud', $this->latitud]);
+            ->andFilterWhere(['like', 'departamento', $this->departamento])
+            ->andFilterWhere(['like', 'latitud', $this->latitud])
+            ->andFilterWhere(['like', 'meridiano', $this->meridiano])
+            ->andFilterWhere(['like', 'codpro', $this->codpro]);
 
         return $dataProvider;
     }
     
-    public function searchByCodpro($codpro)
+     public function searchByCodpro($codpro)
     {
         $query = Direcciones::find();
 

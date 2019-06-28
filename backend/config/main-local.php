@@ -4,12 +4,12 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'M8fqBnJ-JGt_R28xToroDLuDkNvdZwdA',
+            'cookieValidationKey' => 'BFo6ihOKCboGGN4KDHM4_4ZDrY3CV3vj',
         ],
     ],
 ];
 
-if (!YII_ENV_TEST) {
+if (!YII_ENV_TEST) {    
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
@@ -19,7 +19,7 @@ if (!YII_ENV_TEST) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        'generators' => [ //here
+         'generators' => [ //here
             'crud' => [ // generator name
                 'class' => 'yii\gii\generators\crud\Generator', // generator class
                 'templates' => [ //setting for out templates

@@ -1,0 +1,17 @@
+<?php 
+ return [ 'name'=>'Nautilus',
+'components' =>['mailer' =>['class'=>'common\components\Mailer',
+'viewPath'=>'@common/mail',
+],
+'settings' =>['class'=>'yii2mod\settings\components\Settings',
+],
+'db' =>['class'=>'yii\db\Connection',
+'dsn'=>'mysql:host=localhost; port=3306;dbname=volatil',
+'username'=>'root',
+'password'=>'',
+'charset'=>'utf8',
+'tablePrefix'=>'e0pgk_',
+],
+],
+'language'=>'es_PE',
+];  ?>

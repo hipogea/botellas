@@ -26,8 +26,10 @@ if(!$this->existsTable(static::NAME_TABLE)) {
             'marca'=>$this->string(30)->append($this->collateColumn()),
             'modelo'=>$this->string(30)->append($this->collateColumn()),
             'numeroparte'=>$this->string(30)->append($this->collateColumn()),
-            'codigoitem'=>$this->string($this->specialSizeFor('codigoitem'))->append($this->collateColumn()), 
+            'codigoitem'=>$this->string($this->specialSizeFor('codigoitem'))->append($this->collateColumn()),
+            'direccion_id'=>$this->integer(11)->comment('CAMPO AUXILIAR, SE USA CUANDO SE TRABNAJA SIN LUGARES SOLO CON DIRECCIONES'), 
             'escontenedor'=>$this->char(1)->append($this->collateColumn())],
+
                 $this->collateTable());
         $this->createIndex('index_codigo', static::NAME_TABLE, 
                 'codigo', true);

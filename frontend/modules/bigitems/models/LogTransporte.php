@@ -103,4 +103,9 @@ class LogTransporte extends \common\models\base\modelBase
     {
         return new LogTransporteQuery(get_called_class());
     }
+    
+    /*devuelveun registro del ultimo movimieto del activo con id=id */
+    public static function lastMovement($id){
+        return static::instance()->find()->max('id')->where(['activo_id'=>$id])->one();
+    }
 }

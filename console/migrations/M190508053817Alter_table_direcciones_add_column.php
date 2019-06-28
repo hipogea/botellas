@@ -20,16 +20,23 @@ class M190508053817Alter_table_direcciones_add_column extends baseMigration
          * Agregando una columna a la tabla Direcciones
          * con su respectiva llave foranes
          */
-        if(is_null($this->getDb()->getSchema()
-                ->getTableSchema(static::NAME_TABlE_DIRECCIONES)->
+        $table=static::NAME_TABlE_DIRECCIONES;
+        if($this->existsTable($table)) {
+          if(is_null($this->getDb()->getSchema()
+                ->getTableSchema()->
                 getColumn('codpro'))){
-            $this->addColumn(static::NAME_TABlE_DIRECCIONES,
+            $this->addColumn($table,
                  'codpro', 
                  $this->char(6)->notNull()->append($this->collateColumn())
                  );
-         /*$this->addForeignKey('fk_direc_cliprod56', static::NAME_TABLE_DIRECCIONES,
-              'codpro', self::NAME_TABLE_CLIPRO,'codpro');*/
+            
+             $this->addForeignKey($this->generateNameFk($table), $table,
+              'codpro', static::NAME_TABLE_CLIPRO,'codpro');
+        
         }
+        
+        }
+        
          
     }
 
@@ -42,13 +49,15 @@ class M190508053817Alter_table_direcciones_add_column extends baseMigration
             'fk_direc_cliprod56',
             static::NAME_TABlE_DIRECCIONES
         );*/
- if(!is_null($this->getDb()->getSchema()
-                ->getTableSchema(static::NAME_TABlE_DIRECCIONES)->
+        if($this->existsTable($table)) {
+            if(!is_null($this->getDb()->getSchema()
+                ->getTableSchema($table)->
                 getColumn('codpro')))
-$this->dropColumn(
-            
-            static::NAME_TABlE_DIRECCIONES,'codpro'
+                $this->dropColumn(            
+            $table,'codpro'
         );
+        }
+ 
     }
 
     /*

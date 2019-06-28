@@ -59,6 +59,11 @@ use common\models\masters\Direcciones;
    ];
    echo grid::widget([
        'id'=>'holas',
+       'bootstrap'=>true, 
+       'bordered'=>false,
+       'hover'=>true,
+       'responsive'=>true,
+       'tableOptions' =>['class' => 'table table-striped table-dark'],
     'dataProvider'=> $probConversiones,
    // 'filterModel' => $searchModel,
     'columns' => $gridColumns,
@@ -67,7 +72,7 @@ use common\models\masters\Direcciones;
        ]);
    ?>
    
-   
+   <div class ="table table-striped table-dark "
    
    
 

@@ -13,13 +13,13 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
      public $jsOptions = ['position' => \yii\web\View::POS_HEAD];
     public $css = [
-        'css/app.css',
+       // 'css/app.css',
         'css/site.css',
         'css/personal.css',
         'css/font-awesome.min.css',       
         'css/ionicons.min.css',
         'css/akaunting-green.css',
-         'css/bootstrap.min.css',
+         //'css/bootstrap.min.css',
         'css/install.css',
          'css/select2.css',
     ];

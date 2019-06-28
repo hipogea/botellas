@@ -750,6 +750,10 @@ public static function createSettings(){
     
      h::settings()->set('general','sizecodigomaterial','/[1-9]{1}[0-9]{10}/');
     
+     ////colocar si quiere direcciones o no 
+     if(h::app()->hasModule('bigitems'))
+     h::settings()->set('bigitems','WithPlaces', '0');
+     
 }
 
 

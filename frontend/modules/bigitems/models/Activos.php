@@ -3,8 +3,9 @@
 namespace frontend\modules\bigitems\models;
 use frontend\modules\bigitems\models\LogTransporte;
 use frontend\modules\bigitems\interfaces\Transport;
+use frontend\modules\bigitems\traits\assetTrait;
 use Yii;
-use common\traits\baseTrait;
+//use common\traits\baseTrait;
 /**
  * This is the model class for table "{{%activos}}".
  *
@@ -37,8 +38,10 @@ use common\traits\baseTrait;
  */
 class Activos extends \common\models\base\modelBase implements Transport
 {
-  use baseTrait;
+  use assetTrait;
   const SCENARIO_MOVE='move';
+  public $booleanFields=['espadre','entransporte'];
+   public $dateorTimeFields=['fecha'];
     /**
      * {@inheritdoc}
      */
@@ -144,44 +147,140 @@ class Activos extends \common\models\base\modelBase implements Transport
         return new ActivosQuery(get_called_class());
     }
     
+   private static function campoRefActual(){
+      return ($this->withPlaces())?'direccion_id':'lugar_id'; 
+   }
+   private static function campoRefAnt(){
+      return ($this->withPlaces())?'direccion_anterior_id':'lugar_anterior_id';
+   } 
    
-    public function   moveAsset($codocu,$numdoc,$fecha){
-        
-        $this->setScenario(static::SCENARIO_MOVE);
-        $this->setAttributes([
-            'codocu'=>$codocu,
-            'numdoc'=>$numdoc,
-            'fecha'=>$fecha,
-        ]);
-        
-        $modelTransporte=New LogTransporte();
-        $modelTransporte->setAttributes(
-                [
-            'activo_id'=>$this->id,
-            'lugar_id'=>$numdoc,
-            'fecha'=>$fecha,
-                    ]
-                );
-        
-        
-        $this->save();
-        
+   
+    /*
+     * Fecha : En formato Y-m-d
+     */
+    public function   moveAsset($codocu,$numdoc,$fecha,$nuevolugar){ 
+      $modelLogTransporte=New LogTransporte();
+      //Asignado los valores de Activos a Log
+       $modelLogTransporte=$this->transferData($modelLogTransporte);
+       //Asignado los parametros a los campos de Activos
+       $this->prepareData($codocu,$numdoc,$fecha,$nuevolugar);     
+       //Iniciando la transaccion y grabando
+        $transa=$this->getDb()->beginTransaction();
+         if($this->save() && $modelTransporte->save()){
+             $transa->commit();
+             return true;        
+         }else{
+             $transa->rollBack();
+             print_r($this->getErrors());print_r($modelTransporte->getErrors());die();             
+            return false;         }        
     }
+    
+    
+    
     
     private function logTransport(){
         
     }
     
-    private function hasSetting(){
-        
-    }
-  
-     public function   revertMoveAsset($asset,$codocu,$numdoc){}
+   
+  /*sOLO DEBE BUSCAR EL UTIMO MOVIMIENTO*/
+     public function   revertMoveAsset(){
+         $modelLogTransporte=$this->lastMovement();
+         if(!is_null($modelLogTransporte) ){ //si es que ya se ha movido alguan vez
+             if($this->canRevert()){//Si es posible revertir
+                 //recoger los valores del Log
+                $this->recipeData($modelLogTransporte);
+                $transa=$this->getDb()->beginTransaction();
+                    if($this->save() && $modelTransporte->delete()>0){
+                         $transa->commit();
+                        return true;        
+                        }else{
+                            $transa->rollBack();
+                            print_r($this->getErrors());print_r($modelTransporte->getErrors());die();             
+                        return false;         }   
+                }else{
+                 
+             }
+             
+         }ELSE{
+             return true;
+         }
+     }
      
      
      /*Donde se ecnuentra*/
     public function whereIam(){
         
     }
+   
     
+    public function lastMovement(){
+        return LogTransporte::lastMovement($this->id);
+    }
+    
+    /*Transfiere datos de Activos al modelo LogTransporte */
+    private function transferData(&$modelLogTransporte){
+         $camporefactual=static::campoRefActual();
+         $camporefanterior=static::campoRefAnt();         
+          $campos=[
+            'activo_id'=>$this->id,
+            'numdoc'=>$this->numdoc,
+               'codocu'=>$this->codocu,  
+            'fecha'=>$this->fecha,
+              'codestado'=>$this->codestado            
+                    ];      
+        $campos[$camporefactual]=$this->getOldAttribute($this->{$camporefactual});
+         $campos[$camporefanterior]=$this->getOldAttribute($this->{$camporefant});
+       $modelLogTransporte->setAttributes($campos); 
+       return $modelLogTransporte;
+    }
+    
+    
+    /*Transfiere datos de  LogTransporte al modelo Activos */
+    private function recipeData($modelLogTransporte){
+         $camporefactual=static::campoRefActual();
+         $camporefanterior=static::campoRefAnt();         
+          $campos=[
+            'activo_id'=>$modelLogTransporte,
+            'numdoc'=>$modelLogTransporte->numdoc,
+               'codocu'=>$modelLogTransporte->codocu,  
+            'fecha'=>$modelLogTransporte->fecha,
+              'codestado'=>$modelLogTransporte->codestado            
+                    ];      
+        $campos[$camporefactual]=$modelLogTransporte->{$camporefactual};
+         $campos[$camporefanterior]=$modelLogTransporte->{$camporefant};
+       $this->setAttributes($campos); 
+       return $this;
+    }
+    
+    /*Prepara los campos log para transportar  */
+    private function prepareData($codocu,$numdoc,$fecha,$nuevolugar){
+         $camporefactual=static::campoRefActual();
+      $camporefanterior=static::campoRefAnt();
+        $campos[ $camporefactual]=$nuevolugar;
+         $campos[$camporefanterior]=$this->{$camporefactual}; //actualizar este campo
+         $this->setScenario(static::SCENARIO_MOVE);
+        $campos=[
+            'codocu'=>$codocu,
+            'numdoc'=>$numdoc,
+            'fecha'=>$fecha,
+        ];
+        $this->setAttributes($campos);
+    }
+    /*Esta funcion analiza si s epuede realizar el movimietn reversa*/
+    public function canRevert(){
+      return true;
+    }
+    
+    /*Esta funcion analiza si s epuede realizar el movimietn */
+    public function canMove(){
+      return true;
+    }
+    
+    public function changeOnTransport(){
+        $this->entransporte=true;
+    }
+     public function changeOffTransport(){
+        $this->entransporte=false;
+    }
 }

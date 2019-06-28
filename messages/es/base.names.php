@@ -21,6 +21,13 @@ return [
     'Active'=>'Activo',
     'Parameter in Document'=>'Parámetro en documento',
     'Parameter in Center'=>'Parámetro en Centro',
+    'Place Name'=>'Nombre lugar',
+    'District'=>'Distrito',
+    'Province'=>'Provincia',
+    'Departament'=>'Departamento',
+     'Latitude'=>'Latitud',
+         'Meridian'=>'Meridiano',
+     'Vendor Code'=>'Cod Empresa',
 ];
 
 ?>

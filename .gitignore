@@ -47,4 +47,8 @@ phpunit.phar
 *.txt
 *.ico
 *.yml
-
+*.gif
+*.jpeg
+*.yml
+*.html
+*.md

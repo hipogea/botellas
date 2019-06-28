@@ -1,7 +1,9 @@
 <?php
 
 namespace common\models\masters;
-
+use common\models\masters\Clipro;
+USE frontend\modules\bigitems\models\Lugares;
+use common\helpers\h;
 use Yii;
 
 /**
@@ -96,9 +98,18 @@ class Direcciones extends \common\models\base\modelBase
      */
     public function getLugares()
     {
-        return $this->hasMany(Lugares::className(), ['direcciones_id' => 'id']);
+       if(h::app()->hasModule('bigitems'))
+        return $this->hasMany(\frontend\modules\bigitems\models\Lugares::className(), ['direcciones_id' => 'id']);
+     return false;
+       }
+
+    public function getClipro()
+    {
+        return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
     }
 
+    
+    
     /**
      * {@inheritdoc}
      * @return DireccionesQuery the active query used by this AR class.
@@ -107,4 +118,26 @@ class Direcciones extends \common\models\base\modelBase
     {
         return new DireccionesQuery(get_called_class());
     }
+    
+    public function afterSave($insert, $changedAttributes) {
+        if($insert){
+            /*var_dump(h::app()->hasModule('bigitems'));
+             var_dump(h::settings()->has('bigitems','withPlaces'));
+          var_dump(h::settings()->get('bigitems','withPlaces')=='N');
+          var_dump(!is_null(Lugares::find()->one()));die();*/
+           if(h::app()->hasModule('bigitems') && 
+                 h::settings()->has('bigitems','withPlaces') &&
+               h::settings()->get('bigitems','withPlaces')=='N' &&
+                    is_null(Lugares::find()->one())
+                   ){
+                       Lugares::insertFirst();
+           }else{
+               
+           }
+        }
+       return parent::afterSave($insert, $changedAttributes);
+        
+    }
+    
+    
 }
