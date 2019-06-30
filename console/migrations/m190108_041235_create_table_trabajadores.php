@@ -36,8 +36,8 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
             'referencia'=>$this->string(30)->append($this->collateColumn()),
              ], $this->collateTable());
       
-         $this->createIndex(uniqid('k_codtra'), static::NAME_TABLE, 'dni',true);
-        $this->createIndex(uniqid('k_dni'), static::NAME_TABLE, 'dni');
+         $this->createIndex(uniqid('k_codigotra'), static::NAME_TABLE, 'codigotra',true);
+       // $this->createIndex(uniqid('k_dni'), static::NAME_TABLE, 'dni');
         $this->createIndex(uniqid('k_ap'), static::NAME_TABLE, 'ap');
         $this->createIndex(uniqid('k_am'), static::NAME_TABLE, 'am');
         $this->createIndex(uniqid('k_nombres'), static::NAME_TABLE, 'nombres');

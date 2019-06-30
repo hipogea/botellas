@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 USE yii\jui\DatePicker;
 use common\widgets\ActiveFormAdvanced;
+use kartik\widgets\ActiveForm as KartikForm;
 use common\helpers\HtmlA;
 use common\models\Oficios;
 use yii\helpers\ArrayHelper;
@@ -17,37 +18,20 @@ use kartik\select2\Select2;
 ?>
 
 <div class="box box-success">
- <?= Html::a('devolver valor', "#", ['onclick'=>'window.close();']) ?>
+    <br>
    
-  <div class="box-body">
-      <div class="row">
-        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <label for="name" class="control-label">Nombre</label>
-                <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-id-card-o"></i></div>
-                        <input class="form-control" placeholder="Ingrese Nombre" required="required" name="name" type="text" id="name">
-                </div>
+  <div class="box-body"> 
+      
     
-        </div>
-         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            <label for="sku" class="control-label">SKU</label>
-                <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-key"></i></div>
-                        <input class="form-control" placeholder="Ingrese SKU" required="required" name="sku" type="text" id="sku">
-                </div>
-    
-        </div>
-    </div>
-    
- <?php $form = ActiveFormAdvanced::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+ <?php  $form = KartikForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
       
      <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             
          <?= $form->field($model,'codigo', [
                                     'addon' => ['prepend' => 
-                                        ['content'=>'<i class="fa-arrow-circle-up"></i>']]
-                                            ]); ?>
+                                        ['content'=>'<i class="fa fa-key"></i>']]
+                                            ]);  ?>
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
@@ -70,6 +54,10 @@ use kartik\select2\Select2;
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         <?= $form->field($model, 'anofabricacion')->textInput(['maxlength' => true]) ?>
         </div>
+        
+         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        <?= $form->field($model, 'espadre')->checkbox() ?>
+        </div>
      </div>   
       
     
@@ -78,7 +66,7 @@ use kartik\select2\Select2;
         <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
-    <?php ActiveFormAdvanced::end(); ?>
+    <?php KartikForm::end(); ?>
    
     <?php $rutita=yii::$app->urlManager->createUrl(['trabajadores/updatedialog','id'=>'7003']);   ?>
   

@@ -61,7 +61,8 @@ class Trabajadores extends modelBase
     public function rules()
     {
         return [
-            [['ap', 'am', 'nombres', 'codpuesto', 'cumple'], 'required'],
+            [['ap', 'am', 'nombres', 'codpuesto', 'fecingreso','cumple'], 'required'],
+            [['cumple', 'fecingreso'], 'validateFechas'],
             [['codigotra'], 'string', 'max' => 6],
             [['ap', 'am', 'nombres'], 'string', 'max' => 40],
             [['dni', 'ppt', 'pasaporte', 'cumple', 'fecingreso'], 'string', 'max' => 10],
@@ -96,6 +97,32 @@ class Trabajadores extends modelBase
         ];
     }
 
+    
+    public function validateFechas($attribute, $params)
+    {
+       $this->toCarbon('fecingreso');
+       $this->toCarbon('cumple');
+       self::CarbonNow();
+       if($this->toCarbon('fecingreso')->greaterThan(self::CarbonNow())){
+            $this->addError('fecingreso', yii::t('base.errors','The field {campo} is greater than current day',
+                    ['campo'=>$this->getAttributeLabel('fecingreso')]));
+       }
+       if(self::CarbonNow()->diffInYears( $this->toCarbon('cumple')) < 18){
+            $this->addError('cumple', yii::t('base.errors','This person is very Young to be worker',
+                    ['campo'=>$this->getAttributeLabel('cumple')]));
+       }
+        /*if (!in_array($this->$attribute, ['USA', 'Indonesia'])) {*/
+           
+        /*}*/
+    }
  
+    
+    public function beforeSave($insert) {
+        if($insert)
+        $this->codigotra=$this->correlativo('codigotra');
+        
+       return parent::beforeSave($insert);
+    }
+    
 
 }

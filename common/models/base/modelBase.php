@@ -6,13 +6,14 @@ use Yii;
 use DateTime;
 use common\helpers\FileHelper;
 use  yii\web\ServerErrorHttpException;
-//use common\models\base\modelBaseTrait;
+use common\models\base\modelBaseTrait;
 use common\interfaces\documents\baseInterface;
 use common\models\Documentos;
 
 class modelBase extends \yii\db\ActiveRecord  implements baseInterface
 
 {
+   use modelBaseTrait;
     public $otherModels=[];
     const PREFIX_ADVANCED = '@';
     const PREFIX_BASIC = '/';
@@ -29,7 +30,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
     
     /* claves para transformar los formatos de fechas  
      **/
-    const _FORMATUSER='timeUSER'; //Formato (salida) para humanos, es decir formato para visulizarlos en los formularios y reportes
+    const _FORMATUSER='timeUser'; //Formato (salida) para humanos, es decir formato para visulizarlos en los formularios y reportes
     const _FORMATBD='timeBD';//formato para guardarlo en la base de datos como porje jemplo  Y-m-d H:i:s'
     
     
@@ -97,11 +98,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    
     public $booleanFields=[]; // array para almacenar los campos que se consideran booleanos 
     
-    public function getLinkFields(){
-       if(count($this->_linkFields)==0){
-           
-                    }
-   }
+   
    
    
   public function makeReport(){}
@@ -137,7 +134,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          
      // if(count($this->_linkFields)==0 || $force ){  
       $matriz=$this->fillRelations();//refresca la propiedad _obRelations
-         //var_dump(array_values($this->_obRelations));
+        //print_r(array_values($this->_obRelations));die();
       foreach($matriz as $classmodelo=>$info){ //recoore la porpiedad _obRelations
           
           if($onlyChilds===null){
@@ -285,7 +282,15 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                && is_object($this->{$object->name}()) //si devuelve un objeto
                && in_array(get_parent_class($this->{$object->name}()),['yii\db\ActiveQuery','yii\db\Query'])  //si el objeto es una clas actiev Query
                  ){
-                               $relaciones[$this->{$object->name}()->modelClass]=[$this->{$object->name}()->link,$this->{$object->name}()->multiple,$object->name]; //carga la propiedad  
+                             
+                   if(array_key_exists($this->{$object->name}()->modelClass, $relaciones)){
+                        $relaciones[$this->{$object->name}()->modelClass.'_xxx_'. uniqid()]=[$this->{$object->name}()->link,$this->{$object->name}()->multiple,$object->name]; //carga la propiedad  
+                   }else{
+                      $relaciones[$this->{$object->name}()->modelClass]=[$this->{$object->name}()->link,$this->{$object->name}()->multiple,$object->name]; //carga la propiedad  
+                    
+                   }
+                   
+                   
                    }
                        // unset($this->{$object->name}());//libera espacio 
                    } 
@@ -302,7 +307,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    * Funcion q ue devuelve el nombre de la clase
    * foranea asociada al @campo suministrado 
    * @campo : Nombre de campo suministrado 
-   * 
+   
    * Pregunta ¿Porqué hacer esta funcion y no usar 
    * las propiedades getXnamodel() de las funciones de las relaciones
    * hasOne()? 
@@ -311,7 +316,13 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    * en la propiedad _obRelations la clase modelo que corresponde
    */          
   public function obtenerForeignClass($nombrecampo){
-     return $this->fieldsLink(false)[$nombrecampo]; // fieldsLink(false) solo padres HasONE
+    
+     $nombrecalseforanea= $this->fieldsLink(false)[$nombrecampo];
+     if(strpos($nombrecalseforanea,'_xxx_')) 
+      return substr($nombrecalseforanea,0,strpos($nombrecalseforanea,'_xxx_'));
+      
+     return $nombrecalseforanea;
+   
   }      
    
 /*
@@ -321,7 +332,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
  public function obtenerForeignField($nombrecampo){
      $arreglo=$this->fillRelations();
      $nombrecampoforaneo=null;
-     $claseforanea=$this->obtenerForeignClass($nombrecampo);
+     $claseforanea=$this->fieldsLink(false)[$nombrecampo];
      foreach($arreglo[$claseforanea][0] as $campoforaneo=>$campolocal){
          if($nombrecampo===$campolocal){
              $nombrecampoforaneo=$campoforaneo;
@@ -376,9 +387,13 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             //yii::error(' FORMATTER->ASDATE(\'OBJETOCREADO\',\''.$this->getGeneralFormat($formatToShow,$typ,$show).'\')  ');
             
                      
-              $resultado=Yii::$app->formatter->asDate(
-                 DateTime::createFromFormat($this->getGeneralFormat($formatToAnalize,$typ,$show),$this->{$field}),
-                        'php:'.$this->getGeneralFormat($formatToShow,$typ,$show));
+          $resultado=Yii::$app->formatter->asDate(
+                                                    DateTime::createFromFormat(
+                                                                      $this->getGeneralFormat($formatToAnalize,$typ,$show),
+                                                                        $this->{$field}
+                                                                            ),
+                                                    'php:'.$this->getGeneralFormat($formatToShow,$typ,$show)
+                                                       );
                   //yii::error(' El resultado : '.$resultado);
              return $resultado;
         }
@@ -481,6 +496,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
               
         }
         
+        
+        /*Funcion que convierte un formato dado en 
+         * formatos válidos para el objeto DateTime de PHP
+         * o el parámetro $format de la funcion createfromFormat($format) de CARBON 
+         * 
+         */
         private function  getGeneralFormat($format,$type,$show){
             $expresion="/[^a-zA-Z0-9]/";   
             preg_match($expresion,$format,$valores);
@@ -489,10 +510,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             $ygriega='Y';
             $mes='m';
             $dia='d';
+            
+            /*Aca de acuerdo al formato aceptado del objeto DateTime de php */
             foreach(explode($delimiter,$format) as $clave=>$valor){
-                if($valor==='yy' && $show){$ygriega='y';}   
-                if($valor==='m' && $show){$mes='n';} 
-                if($valor==='d' && $show){$dia='j';}  
+                if($valor==='yy' && $show){$ygriega='y';} ///Año de dos digitos   
+                if($valor==='m' && $show){$mes='n';} // mes de un digito sin cero adelante
+                if($valor==='d' && $show){$dia='j';}  // dia de un digito sin cero adelante 
             }
             // $format= $this->gsetting($key, $type);
             if(strtolower(substr(trim($format),0,1))=='d'){
@@ -895,22 +918,35 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    /*.
     * 
     * Obtiene una instancia de Carbon pasando
-    * un campo del objeto
+    * un NOMBRE DE UN campo del objeto
      */
     public function toCarbon($attribute){
          if (!in_array($attribute, 
-                 $this->dateorTimeFields)){
-            throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['valor'=>$value,'campo'=>$key])); 
+                 array_keys($this->dateorTimeFields))){
+            throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['campo'=>$attribute])); 
          }
+         yii::$app->settings->invalidateCache();
           if($this->dateorTimeFields[$attribute]==static::_FDATE)
-              return Carbon::createFromFormat('Y-m-d',$this->getOldAttribute($attribute));
+              return Carbon::createFromFormat(
+                      $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FDATE),static::_FDATE,true),
+                      $this->{$attribute});
            if($this->dateorTimeFields[$attribute]==static::_FDATETIME)
-              return Carbon::createFromFormat('Y-m-d H:i:s',$this->getOldAttribute($attribute));
+              return Carbon::createFromFormat(
+                    $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FDATETIME),static::_FDATETIME,true),
+                      $this->{$attribute});
             if($this->dateorTimeFields[$attribute]==static::_FTIME)
-              return Carbon::createFromFormat('H:i:s',$this->getOldAttribute($attribute));
+              return Carbon::createFromFormat(
+                     $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_TIME),static::_TIME,true),
+                      $this->{$attribute});
                    
           
            }
+           
+      public static function CarbonNow(){
+          return Carbon::create();
+      }
+              
+           
   /*
    * Obtiene una coleccion de clases modelos (strings)
    * relacionados ; pero aguas arriba (hasOne) 

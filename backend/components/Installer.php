@@ -734,25 +734,27 @@ public static function createBasicRole(){
  */
 public static function createSettings(){
     //Expresion regular para validar RUC
-    h::settings()->set('general','formatoRUC','/[1-9]{1}[0-9]{10}/');
-    
+    h::settings()->set('general','formatoRUC','/[1-9]{1}[0-9]{10}/');    
     //Expresion regular para validar DNI
-    h::settings()->set('general','formatoDNI','/[0-9]{8}/');
-    
+    h::settings()->set('general','formatoDNI','/[0-9]{8}/');    
     //IGV
-    h::settings()->set('general','igv',0.18);
-    
+    h::settings()->set('general','igv',0.18);    
     //Moneda por Default
     h::settings()->set('general','moneda', h::session()->get('codmon'));
-    
-    
-    //longitud del campo de codigo de materiales 
-    
-     h::settings()->set('general','sizecodigomaterial','/[1-9]{1}[0-9]{10}/');
+    //longitud del campo de codigo de materiales     
+    // h::settings()->set('general','sizecodigomaterial','/[1-9]{1}[0-9]{10}/');
     
      ////colocar si quiere direcciones o no 
      if(h::app()->hasModule('bigitems'))
      h::settings()->set('bigitems','WithPlaces', '0');
+     
+     ///formatos de tiempo
+      h::settings()->set('timeUser','date', 'dd/MM/yyyy');
+      h::settings()->set('timeUser','datetime', 'dd/MM/yyyy hh:ii:ss');
+      h::settings()->set('timeUser','time', 'hh:ii:ss');
+      h::settings()->set('timeBD','date', 'Y-m-d');
+      h::settings()->set('timeBD','datetime', 'Y-m-d H:i:s');
+      h::settings()->set('timeBD','time', 'H:i:s');
      
 }
 

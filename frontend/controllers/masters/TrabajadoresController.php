@@ -8,6 +8,7 @@ use common\models\config\Configuracion;
 use common\models\masters\TrabajadoresSearch;
 
 use common\models\base\modelBase;
+use common\helpers\h;
 use yii\web\Controller;
 use yii\db\Migration;
 use yii\web\NotFoundHttpException;
@@ -39,9 +40,9 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     {      
-        
+       //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();
        // var_dump(Trabajadores::find()->where(['codigotra'=>'70w03'])->one());die();
-        
+        //echo \common\models\masters\Centros::find()->where(true)->one()->codcen;die();
         
         $modelo=new Configuracion();
       //print_r($modelo->rules());die();
@@ -129,7 +130,14 @@ if (Yii::$app->request->isAjax){
         //$model->gsetting('timeBD', 'date');
         //die();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+        }
+        
+        
+        
+        if ($model->load(h::request()->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->codigotra]);
         }
 
@@ -149,10 +157,19 @@ if (Yii::$app->request->isAjax){
     {
         $model = $this->findModel($id);
 
+         if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+        }
+        
+        
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codigotra]);
+           return $this->redirect(['view', 'id' => $model->codigotra]);
         }
 
+        
+        
         return $this->render('update', [
           'model'=>$model
         ]);

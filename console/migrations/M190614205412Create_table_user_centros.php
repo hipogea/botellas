@@ -34,6 +34,7 @@ if(!$this->existsTable(static::NAME_TABLE)) {
 
 public function safeDown()
     {
+        $table=static::NAME_TABLE;
        if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) !== null) {
             $this->dropTable(static::NAME_TABLE);
         }

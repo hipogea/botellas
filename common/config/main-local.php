@@ -13,5 +13,5 @@
 'tablePrefix'=>'e0pgk_',
 ],
 ],
-'language'=>'es_PE',
+'language'=>'es',
 ];  ?>

@@ -1,39 +1,17 @@
 <?php
 
 namespace frontend\modules\bigitems\models;
+use common\models\masters\Documentos;
+use common\helpers\h;
 use frontend\modules\bigitems\models\LogTransporte;
+use frontend\modules\bigitems\Module as BigItemsModule;
 use frontend\modules\bigitems\interfaces\Transport;
 use frontend\modules\bigitems\traits\assetTrait;
 use Yii;
 //use common\traits\baseTrait;
 /**
  * This is the model class for table "{{%activos}}".
- *
- * @property int $id
- * @property string $codigo
- * @property string $codigo2
- * @property string $codigo3
- * @property string $descripcion
- * @property string $marca
- * @property string $modelo
- * @property string $serie
- * @property string $anofabricacion
- * @property string $codigoitem
- * @property string $codigocontable
- * @property string $espadre
- * @property int $lugar_original_id
- * @property string $tipo
- * @property string $codarea
- * @property string $codestado
- * @property int $lugar_id
- * @property string $fecha
- * @property string $codocu
- * @property string $numdoc
- * @property string $entransporte
- *
- * @property Lugares $lugar
- * @property Lugares $lugarOriginal
- * @property Documentos $codocu0
+ 
  * @property Logtransporte[] $logtransportes
  */
 class Activos extends \common\models\base\modelBase implements Transport
@@ -41,7 +19,7 @@ class Activos extends \common\models\base\modelBase implements Transport
   use assetTrait;
   const SCENARIO_MOVE='move';
   public $booleanFields=['espadre','entransporte'];
-   public $dateorTimeFields=['fecha'];
+   public $dateorTimeFields=['fecha'=>self::_FDATE];
     /**
      * {@inheritdoc}
      */
@@ -56,17 +34,37 @@ class Activos extends \common\models\base\modelBase implements Transport
     public function rules()
     {
         return [
+             [['codigo', 'codigo2'], 'required'],
+            [['codigo'], 'match','pattern'=> self::maskCodePpal()],
+            [['codigo2'], 'match','pattern'=> self::maskCodeSec()],
+            [['codigo'], 'unique'],
+            [['codigo2'], 'unique'],
             [['lugar_original_id', 'lugar_id'], 'integer'],
-            [['codigo', 'codigo2', 'codigo3'], 'string', 'max' => 16],
+           // [['codigo', 'codigo2', 'codigo3'], 'string', 'max' => 16],
             [['descripcion', 'serie'], 'string', 'max' => 40],
+            [['descripcion'], 'required'],
             [['marca', 'modelo'], 'string', 'max' => 30],
-            [['anofabricacion'], 'string', 'max' => 4],
+            [['anofabricacion'], 'match', 'pattern' => '/[1-2]{1}[0-9]{3}/'],
             [['codigoitem'], 'string', 'max' => 14],
             [['codigocontable', 'espadre', 'numdoc'], 'string', 'max' => 20],
             [['tipo', 'codestado'], 'string', 'max' => 2],
             [['codarea', 'entransporte'], 'string', 'max' => 3],
             [['fecha'], 'string', 'max' => 10],
-            [['codocu'], 'string', 'max' => 1],
+            [['codocu'], 'string', 'max' => 3],
+            
+            /*scenario Move
+             *  */
+             [['fecha','codocu','numdoc'], 'required', 'on' =>['move']],
+            [['fecha','codocu','numdoc',
+              'entransporte','lugar_id',
+                'direccion_id','direccion_original_id,lugar_original_id'
+              ], 'safe', 'on' =>['move']
+             ],
+            /**/
+            
+            [['codocu'], 'string', 'max' => 3],
+            
+            
             [['codigo'], 'unique'],
             [['codigo2'], 'unique'],
             [['codigo3'], 'unique'],
@@ -81,28 +79,27 @@ class Activos extends \common\models\base\modelBase implements Transport
      */
     public function attributeLabels()
     {
-        return [
-            'id' => 'ID',
-            'codigo' => 'Codigo',
-            'codigo2' => 'Codigo2',
-            'codigo3' => 'Codigo3',
-            'descripcion' => 'Descripcion',
-            'marca' => 'Marca',
-            'modelo' => 'Modelo',
-            'serie' => 'Serie',
-            'anofabricacion' => 'Anofabricacion',
-            'codigoitem' => 'Codigoitem',
-            'codigocontable' => 'Codigocontable',
-            'espadre' => 'Espadre',
-            'lugar_original_id' => 'Lugar Original ID',
-            'tipo' => 'Tipo',
-            'codarea' => 'Codarea',
-            'codestado' => 'Codestado',
-            'lugar_id' => 'Lugar ID',
-            'fecha' => 'Fecha',
-            'codocu' => 'Codocu',
-            'numdoc' => 'Numdoc',
-            'entransporte' => 'Entransporte',
+        return [          
+            //'id' => 'ID',
+            'codigo' => yii::t('bigitems.labels','Code'),
+            'codigo2' => yii::t('bigitems.labels','Universal Code'),            
+            'descripcion' => yii::t('bigitems.labels','Description'),
+            'marca' => yii::t('bigitems.labels','Manufacturer'),
+            'modelo' => yii::t('bigitems.labels','Model'),
+            'serie' =>  yii::t('bigitems.labels','Serial'),
+            'anofabricacion' => yii::t('bigitems.labels','Year'),
+            'codigoitem' => yii::t('bigitems.labels','Item Code'),
+           // 'codigocontable' => 'Codigocontable',
+            'espadre' => yii::t('bigitems.labels','Has Childs'),
+            'lugar_original_id' => yii::t('bigitems.labels','Original Place'),
+            'tipo' => yii::t('bigitems.labels','Type'),
+            'codarea' => yii::t('bigitems.labels','Departament'),
+            'codestado' => yii::t('bigitems.labels','Status'),
+            'lugar_id' => yii::t('bigitems.labels','Place'),
+            'fecha' => yii::t('bigitems.labels','Date'),
+            'codocu' => yii::t('bigitems.labels','Document'),
+            'numdoc' => yii::t('bigitems.labels','Doc Number'),
+            'entransporte' => yii::t('bigitems.labels','In Transport'),
         ];
     }
 
@@ -125,7 +122,7 @@ class Activos extends \common\models\base\modelBase implements Transport
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodocu0()
+    public function getDocumento()
     {
         return $this->hasOne(Documentos::className(), ['codocu' => 'codocu']);
     }
@@ -165,6 +162,9 @@ class Activos extends \common\models\base\modelBase implements Transport
        //Asignado los parametros a los campos de Activos
        $this->prepareData($codocu,$numdoc,$fecha,$nuevolugar);     
        //Iniciando la transaccion y grabando
+       
+       //colocando el escenario
+       $this->setScenario(self::SCENARIO_MOVE);
         $transa=$this->getDb()->beginTransaction();
          if($this->save() && $modelTransporte->save()){
              $transa->commit();
@@ -282,5 +282,12 @@ class Activos extends \common\models\base\modelBase implements Transport
     }
      public function changeOffTransport(){
         $this->entransporte=false;
+    }
+    
+    public static function maskCodePpal(){
+        return h::settings()->get(BigItemsModule::getId(), BigItemsModule::MASCARA_CODIGO_PPAL);
+    }
+    public static function maskCodeSec(){
+       return h::settings()->get(BigItemsModule::getId(), BigItemsModule::MASCARA_CODIGO_SEC);
     }
 }

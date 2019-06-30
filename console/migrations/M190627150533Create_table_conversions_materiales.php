@@ -36,7 +36,7 @@ if(!$this->existsTable($table)) {
 }
 
 public function safeDown()
-    {
+    {    $table=static::NAME_TABLE;
        if($this->existsTable($table)) {
             $this->dropTable($table);
         }

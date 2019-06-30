@@ -142,8 +142,16 @@ return [
                 
                 'report.messages' => [
                                             'class' => 'yii\i18n\PhpMessageSource',
-                                            'basePath' => 'frontend\modules\report\messages',
-                                            ],   
+                                            'basePath' => '@frontend/modules/report/messages',
+                                            ],  
+                 'bigitems.labels' => [
+                                            'class' => 'yii\i18n\PhpMessageSource',
+                                            'basePath' => '@frontend/modules/bigitems/messages',
+                                            ],  
+                'bigitems.errors' => [
+                                            'class' => 'yii\i18n\PhpMessageSource',
+                                            'basePath' => 'frontend\modules\bigitems\messages',
+                                            ],
                 
                 'install.procedures' =>[
                                             'class' => 'yii\i18n\PhpMessageSource',

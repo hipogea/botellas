@@ -87,6 +87,11 @@ class h {
         return ['PEN'=>yii::t('base.names','NEW PERUVIAN SUN'),'USD'=>yii::t('base.names','AMERICAN DOLAR')];
     }
     
+    public static function getFormatShowDate(){
+      return h::settings()->get('dates','timeUser');
+    }
+    
+    
     public static function getCurrenciesNames(){
         return array_keys(static::getCurrencies());
     }
