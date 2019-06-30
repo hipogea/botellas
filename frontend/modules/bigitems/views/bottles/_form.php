@@ -1,9 +1,12 @@
 <?php
 
+use kartik\tabs\TabsX;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\widgets\selectwidget\selectWidget;
 use common\helpers\ComboHelper;
+use common\helpers\h;
+ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\bigitems\models\Docbotellas */
 /* @var $form yii\widgets\ActiveForm */
@@ -49,9 +52,7 @@ use common\helpers\ComboHelper;
         ]);  ?>
     </div>
     
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">     <?= $form->field($model, 'codcen')->textInput(['maxlength' => true]) ?>
-
- </div>  
+     
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     
     <?= $form->field($model, 'codenvio')->
@@ -63,9 +64,33 @@ use common\helpers\ComboHelper;
                     ) ?>
        
 </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">     <?= $form->field($model, 'fecdocu')->textInput(['maxlength' => true]) ?>
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+      <?= $form->field($model, 'fecdocu')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                       'format' => h::getFormatShowDate(),
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'1980:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control']
+                            ]) ?>
 
- </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">     <?= $form->field($model, 'fectran')->textInput(['maxlength' => true]) ?>
+ </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
+    <?= $form->field($model, 'fectran')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                       'format' => h::getFormatShowDate(),
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'1980:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control']
+                            ]) ?> <?php /*h::settings()->invalidateCache();echo h::getFormatShowDate() */ ?>
 
  </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
     <?php 
@@ -79,9 +104,20 @@ use common\helpers\ComboHelper;
             //'foreignskeys'=>[1,2,3],
         ]);  ?>
  </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">     <?= $form->field($model, 'codven')->textInput(['maxlength' => true]) ?>
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+     <?php 
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codven',
+        'ordenCampo'=>2
+            //'foreignskeys'=>[1,2,3],
+        ]);  ?>
 
- </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">     <?= $form->field($model, 'codplaca')->textInput(['maxlength' => true]) ?>
+ </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+    <?= $form->field($model, 'codplaca')->textInput(['maxlength' => true]) ?>
 
  </div> 
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
@@ -121,3 +157,26 @@ use common\helpers\ComboHelper;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+  
+
+
+
+ <?php  
+ //var_dump($this->context);die();
+ echo TabsX::widget([
+    'position' => TabsX::POS_ABOVE,
+    'align' => TabsX::ALIGN_LEFT,
+    'items' => [
+        [
+            'label' => yii::t('base.names','Items'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('detalle',[ 'form' => $form, 'modelDetail' => $modelDetail,'orden'=>$orden]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => true
+        ],
+       
+    ],
+]);  
+    
+    ?> 
+    

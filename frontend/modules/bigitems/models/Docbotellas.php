@@ -2,6 +2,7 @@
 
 namespace frontend\modules\bigitems\models;
 use common\models\masters\Direcciones;
+//use common\models\masters\Centros;
 use common\models\masters\Direcciones as DireccionesB;
 use common\models\masters\Trabajadores;
 use common\models\masters\Centros;
@@ -36,11 +37,24 @@ use Yii;
  * @property Trabajadores $codven0
  * @property Centros $codcen0
  */
-class Docbotellas extends \common\models\base\modelBase
+class Docbotellas extends \common\models\base\DocumentBase
 {
+   
+    public $prefijo='79';
     /**
      * {@inheritdoc}
      */
+   
+    public function init(){
+        $this->fieldStatus='codestado';
+        $this->fieldCodCenter='codcen';
+       parent::init();
+       
+    }
+    
+    
+    
+    
     public static function tableName()
     {
         return '{{%bigitems_docbotellas}}';
@@ -52,7 +66,9 @@ class Docbotellas extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codestado', 'codpro', 'essalida', 'codcen', 'descripcion', 'codenvio', 'fecdocu', 'ptopartida_id', 'ptollegada_id'], 'required'],
+            [[ 'codpro', 'essalida', 
+                //'codcen','codestado',
+                'descripcion', 'codenvio', 'fecdocu', 'ptopartida_id', 'ptollegada_id'], 'required'],
             [['ptopartida_id', 'ptollegada_id'], 'integer'],
             [['comentario'], 'string'],
             [['codestado', 'codenvio'], 'string', 'max' => 2],
@@ -158,4 +174,19 @@ class Docbotellas extends \common\models\base\modelBase
     {
         return new DocbotellasQuery(get_called_class());
     }
+    
+    public function beforeSave($insert) {
+        if($insert){
+            $this->resolveCentros();$this->resolveEstados();
+           $this->numero= $this->correlativo('numero',8);
+        }
+        return parent::beforeSave($insert);
+    }
+    
+    
+   private function resolveEstados(){
+        if(empty($this->{$this->fieldStatus})){
+           $this->{$this->fieldStatus}='10';
+        }
+   }
 }

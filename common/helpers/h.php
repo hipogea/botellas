@@ -88,7 +88,7 @@ class h {
     }
     
     public static function getFormatShowDate(){
-      return h::settings()->get('dates','timeUser');
+      return h::settings()->get('timeUser','date');
     }
     
     

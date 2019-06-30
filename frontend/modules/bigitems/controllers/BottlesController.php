@@ -5,6 +5,7 @@ namespace frontend\modules\bigitems\controllers;
 use Yii;
 use frontend\modules\bigitems\models\Docbotellas;
 use frontend\modules\bigitems\models\DocbotellasSearch;
+use frontend\modules\bigitems\models\Detdocbotellas;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -66,8 +67,51 @@ class BottlesController extends baseController
     {
         $model = new Docbotellas();
 
+        
+          $items=[new Detdocbotellas()];
+         if(Yii::$app->request->isPost){
+                $count = count(Yii::$app->request->post('Detdocbotellas', []));
+                $items = [new Detdocbotellas()];
+                for($i = 1; $i < $count; $i++) {
+                $items[] = new Detdocbotellas();
+          }
+            /* foreach(Yii::$app->request->post('Parametrosdocu') as $index=>$valor){
+              $items[]= new \common\models\masters\Parametrosdocu();
+          }*/
+         // var_dump(Yii::$app->request->post('Documentos'));echo "<br><br>";
+         //var_dump(Yii::$app->request->post('Parametrosdocu',[]));
+          /*var_dump(Model::loadMultiple($items, Yii::$app->request->post('Parametrosdocu'),''));
+          var_dump(Model::validateMultiple($items));
+          var_dump($model->load(Yii::$app->request->post('Documentos'),''));
+          var_dump($model->validate());
+          die();*/
+          
+         if (
+        Model::loadMultiple($items, Yii::$app->request->post('Detdocbotellas'),'') && 
+        Model::validateMultiple($items) && $model->load(Yii::$app->request->post('Docbotellas'),'') &&
+        $model->validate()){
+        $model->save();foreach($items as $item){
+            $item->save();
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }else{
+            print_r($model->attributes
+                    );die();
         }
 
         return $this->render('create', [

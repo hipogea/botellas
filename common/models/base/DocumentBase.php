@@ -5,6 +5,7 @@
 namespace common\models\base;
 //use common\interfaces\DocumentInterface;
 use common\models\base\Estado;
+use common\models\masters\Centros;
 use common\models\config\Config;
 use common\models\base\modelBase as ModeloGeneral ;
 use common\interfaces\documents\documentBaseInterface as docuInterface;
@@ -28,10 +29,10 @@ class DocumentBase extends ModeloGeneral implements docuInterface
  
    
  public function init(){
-     if(!$this->hasAttribute($this->nameFieldDocument()))
-     throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{documento}\' is empty,  in class \'{clase}\' ',['documento'=>$this->nameFieldDocument(),'clase'=>self::class]));
-      if(!$this->hasAttribute($this->nameFieldStatus()))
-     throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{estado}\' is empty,  in class \'{clase}\' ',['estado'=>$this->nameFieldStatus(),'clase'=>self::class]));
+     //if(!$this->hasAttribute($this->nameFieldDocument()))
+     //throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{documento}\' is empty,  in class \'{clase}\' ',['documento'=>$this->nameFieldDocument(),'clase'=>self::class]));
+      //if(!$this->hasAttribute($this->nameFieldStatus()))
+     //throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{estado}\' is empty,  in class \'{clase}\' ',['estado'=>$this->nameFieldStatus(),'clase'=>self::class]));
       return parent::init();
 }
  
@@ -384,5 +385,14 @@ class DocumentBase extends ModeloGeneral implements docuInterface
      public function hasChangedDocument(){
          return $this->hasChanged() or $this->hasChangedChilds();
      } 
+     
+     
+      /*CUando se omite el centro*/
+    public function resolveCentros(){
+        if(empty($this->{$this->fieldCodCenter})){
+            $this->{$this->fieldCodCenter}= Centros::find()->where(true)->one()->codcen;
+           // Centros::find()->where(true)->one()->codcen;
+        }
+    }
 }
    
