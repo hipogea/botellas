@@ -27,18 +27,7 @@ return [
 		],
 		'tableName' => '{{%attachments}}' // Optional, default to 'attach_file'
 	],
-        'people' => [
-            'class' => 'frontend\modules\people\Module',
-        ],
-	'bigitems' => [
-            'class' => 'frontend\modules\bigitems\Module',
-        ],
-        'materials' => [
-            'class' => 'frontend\modules\materials\Module',
-        ],
-         'report' => [
-            'class' => 'frontend\modules\report\Module',
-        ],
+        
 	
 ],
     

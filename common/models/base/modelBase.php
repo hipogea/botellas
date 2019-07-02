@@ -375,22 +375,17 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          *   dd-mm-yyyy
          *   dd.mm.yyyy ...  etc   * 
          */
-        private function setFormatTimeFromSettings($field,$key,$typ,$show){
+        private function setFormatTimeFromSettings($field,/*$key,$typ*,*/$show,$literal=false){
+            $key=($show)?static::_FORMATUSER:static::_FORMATBD;
+            $typ=$this->dateorTimeFields[$field];
             $formatToShow= $this->gsetting($key, $typ);
              $formatToAnalize= $this->gsetting($this->reverseKey($key), $typ); 
-             //yii::error('valor del campo  '.$this->{$field});
-             //yii::error('format to analize '.$formatToAnalize);
-             //yii::error('format to show '.$formatToShow);
              $objetof=DateTime::createFromFormat($this->getGeneralFormat($formatToAnalize,$typ,$show),$this->{$field});
-             //yii::error(' DateTime::creaFrOM(\''.$this->getGeneralFormat($formatToAnalize,$typ,$show).'\',\''.$typ.'\',\''.$this->{$field}.'\' )  ');
-             //yii::error('El objecto creado por DateTIME : '. serialize($objetof));
-            //yii::error(' FORMATTER->ASDATE(\'OBJETOCREADO\',\''.$this->getGeneralFormat($formatToShow,$typ,$show).'\')  ');
-            
-                     
+                  
           $resultado=Yii::$app->formatter->asDate(
                                                     DateTime::createFromFormat(
                                                                       $this->getGeneralFormat($formatToAnalize,$typ,$show),
-                                                                        $this->{$field}
+                                                                       (!$literal)?$this->{$field}:$field
                                                                             ),
                                                     'php:'.$this->getGeneralFormat($formatToShow,$typ,$show)
                                                        );
@@ -414,7 +409,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
           // $oldformat=Yii::$app->formatter->dateFormat;
             foreach($this->dateorTimeFields as $field=>$typ){
                 //$this->{$field}=$this->setFormatTimeFromSettings($field,$key, $typ);
-                $this->{$field}=$this->setFormatTimeFromSettings($field,$key, $typ,$show);
+                $this->{$field}=$this->setFormatTimeFromSettings($field,/*$key*, $typ,*/$show);
             }
             //Dejamos el objeto como estaba antes 
             //Yii::$app->formatter->dateFormat=$oldformat;
@@ -502,7 +497,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          * o el parámetro $format de la funcion createfromFormat($format) de CARBON 
          * 
          */
-        private function  getGeneralFormat($format,$type,$show){
+        public function  getGeneralFormat($format,$type,$show){
             $expresion="/[^a-zA-Z0-9]/";   
             preg_match($expresion,$format,$valores);
             $delimiter=$valores[0]; 
@@ -529,7 +524,10 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                 if($type==static::_FTIME)return 'H:i:s';
             }
             
-             
+            /*sI SE TRATARA DE UN TIME */
+             if(strtolower(substr(trim($format),0,1))=='h' ){               
+                if($type==static::_FTIME)return 'H:i:s';
+            }
            
         }
         
@@ -936,7 +934,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                       $this->{$attribute});
             if($this->dateorTimeFields[$attribute]==static::_FTIME)
               return Carbon::createFromFormat(
-                     $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_TIME),static::_TIME,true),
+                     $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FTIME),static::_FTIME,true),
                       $this->{$attribute});
                    
           
@@ -987,7 +985,69 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       
   }
   
-}
+  /*FUNCION ABREVIADA PARA USAR LA FUNCION 
+   *  setFormatTimeFromSettings() 
+   * coN DENOMIANCION MAS CORTA 
+   * EN RELAIDA HACE LLOO MISMO
+   * @attribute: NOmbre del campo date
+   * @show: boolean    true: Saca el formato de fecha pra el usuario  dd/mm/yy o dd.m/y  ó como lo hayan configurado
+   *                   false:saca el formato para la BD
+   * 
+   */
+  public function swichtDate($attribute,$show){
+      
+      return $this->setFormatTimeFromSettings($attribute,$show);
+  }
+  
+  /*
+   * Funcion que abre el borde de una fecha , esto 
+   * para introducirla en la sentencia  between de SQL 
+   * @attribute: NOmbre del campo fecha 
+   * @up: Boolean    true: añade (+) , false  quita (-)
+   * Asi pòr ejemplo : (+) 23/05/2019  => 24/05/2019  agrega un dia
+   *                   (-)  15/04/2018   =>16/04/2018  disminuye un dia
+   *                   (+) 23/05/2019 15:45:23 => 23/05/2019 15:45:24 AGREGA UN MILISEGUNDO
+   *                   (+) 15:45:23 =>  15:45:24 AGREGA UN MILISEGUNDO
+   * @show : Boolean   true:  en formato para ususrio yy/mm/dd  false en forato para DB  Y-m-d       
+   *  return : STRING una cadea foramteada de fecha en formato  Y-m-d
+   *   */
+  public function openBorder($attribute,$up=true){
+      $type=$this->dateorTimeFields[$attribute];
+      if($type==static::_FDATE)
+          return($up)?$this->toCarbon($attribute)->addDay()->toDateString():
+                      $this->toCarbon($attribute)->subDay()->toDateString();
+          
+      if($type==static::_FDATETIME or $type==static::_FTIME)
+        return($up)?$this->toCarbon($attribute)->addSecond()->toDateTimeString():
+                      $this->toCarbon($attribute)->subSecond()->toDateTimeString();
+         
+      if($type==static::_FTIME)
+        return($up)?$this->toCarbon($attribute)->addSecond()->toTimeString():
+                      $this->toCarbon($attribute)->subSecond()->toTimeString();
+         }
+      
+  
+         
+ /*
+  * Convierte una cadena de fecha en fomartto
+  * db/ o user segun el valor de Show
+  */
+  public function formatDate($stringDate,$show){
+      return $this->setFormatTimeFromSettings($stringDate,$show,true);
+  }
+  
+  
+  }
+  
+  /*public function  addDay($fieldDate){
+      return $this->toCarbon($fieldDate)->addDay();
+  }
+  public function  addDay($fieldDate){
+      return $this->toCarbon($fieldDate)->addDay();
+  }
+  */
+  
+
               
    
 

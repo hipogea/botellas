@@ -5,7 +5,7 @@ namespace frontend\modules\bigitems\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use frontend\modules\bigitems\models\Docbotellas;
-
+use common\models\masters\Clipro;
 /**
  * DocbotellasSearch represents the model behind the search form of `frontend\modules\bigitems\models\Docbotellas`.
  */
@@ -18,7 +18,7 @@ class DocbotellasSearch extends Docbotellas
     {
         return [
             [['id', 'ptopartida_id', 'ptollegada_id'], 'integer'],
-            [['codestado', 'codpro', 'numero', 'codcen', 'descripcion', 'codenvio', 'fecdocu', 'fectran', 'codtra', 'codven', 'codplaca', 'comentario', 'essalida'], 'safe'],
+            [['codestado', 'codpro','fectran1', 'numero', 'codcen', 'descripcion', 'codenvio', 'fecdocu', 'fectran', 'codtra', 'codven', 'codplaca', 'comentario', 'essalida'], 'safe'],
         ];
     }
 
@@ -41,13 +41,17 @@ class DocbotellasSearch extends Docbotellas
     public function search($params)
     {
         $query = Docbotellas::find();
-
+  /*$query = Docbotellas::find()->
+                innerJoin(Clipro::tableName(),
+                        Clipro::tableName().'.codpro='.$this->tableName().'.codpro'
+                        );
+  */
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+//var_dump($dataProvider->models);die();
         $this->load($params);
 
         if (!$this->validate()) {
@@ -63,8 +67,18 @@ class DocbotellasSearch extends Docbotellas
             'ptollegada_id' => $this->ptollegada_id,
         ]);
 
-        $query->andFilterWhere(['like', 'codestado', $this->codestado])
-            ->andFilterWhere(['like', 'codpro', $this->codpro])
+        if(!empty($this->fectran) && !empty($this->fectran1)){
+         $query->andFilterWhere([
+             'between',
+             'fectran',
+             $this->openBorder('fectran',false),
+             $this->openBorder('fectran1',true)
+                        ]);   
+        }
+        
+        
+        $query->/*andFilterWhere(['between', 'fectran', $this->setFormatTimeFromSettings('fectran',false),$this->setFormatTimeFromSettings('fectran1',false)])
+            ->*/andFilterWhere(['like', 'codpro', $this->codpro])
             ->andFilterWhere(['like', 'numero', $this->numero])
             ->andFilterWhere(['like', 'codcen', $this->codcen])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion])
@@ -74,8 +88,7 @@ class DocbotellasSearch extends Docbotellas
             ->andFilterWhere(['like', 'codtra', $this->codtra])
             ->andFilterWhere(['like', 'codven', $this->codven])
             ->andFilterWhere(['like', 'codplaca', $this->codplaca])
-            ->andFilterWhere(['like', 'comentario', $this->comentario])
-            ->andFilterWhere(['like', 'essalida', $this->essalida]);
+            ->andFilterWhere(['like', 'comentario', $this->comentario]);
 
         return $dataProvider;
     }

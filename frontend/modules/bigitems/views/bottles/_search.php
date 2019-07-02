@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+   
 
     <?= $form->field($model, 'codestado') ?>
 
@@ -27,6 +27,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'numero') ?>
 
     <?= $form->field($model, 'codcen') ?>
+    
+    <?= $form->field($model, 'fectran') ?>
+      <?= $form->field($model, 'fectran1') ?>
 
     <?php // echo $form->field($model, 'descripcion') ?>
 

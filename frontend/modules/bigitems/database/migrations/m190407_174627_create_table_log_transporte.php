@@ -27,12 +27,16 @@ if(!$this->existsTable(static::NAME_TABLE)) {
      /*campos reflejo de la tabla activos*/
      'codestado'=>$this->char(2)->append($this->collateColumn()),
      'lugar_id'=>$this->integer(11), //identiifacion del lugar
-     'fecha'=>$this->char(10)->append($this->collateColumn()),//
+     'lugar_original_id'=>$this->integer(11), //identiifacion del lugar
+     'direccion_id'=>$this->integer(11), //identiifacion del lugar
+     'direccion_original_id'=>$this->integer(11), //identiifacion del lugar
+      'fecha'=>$this->char(10)->append($this->collateColumn()),//
      'fechadoc'=>$this->char(10)->append($this->collateColumn()),//
-     'codocu'=>$this->char()->append($this->collateColumn()),
+     'codocu'=>$this->char(3)->append($this->collateColumn()),
      'numdoc'=>$this->string(20)->append($this->collateColumn()),
      /*Fin de campos reflejos de la tabla activos */
      'lugar_anterior_id'=>$this->integer(11), //lugar inmediato anterior
+      'direccion_anterior_id'=>$this->integer(11), //lugar inmediato anterior
      'time'=>$this->char(18)->append($this->collateColumn()),
      'user_id'=>$this->integer(11)],
                 $this->collateTable());

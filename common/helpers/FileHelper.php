@@ -16,6 +16,7 @@ class FileHelper extends FileHelperOriginal {
     public static function getModels($withExt=False){
         //$archivos=self::findFiles(yii::getAlias('@common/models')); 
         $archivox=[];
+        //PRINT_R(self::getPathModules());DIE();
         $archivos=array_merge(
                     self::findFiles(yii::getAlias('@common/models')),
                     self::findFiles(yii::getAlias('@backend/models')),
@@ -51,6 +52,7 @@ class FileHelper extends FileHelperOriginal {
     public static function getPathModules(){
        $ff=[];
         $caminos=array_values(yii::$app->getModules());
+        //PRINT_R(ARRAY_VALUES(yii::$app->getModules()));DIE();
         foreach($caminos as $calve=>$valor){
           if(is_array($valor)){
               $ff[]=self::sanitizePath($valor['class']);

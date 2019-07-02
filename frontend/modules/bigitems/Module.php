@@ -56,9 +56,9 @@ class Module extends \yii\base\Module
     
     //Deuelve si se esta manejando el transporte conlugares
     // o solo con direcciones 
-    public  function withPlaces(){
+    public  static function withPlaces(){
        // var_dump(yii::$app->settings->has('bigitems', 'withPlaces'));die();
-        return (h::settings()->get($this->id, static::SE_USA_LUGARES)=='N')?false:true;
+        return (h::settings()->get(static::getId(), static::SE_USA_LUGARES)=='N')?false:true;
     }
     
     
@@ -77,7 +77,7 @@ class Module extends \yii\base\Module
     private function resolvePlaces(){
      
          
-        if(!$this->withPlaces() && $this->emptyPlaces()){
+        if(!$this::withPlaces() && $this->emptyPlaces()){
           
          Lugares::insertFirst();  
        }
@@ -96,7 +96,7 @@ class Module extends \yii\base\Module
         }
     }
    
-   public  function getId(){
+   public static function getId(){
        /*Mejorar eta situacion debe de haber algna manera de sacar el ID del modulo*/
        return 'bigitems';
    } 

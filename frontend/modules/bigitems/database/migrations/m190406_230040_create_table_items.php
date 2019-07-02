@@ -41,6 +41,8 @@ if(!$this->existsTable(static::NAME_TABLE)) {
      /*campos que cambian conel tiempo*/ 
     'codestado'=>$this->char(2)->append($this->collateColumn()),
      'lugar_id'=>$this->integer(11), //identiifacion del lugar
+      'direccion_id'=>$this->integer(11), //identiifacion del lugar
+     'direccion_original_id'=>$this->integer(11), //identiifacion del lugar
      'fecha'=>$this->char(10)->append($this->collateColumn()),//
      'codocu'=>$this->char()->append($this->collateColumn()),
      'numdoc'=>$this->string(20)->append($this->collateColumn()),

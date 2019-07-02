@@ -14,6 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box box-success">
     <h4><?= Html::encode($this->title) ?></h4>
     <?php Pjax::begin(); ?>
+    <?= $this->render('_search', ['model' => $searchModel]); ?>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -31,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'codpro',
             'numero',
             'codcen',
+            'fectran',
+            //'despro',
             //'descripcion',
             //'codenvio',
             //'fecdocu',

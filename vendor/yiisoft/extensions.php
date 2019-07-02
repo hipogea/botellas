@@ -481,4 +481,15 @@ return array (
       '@kartik/export' => $vendorDir . '/kartik-v/yii2-export/src',
     ),
   ),
+  'unclead/yii2-multiple-input' => 
+  array (
+    'name' => 'unclead/yii2-multiple-input',
+    'version' => '2.21.5.0',
+    'alias' => 
+    array (
+      '@unclead/multipleinput/examples' => $vendorDir . '/unclead/yii2-multiple-input/examples',
+      '@unclead/multipleinput' => $vendorDir . '/unclead/yii2-multiple-input/src',
+      '@unclead/multipleinput/tests' => $vendorDir . '/unclead/yii2-multiple-input/tests',
+    ),
+  ),
 );

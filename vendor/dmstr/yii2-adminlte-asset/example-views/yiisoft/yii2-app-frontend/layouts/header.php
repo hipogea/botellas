@@ -24,8 +24,9 @@ use common\helpers\h;
             <ul class="nav navbar-nav">
 
               
-             
-              
+             <?php require('notificaciones.php');   ?>
+             <?php require('tasks.php');   ?>
+              <?php require('historial.php');   ?>
                 <!-- User Account: style can be found in dropdown.less -->
 
                 <li class="dropdown user user-menu">

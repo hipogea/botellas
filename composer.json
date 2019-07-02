@@ -41,7 +41,8 @@
         "bower-asset/jquery-growl": "^1.3",
         "loveorigami/yii2-notification-wrapper": "*",
         "shifrin/yii2-noty": "^1.0",
-        "kartik-v/yii2-export": "*"
+        "kartik-v/yii2-export": "*",
+        "unclead/yii2-multiple-input": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

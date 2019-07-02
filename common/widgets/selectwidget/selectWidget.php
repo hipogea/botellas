@@ -15,6 +15,8 @@ class selectWidget extends \yii\base\Widget
     public $model;//EL modelo
     public $form; //El active FOrm 
     public $campo;//el nombre del campo modelo
+    public $tabular=false; //Cuando se trata de renderizar en una grilla o tabala 
+  
    // public $foreignskeys=[2,3,4];//Orden de los campos del modelo foraneo 
     //que s evan a amostrar o renderizar en el forumlario eta propida debe de especficarse al momento de usar el widget 
     private $_foreignClass; //nombe de la clase foranea
@@ -26,13 +28,13 @@ class selectWidget extends \yii\base\Widget
     
     public function init()
     {
-        
+       
         parent::init();
         // echo get_class($this->model);die();
         if(!($this->model instanceof modelBase))
         throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
         if(!($this->form instanceof \yii\widgets\ActiveForm))
-        throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".');
+        throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".'.get_class($this->form));
   
         $this->_foreignClass=$this->model->obtenerForeignClass($this->campo);
         $this->_foreignField=$this->model->obtenerForeignField($this->campo);
@@ -66,6 +68,7 @@ class selectWidget extends \yii\base\Widget
                 'campo'=>$this->campo,
                   'esnuevo'=>$this->model->isNewRecord,
                  'valoresLista'=>$this->getValoresList(),
+                 'id'=>$this->id,
                //  'valores'=>$valores,
                //  'idcontrolprefix'=>$this->getIdControl(),
                 ]);

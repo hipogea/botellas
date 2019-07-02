@@ -27,6 +27,7 @@ if(!$this->existsTable($table)) {
              'id'=>$this->primaryKey(),
         'codestado' => $this->char(2)->notNull()->append($this->collateColumn()),
            'codpro' => $this->char(6)->notNull()->append($this->collateColumn()),
+        'codocu' => $this->char(3)->notNull()->append($this->collateColumn()),
               'numero' => $this->char(10)->notNull()->append($this->collateColumn()),
               'codcen' => $this->string(5)->notNull()->append($this->collateColumn()),
               'descripcion' => $this->string(40)->notNull()->append($this->collateColumn()),

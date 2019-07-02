@@ -3,6 +3,9 @@
 namespace frontend\modules\bigitems\models;
 use common\models\masters\Direcciones;
 //use common\models\masters\Centros;
+ use frontend\modules\bigitems\interfaces\Transport;
+  use frontend\modules\bigitems\Module as ModuleBigItems;
+use common\models\base\DocumentBase;
 use common\models\masters\Direcciones as DireccionesB;
 use common\models\masters\Trabajadores;
 use common\models\masters\Centros;
@@ -37,10 +40,17 @@ use Yii;
  * @property Trabajadores $codven0
  * @property Centros $codcen0
  */
-class Docbotellas extends \common\models\base\DocumentBase
+class Docbotellas extends DocumentBase implements Transport
 {
    
     public $prefijo='79';
+    public $fieldCodocu='codocu';
+    public $fectran1; ///ficitica para poder establecer un rango de echas para busqueda
+    public $dateorTimeFields=[
+        'fecdocu'=>self::_FDATE,
+        'fectran'=>self::_FTIME,
+        'fectran1'=>self::_FDATE
+        ];
     /**
      * {@inheritdoc}
      */
@@ -189,4 +199,59 @@ class Docbotellas extends \common\models\base\DocumentBase
            $this->{$this->fieldStatus}='10';
         }
    }
+   
+   
+   
+     
+     /*
+      * Esta funcion resuleve el problema de que 
+      * si se devuelve una direccion o un lugar
+      * dependeinedo de coo este trabajando el modulo
+      */
+     public function ptoLlegadaOrAddress(){
+      if(ModuleBigItems::withPlaces()){
+          return $this->ptollegada->lugares[0]->id;
+      }else{
+         return $this->ptollegada->id; 
+      }
+      
+     }
+     
+      /*
+      * Esta funcion resuleve el problema de que 
+      * si se devuelve una direccion o un lugar
+      * dependeinedo de coo este trabajando el modulo
+      */
+     public function ptoPartidaOrAddress(){
+         if(ModuleBigItems::withPlaces()){
+          return $this->ptopartida->lugares[0]->id;
+      }else{
+         return $this->ptopartida->id; 
+      }
+     }
+     
+     
+     
+     
+     public function   moveAsset($codocu, $numdoc, $fecha, $nuevolugar){
+         foreach($this->detdocbotellas as $fila ){
+             $fila->moveAsset();
+         }
+       }
+     public function   revertMoveAsset(){
+        
+       }
+    public function   canMoveAsset(){
+        /*
+         * El documetno debe de estar 
+         */
+       }
+   
+     public function   canRevertMoveAsset(){
+        
+       }  
+      /*Coloca el flag de Transporte en el activo asociado*/ 
+    public function setAssetOnTransport(){
+       
+    }
 }

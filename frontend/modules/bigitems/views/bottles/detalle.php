@@ -10,9 +10,15 @@
                     </thead>
                     <tbody>
       
-       <?php //$orden=1; ?>
-       <?php echo $this->render('item',['form'=>$form,'modelDetail'=>$modelDetail,'orden'=>$orden]); ?>
-       <tr id="addItem">
+       <?php $orden=0;foreach($items as $item){ ?>
+           <?php 
+           
+           echo $this->render('item',['form'=>$form,'item'=>$item,'orden'=>$orden]);
+           $orden+=1;
+           ?>
+                   
+       <?php } ?>
+        <tr id="addItem">
            <td class="text-center"><button type="button" id="button-add-item" data-toggle="tooltip" title="Añadir" class="btn btn-xs btn-primary" data-original-title="Añadir"><i class="fa fa-plus"></i></button></td>
            <td class="text-right" colspan="2"></td>
        </tr>

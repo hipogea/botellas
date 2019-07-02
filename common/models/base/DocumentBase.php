@@ -5,22 +5,33 @@
 namespace common\models\base;
 //use common\interfaces\DocumentInterface;
 use common\models\base\Estado;
+use common\models\masters\Documentos;
 use common\models\masters\Centros;
 use common\models\config\Config;
 use common\models\base\modelBase as ModeloGeneral ;
 use common\interfaces\documents\documentBaseInterface as docuInterface;
-//use Yii;
+use Yii;
 class DocumentBase extends ModeloGeneral implements docuInterface
 {
   public $estados=null; //array de estados del documento
   public $childMessages='';//campo referencial para almacenar los MENSAJES DE ERRORES DE LOS HIJOS
+  public $fieldCodocu; //nombre del campo que almacena el documento
+ 
   public $fieldStatus; //nombre del campo que almacena el estado
   public $fieldCodCenter; //nombre del campo que almacena el centro logistico
   //public $documentCode; //codigo del documento
   public $mapTables=[];//guarda los pares 
   //[ 'modelo'=>'modelotemp','modelo2'=>'modelo2temp'] que van ah estar involucrados en 
   //como hijos 
-    
+   
+  /*
+   * Errores y avisos de los hijos o items 
+   * para simular a la propiedad getErrors() de 
+   * Activerecord
+   * 
+   */
+  private $_errorsChild=[];
+  
  const FIELD_ID='id';
  const FIELD_IDTEMP='idtemp';
  const FIELD_IDSTATUS='idstatus';
@@ -33,7 +44,10 @@ class DocumentBase extends ModeloGeneral implements docuInterface
      //throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{documento}\' is empty,  in class \'{clase}\' ',['documento'=>$this->nameFieldDocument(),'clase'=>self::class]));
       //if(!$this->hasAttribute($this->nameFieldStatus()))
      //throw new ServerErrorHttpException(Yii::t('models.errors', 'The property \'{estado}\' is empty,  in class \'{clase}\' ',['estado'=>$this->nameFieldStatus(),'clase'=>self::class]));
-      return parent::init();
+     
+     /*obteniendo el cpodigo del documento de las tablas de cdocumenrtos*/
+   
+     return parent::init();
 }
  
  
@@ -394,5 +408,30 @@ class DocumentBase extends ModeloGeneral implements docuInterface
            // Centros::find()->where(true)->one()->codcen;
         }
     }
+    
+   
+  private function existsDocuMaster(){
+   $registro= Documentos::find()->where(['tabla'=>'\\'.static::class])->one();
+   
+     if(is_null($registro)){
+         throw new \yii\base\Exception(Yii::t('base.errors', 'This Document is not registered. Please register in   \'Documents\' Table With class: \'{clase}\' ' ,['clase'=>static::class]));
+     }else{
+         $cod=$registro->codocu; unset($registro);
+        return $cod;
+     }
+  }
+    
+   public function beforesave($insert){
+      If($insert) $this->resolveCodocu();
+       return parent::beforeSave($insert);
+       
+   } 
+   
+  private function resolveCodocu(){
+      if(empty($this->{$this->fieldCodocu})){
+          $this->{$this->fieldCodocu}=$this->existsDocuMaster();
+         //$this->{$this->fieldCodocu}=($coddocu)?$coddocu:$this->{$this->fieldCodocu};
+           }
+   }
 }
    

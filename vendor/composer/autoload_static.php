@@ -100,6 +100,12 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'yidas\\yii\\fontawesome\\' => 22,
             'yidas\\adminlte\\' => 15,
         ),
+        'u' => 
+        array (
+            'unclead\\multipleinput\\tests\\' => 28,
+            'unclead\\multipleinput\\examples\\' => 31,
+            'unclead\\multipleinput\\' => 22,
+        ),
         's' => 
         array (
             'shifrin\\noty\\' => 13,
@@ -305,6 +311,18 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'yidas\\adminlte\\' => 
         array (
             0 => __DIR__ . '/..' . '/yidas/yii2-adminlte/src',
+        ),
+        'unclead\\multipleinput\\tests\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unclead/yii2-multiple-input/tests',
+        ),
+        'unclead\\multipleinput\\examples\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unclead/yii2-multiple-input/examples',
+        ),
+        'unclead\\multipleinput\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/unclead/yii2-multiple-input/src',
         ),
         'shifrin\\noty\\' => 
         array (

@@ -6,6 +6,7 @@ use yii\helpers\Html;
             dropDownList($valoresLista,
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                      'class'=>'probandoSelect2',
+                     //'id'=> uniqid(),
                         ]
                     ) ?>
  

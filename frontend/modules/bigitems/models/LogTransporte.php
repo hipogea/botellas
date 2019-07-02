@@ -25,6 +25,8 @@ use Yii;
  */
 class LogTransporte extends \common\models\base\modelBase
 {
+ public $dateorTimeFields=['fecha'=>self::_FDATE, 'fechadoc'=>self::_FDATE];
+    
     /**
      * {@inheritdoc}
      */
@@ -38,15 +40,16 @@ class LogTransporte extends \common\models\base\modelBase
      */
     public function rules()
     {
+        
         return [
-            [['activo_id', 'lugar_id', 'lugar_anterior_id', 'user_id'], 'integer'],
+            [['activo_id', 'lugar_id', 'lugar_original_id', 'user_id'], 'integer'],
             [['codestado'], 'string', 'max' => 2],
             [['fecha', 'fechadoc'], 'string', 'max' => 10],
-            [['codocu'], 'string', 'max' => 1],
+            [['fecha','fechadoc','codocu','direccion_id','direccion_original_id','lugar_id','lugar_original_id'], 'safe'],
             [['numdoc'], 'string', 'max' => 20],
             [['time'], 'string', 'max' => 18],
             [['lugar_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lugares::className(), 'targetAttribute' => ['lugar_id' => 'id']],
-            [['lugar_anterior_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lugares::className(), 'targetAttribute' => ['lugar_anterior_id' => 'id']],
+            [['lugar_original_id'], 'exist', 'skipOnError' => true, 'targetClass' => Lugares::className(), 'targetAttribute' => ['lugar_original_id' => 'id']],
             [['activo_id'], 'exist', 'skipOnError' => true, 'targetClass' => Activos::className(), 'targetAttribute' => ['activo_id' => 'id']],
         ];
     }
@@ -65,7 +68,7 @@ class LogTransporte extends \common\models\base\modelBase
             'fechadoc' => 'Fechadoc',
             'codocu' => 'Codocu',
             'numdoc' => 'Numdoc',
-            'lugar_anterior_id' => 'Lugar Anterior ID',
+            'lugar_original_id' => 'Lugar Anterior ID',
             'time' => 'Time',
             'user_id' => 'User ID',
         ];
@@ -84,7 +87,7 @@ class LogTransporte extends \common\models\base\modelBase
      */
     public function getLugarAnterior()
     {
-        return $this->hasOne(Lugares::className(), ['id' => 'lugar_anterior_id']);
+        return $this->hasOne(Lugares::className(), ['id' => 'lugar_original_id']);
     }
 
     /**
@@ -106,6 +109,6 @@ class LogTransporte extends \common\models\base\modelBase
     
     /*devuelveun registro del ultimo movimieto del activo con id=id */
     public static function lastMovement($id){
-        return static::instance()->find()->max('id')->where(['activo_id'=>$id])->one();
+        return static::instance()->find()->where(['activo_id'=>$id])->orderBy('id DESC')->limit(1)->one();
     }
 }

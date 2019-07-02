@@ -18,6 +18,7 @@ class Activos extends \common\models\base\modelBase implements Transport
 {
   use assetTrait;
   const SCENARIO_MOVE='move';
+  const SCENARIO_MARKED_FOR_TRANSPORT='flagTransport';
   public $booleanFields=['espadre','entransporte'];
    public $dateorTimeFields=['fecha'=>self::_FDATE];
     /**
@@ -34,11 +35,12 @@ class Activos extends \common\models\base\modelBase implements Transport
     public function rules()
     {
         return [
-             [['codigo', 'codigo2'], 'required'],
-            [['codigo'], 'match','pattern'=> self::maskCodePpal()],
-            [['codigo2'], 'match','pattern'=> self::maskCodeSec()],
+             [['codigo'/*, 'codigo2'*/], 'required'],
+            [['codigo'], 'match','pattern'=> self::maskCodePpal(),'message'=>'El valor debe ser '.self::maskCodePpal()],
+            [['codigo2'], 'match','pattern'=> self::maskCodeSec(),'message'=>'El valor debe ser '.self::maskCodeSec()],
             [['codigo'], 'unique'],
             [['codigo2'], 'unique'],
+            
             [['lugar_original_id', 'lugar_id'], 'integer'],
            // [['codigo', 'codigo2', 'codigo3'], 'string', 'max' => 16],
             [['descripcion', 'serie'], 'string', 'max' => 40],
@@ -46,20 +48,26 @@ class Activos extends \common\models\base\modelBase implements Transport
             [['marca', 'modelo'], 'string', 'max' => 30],
             [['anofabricacion'], 'match', 'pattern' => '/[1-2]{1}[0-9]{3}/'],
             [['codigoitem'], 'string', 'max' => 14],
-            [['codigocontable', 'espadre', 'numdoc'], 'string', 'max' => 20],
+            [['codigocontable', 'numdoc'], 'string', 'max' => 20],
             [['tipo', 'codestado'], 'string', 'max' => 2],
-            [['codarea', 'entransporte'], 'string', 'max' => 3],
+            [['codarea'], 'string', 'max' => 3],
             [['fecha'], 'string', 'max' => 10],
-            [['codocu'], 'string', 'max' => 3],
+            //[['codocu'], 'string', 'max' => 3],
             
             /*scenario Move
              *  */
-             [['fecha','codocu','numdoc'], 'required', 'on' =>['move']],
+             [['fecha','codocu','numdoc'], 'required', 'on' =>[self::SCENARIO_MOVE]],
             [['fecha','codocu','numdoc',
               'entransporte','lugar_id',
                 'direccion_id','direccion_original_id,lugar_original_id'
-              ], 'safe', 'on' =>['move']
+              ], 'safe', 'on' =>[self::SCENARIO_MOVE]
              ],
+            /**/
+            
+            /*scenario flag tranposrt
+             *  */
+             [['entransporte'], 'safe', 'on' =>[self::SCENARIO_MARKED_FOR_TRANSPORT]],
+            
             /**/
             
             [['codocu'], 'string', 'max' => 3],
@@ -145,10 +153,10 @@ class Activos extends \common\models\base\modelBase implements Transport
     }
     
    private static function campoRefActual(){
-      return ($this->withPlaces())?'direccion_id':'lugar_id'; 
+      return (BigItemsModule::withPlaces())?'lugar_id':'direccion_id'; 
    }
    private static function campoRefAnt(){
-      return ($this->withPlaces())?'direccion_anterior_id':'lugar_anterior_id';
+      return (BigItemsModule::withPlaces())?'lugar_original_id':'direccion_original_id';
    } 
    
    
@@ -156,7 +164,8 @@ class Activos extends \common\models\base\modelBase implements Transport
      * Fecha : En formato Y-m-d
      */
     public function   moveAsset($codocu,$numdoc,$fecha,$nuevolugar){ 
-      $modelLogTransporte=New LogTransporte();
+     if($this->canMove()){
+         $modelLogTransporte=New LogTransporte();
       //Asignado los valores de Activos a Log
        $modelLogTransporte=$this->transferData($modelLogTransporte);
        //Asignado los parametros a los campos de Activos
@@ -166,13 +175,18 @@ class Activos extends \common\models\base\modelBase implements Transport
        //colocando el escenario
        $this->setScenario(self::SCENARIO_MOVE);
         $transa=$this->getDb()->beginTransaction();
-         if($this->save() && $modelTransporte->save()){
+         if($this->save() && $modelLogTransporte->save()){
              $transa->commit();
              return true;        
          }else{
              $transa->rollBack();
-             print_r($this->getErrors());print_r($modelTransporte->getErrors());die();             
-            return false;         }        
+             print_r($this->attributes);
+             print_r($this->getErrors());print_r($modelLogTransporte->getErrors());die();             
+            return false;         }     
+     } else {
+         return false;
+     }
+         
     }
     
     
@@ -191,7 +205,7 @@ class Activos extends \common\models\base\modelBase implements Transport
                  //recoger los valores del Log
                 $this->recipeData($modelLogTransporte);
                 $transa=$this->getDb()->beginTransaction();
-                    if($this->save() && $modelTransporte->delete()>0){
+                    if($this->save() && $modelLogTransporte->delete()>0){
                          $transa->commit();
                         return true;        
                         }else{
@@ -229,9 +243,10 @@ class Activos extends \common\models\base\modelBase implements Transport
             'fecha'=>$this->fecha,
               'codestado'=>$this->codestado            
                     ];      
-        $campos[$camporefactual]=$this->getOldAttribute($this->{$camporefactual});
-         $campos[$camporefanterior]=$this->getOldAttribute($this->{$camporefant});
-       $modelLogTransporte->setAttributes($campos); 
+        $campos[$camporefactual]=$this->{$camporefactual};
+         $campos[$camporefanterior]=$this->{$camporefanterior};
+      // print_r($campos);die();
+         $modelLogTransporte->setAttributes($campos); 
        return $modelLogTransporte;
     }
     
@@ -248,23 +263,25 @@ class Activos extends \common\models\base\modelBase implements Transport
               'codestado'=>$modelLogTransporte->codestado            
                     ];      
         $campos[$camporefactual]=$modelLogTransporte->{$camporefactual};
-         $campos[$camporefanterior]=$modelLogTransporte->{$camporefant};
+         $campos[$camporefanterior]=$modelLogTransporte->{$camporefanterior};
        $this->setAttributes($campos); 
        return $this;
     }
     
     /*Prepara los campos log para transportar  */
     private function prepareData($codocu,$numdoc,$fecha,$nuevolugar){
-         $camporefactual=static::campoRefActual();
-      $camporefanterior=static::campoRefAnt();
-        $campos[ $camporefactual]=$nuevolugar;
-         $campos[$camporefanterior]=$this->{$camporefactual}; //actualizar este campo
-         $this->setScenario(static::SCENARIO_MOVE);
-        $campos=[
+         $campos=[
             'codocu'=>$codocu,
             'numdoc'=>$numdoc,
             'fecha'=>$fecha,
         ];
+         $camporefactual=static::campoRefActual();
+      $camporefanterior=static::campoRefAnt();
+      //agregamos los campos que faltan
+        $campos[ $camporefactual]=$nuevolugar;
+         $campos[$camporefanterior]=$this->{$camporefactual}; //refrescar el campo  'anterior' este campo
+         $this->setScenario(static::SCENARIO_MOVE);
+       
         $this->setAttributes($campos);
     }
     /*Esta funcion analiza si s epuede realizar el movimietn reversa*/
@@ -277,12 +294,49 @@ class Activos extends \common\models\base\modelBase implements Transport
       return true;
     }
     
-    public function changeOnTransport(){
-        $this->entransporte=true;
+    public function changeOnTransport($save=true){
+        if($this->canMove()){
+            $this->entransporte=true;
+                if($save){
+                    $this->setScenario($this::SCENARIO_MARKED_FOR_TRANSPORT);
+                    return $this->save();
+                    }else{
+                     return true;
+            
+                    }
+        }else{
+            return false;
+        }
+        
+        
+        
     }
-     public function changeOffTransport(){
-        $this->entransporte=false;
+     public function changeOffTransport($save=true){
+       if($this->canMove()){
+            $this->entransporte=false;
+                if($save){
+                    $this->setScenario($this::SCENARIO_MARKED_FOR_TRANSPORT);
+                    return $this->save();
+                    }else{
+                     return true;
+            
+                    }
+        }else{
+            return false;
+        }
+        
+        
+        
     }
+   public function   canMoveAsset(){
+       return true;
+   }
+   
+     public function   canRevertMoveAsset(){
+         return true;
+     }
+    
+    
     
     public static function maskCodePpal(){
         return h::settings()->get(BigItemsModule::getId(), BigItemsModule::MASCARA_CODIGO_PPAL);

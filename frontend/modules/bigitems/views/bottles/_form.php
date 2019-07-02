@@ -14,7 +14,10 @@ use common\helpers\h;
 <br>
 <div class="docbotellas-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form =\yii\bootstrap\ActiveForm::begin([
+    'enableAjaxValidation'=> true,'id'=>'tabular-botellas'
+  
+]); ?>
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
   <?= $form->field($model, 'numero')->textInput(['disabled' => 'true']) ?>
 
@@ -143,20 +146,18 @@ use common\helpers\h;
         ]);  ?>
     </div>
 
- </div>  
+ 
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
-   <?= $form->field($model, 'comentario')->textarea(['rows' => 6]) ?>
+   <?php // echo $form->field($model, 'comentario')->textarea(['rows' => 6]) ?>
 
  </div> 
  
  
- <div class="form-group">
-        <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+ 
 
-    <?php ActiveForm::end(); ?>
+   
 
-</div>
+
 
   
 
@@ -170,7 +171,7 @@ use common\helpers\h;
     'items' => [
         [
             'label' => yii::t('base.names','Items'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('detalle',[ 'form' => $form, 'modelDetail' => $modelDetail,'orden'=>$orden]),
+            'content'=> $this->render('detalle',[ 'form' => $form, 'items' => $items]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => true
         ],
@@ -179,4 +180,10 @@ use common\helpers\h;
 ]);  
     
     ?> 
-    
+
+<div class="form-group">
+        <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
+    </div>
+   <?php \yii\bootstrap\ActiveForm::end(); ?>  
+ 
+</div>

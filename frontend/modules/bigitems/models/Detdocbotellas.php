@@ -1,7 +1,8 @@
 <?php
 
 namespace frontend\modules\bigitems\models;
-
+ use frontend\modules\bigitems\interfaces\Transport;
+use common\models\base\modelBase;
 use Yii;
 
 /**
@@ -19,8 +20,9 @@ use Yii;
  * @property Activos $codigo0
  * @property BigitemsDocbotellas $doc
  */
-class Detdocbotellas extends \common\models\base\modelBase
+class Detdocbotellas extends modelBase implements Transport 
 {
+    public $descripcion; //campo ficticio para simular la descriciond ela botella 
     /**
      * {@inheritdoc}
      */
@@ -35,15 +37,15 @@ class Detdocbotellas extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['doc_id', 'codigo', 'codestado'], 'required'],
+            [['doc_id', 'codigo'], 'required'],
             [['doc_id'], 'integer'],
             [['tarifa'], 'number'],
             [['detalle'], 'string'],
             [['codigo', 'numdocuref'], 'string', 'max' => 16],
             [['codocuref'], 'string', 'max' => 3],
             [['codestado'], 'string', 'max' => 2],
-            [['codigo'], 'exist', 'skipOnError' => true, 'targetClass' => Activos::className(), 'targetAttribute' => ['codigo' => 'codigo']],
-            [['doc_id'], 'exist', 'skipOnError' => true, 'targetClass' => BigitemsDocbotellas::className(), 'targetAttribute' => ['doc_id' => 'id']],
+            [['codigo'], 'exist', 'skipOnError' => true, 'targetClass' => Activos::className(), 'targetAttribute' => ['codigo' => 'codigo'],'message'=>'WEste codigo no existe '],
+            [['doc_id'], 'exist', 'skipOnError' => true, 'targetClass' => Docbotellas::className(), 'targetAttribute' => ['doc_id' => 'id']],
         ];
     }
 
@@ -88,4 +90,67 @@ class Detdocbotellas extends \common\models\base\modelBase
     {
         return new DetdocbotellasQuery(get_called_class());
     }
+    
+     public function   moveAsset($codocu, $numdoc, $fecha, $nuevolugar){
+         $result=false;
+        if(!$this->isNewRecord){
+            $documento=$this->docbotella;
+            $result=$this->activo->moveAsset($documento->codocu,
+                    $documento->numero,
+                    $documento->fechatra,
+                    $documento->ptoLlegadaOrAddress()
+                    );
+            unset($documento);
+        }
+        return $result;
+       }
+     public function   revertMoveAsset(){
+         if($this->canRevertMoveAsset() && !$this->isNewRecord ){
+           return $this->activo->revertMoveAsset();
+        }else{
+            return false;
+        }
+         
+       }
+    public function   canMoveAsset(){
+         //reglas para saber si s epude mover 
+        /*
+         * 1) Tiene que estar en el punto de partida que consigana el documento
+         */
+        return true;
+       }
+   
+     public function   canRevertMoveAsset(){
+         //reglas para saber si s epude mover 
+        /*
+         * 1) Tiene que estar en el punto de partida que consigana el documento
+         */
+        return true;
+       }  
+      /*Coloca el flag de Transporte en el activo asociado*/ 
+    public function setAssetOnTransport($on=true){
+        if($this->canMoveAsset() && !$this->isNewRecord ){
+           if($on){
+             return $this->activo->changeOnTransport(true);  
+           }else{
+              return $this->activo->changeOffTransport(true);    
+           }
+           
+        }else{
+            return false;
+        }
+    }
+    
+    /*verifiac si se puede borrar este registro*/
+  public function canDelete(){
+      $condition=true; //COLOCAR AQUI NLA LGOICA 
+    return ($this->hasChilds() && $condition);
+  }
+  
+  
+   /*verifiac si se puede anular este registro*/
+  public function canTrash(){
+      $condition=true; //COLOCAR AQUI NLA LGOICA 
+      return $condition;
+  }
 }

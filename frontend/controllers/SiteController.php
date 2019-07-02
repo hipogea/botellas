@@ -286,4 +286,19 @@ class SiteController extends Controller
         }
          
     }
+    
+    
+    public function actionClearCache(){
+       
+       $datos=[];
+       if(h::request()->isAjax){
+           if( h::app()->hasModule('bigitems')){
+              h::settings()->invalidateCache();
+              $datos['success']=yii::t('base.actions','
+The cache data Settings has been cleaned');
+            }
+           h::response()->format = \yii\web\Response::FORMAT_JSON;
+           return $datos;
+        }
+    }
 }

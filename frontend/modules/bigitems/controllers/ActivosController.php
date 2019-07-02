@@ -35,6 +35,15 @@ class ActivosController extends Controller
      */
     public function actionIndex()
     {
+       
+       /* var_dump($activo=Activos::findOne(1)->moveAsset('100', 
+                '450000678',
+                '15.05.2015',
+                6));die();
+        
+        */
+        /// var_dump($activo=Activos::findOne(1)->revertMoveAsset());die();
+        
         $searchModel = new ActivosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -90,6 +99,8 @@ class ActivosController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }else{
+            //print_r($model->getErrors());die();
         }
 
         return $this->render('update', [
