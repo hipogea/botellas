@@ -6,7 +6,7 @@ use Yii;use DateTime;
 use frontend\modules\bigitems\models\Docbotellas;
 use frontend\modules\bigitems\models\Activos;
 use common\helpers\h;
-use frontend\modules\bigitems\models\DocbotellasSearch;
+use frontend\modules\bigitems\models\viewsmodels\VwDocbotellasSearch;
 use frontend\modules\bigitems\models\Detdocbotellas;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
@@ -43,7 +43,7 @@ class BottlesController extends baseController
     
         
         
-        $searchModel = new DocbotellasSearch();
+        $searchModel = new VwDocbotellasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

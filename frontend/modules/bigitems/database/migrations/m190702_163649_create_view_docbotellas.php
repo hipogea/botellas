@@ -35,13 +35,13 @@ public function safeDown()
     }
     
  private function getFields(){
-     return [ /*Doc*/'a.numero','a.codcen','a.codestado as codestadodoc','a.descripcion',
+     return [ /*Doc*/'a.id','a.codpro','a.codestado','a.codtra','a.codven','a.codplaca','a.numero','a.codcen','a.codestado as codestadodoc','a.descripcion','a.fectran','a.fecdocu','essalida','codenvio',
                   /*Clipro*/'b.despro','b.rucpro',
                   /*Detdoc*/'c.codigo','c.numdocuref','c.codestado as codestadodet',
                   /*Direcciones partida*/'d.direc as direcpartida','d.distrito as distritopartida','d.provincia as provinciapartida',
                   /*Direcciones llegada*/'d1.direc as direcllegada','d1.distrito as distritollegada','d1.provincia as provinciallegada',
                   /*Activos*/'e.descripcion as desactivo',
-                  /*Trabajadores vendedor*/'t.ap as apvendedor' ,'t.nombres as nombrevendededor',
+                  /*Trabajadores vendedor*/'t.ap as apvendedor' ,'t.nombres as nombrevendedor',
                  /*Trabajadores transportista*/ 't1.ap as aptrans','t1.nombres as nombretrans'
                ];
  }   

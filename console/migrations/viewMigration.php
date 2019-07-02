@@ -17,7 +17,7 @@ class viewMigration extends baseMigration
        
     
    public function createView($vista,$Fields,$Tables,$Where){
-       $this->dropView($vista);
+       //$this->dropView($vista);
        $comando= $this->db->createCommand(); 
         $q=new \yii\db\Query();
         $q->select($Fields)
