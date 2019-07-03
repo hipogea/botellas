@@ -2112,18 +2112,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-mpdf.git",
-            "reference": "6eed5cfadef55ae19d2863a46a24dabb61ee9ccd"
+            "reference": "c4141e4e8ed8dc395189ae134078d79ffe2484cf"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-mpdf/zipball/6eed5cfadef55ae19d2863a46a24dabb61ee9ccd",
-            "reference": "6eed5cfadef55ae19d2863a46a24dabb61ee9ccd",
+            "url": "https://api.github.com/repos/kartik-v/yii2-mpdf/zipball/c4141e4e8ed8dc395189ae134078d79ffe2484cf",
+            "reference": "c4141e4e8ed8dc395189ae134078d79ffe2484cf",
             "shasum": ""
         },
         "require": {
             "mpdf/mpdf": "~8.0"
         },
-        "time": "2019-05-25T07:26:13+00:00",
+        "time": "2019-06-19T08:04:04+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {

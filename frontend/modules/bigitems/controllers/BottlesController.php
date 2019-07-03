@@ -201,18 +201,7 @@ class BottlesController extends baseController
          
         
         
-         $q=new \yii\db\Query();
-        $q->select(['a.codpro','b.despro'])
-                ->from('{{%bigitems_docbotellas}} as a, {{%clipro}} as b')
-                ->andWhere('a.codpro=b.codpro');
-                
-                       
-        
-        $model->getDb()->createCommand()->createView('vw_pipish',
-                $q->createCommand()->getRawSql());
-        echo  $q->createCommand()->getRawSql();
-        die();
-        
+         
         
         
         

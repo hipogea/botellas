@@ -1,8 +1,9 @@
 <?php
 
 namespace frontend\modules\report\controllers;
-
+use common\models\masters\Sociedades;
 use Yii;
+use frontend\modules\report\Module as ModuleReporte;
 use frontend\modules\report\models\Reporte;
 use frontend\modules\report\models\Reportedetalle;
 use frontend\modules\report\models\ReportedetalleSearch;
@@ -40,7 +41,11 @@ class MakeController extends baseController
      */
     public function actionIndex()
     {
-      // echo \common\helpers\FileHelper::getShortName("//hipogeA.xls");die();
+       /*$model=$this->findModel(3);
+        $clase=trim($model->modelo);
+        $modelToReport= $clase::find()->where(['id'=>10])->one();
+       var_dump( $modelToReport->despro);die();*/
+       // echo \common\helpers\FileHelper::getShortName("//hipogeA.xls");die();
         
         $searchModel = new ReporteSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -102,8 +107,12 @@ class MakeController extends baseController
             return $this->editField();
         
         /*Para crear el detalle */
-        if(!$model->hasChilds())
-          $this->CreaDetalle($id);
+        if(!$model->hasChilds()){
+            $this->CreaDetalle($id);
+        }else{
+            $this->CreaDetalle($id,true);
+        }
+          
       
         /*Para renderizar el grilla*/
           $searchModel = new ReportedetalleSearch();
@@ -159,15 +168,17 @@ class MakeController extends baseController
     }
     
     
-    public function CreaDetalle($id){
+    public function CreaDetalle($id,$refresh=false){
 		$modeloreporte=$this->findModel($id);
 		$nombremodelo=$modeloreporte->modelo;
 		$modeloareportar=new $nombremodelo;
                 $columnas=$modeloareportar->getTableSchema()->columns;
 		$contador=0; 
-              foreach($columnas as $nameField=>$oBCol){                    
+                
+              foreach($columnas as $nameField=>$oBCol){ 
+                 // echo "verificando sai existe ;".$nameField."<br>";
 			if(!$modeloreporte->existsChildField($nameField) ){ //SI NO ESTA , ENTONCES INSERTARLO
-				 //echo "vale;".$nameField."<br>";
+				 //echo "no existe insertarlo  ".$nameField."<br>";
                              Reportedetalle::firstOrCreateStatic(Reportedetalle::prepareValues($id,
                                     $modeloreporte->codocu, 
                                     $nameField,
@@ -175,8 +186,11 @@ class MakeController extends baseController
                                     $oBCol->size, 
                                     $oBCol->dbType));
                                  $contador+=1;
-			}
-		} 
+			}else{
+                          // echo "ya  existe np pasa nad  ".$nameField."<br>"; 
+                        }
+		}
+                //print_r(array_keys($columnas));die();
         /* foreach( array_diff(
                array_keys(get_object_vars ($modeloareportar)),
                array_keys($modeloareportar->attributes)
@@ -196,6 +210,7 @@ class MakeController extends baseController
 		}else {
 			yii::$app->session->setFlash('notice',yii::t('report.messages', 'No se agregaron registros hijos ya existen todos'));
 		}
+                if(!$refresh)
 		$this->redirect(array('update','id'=>$modeloreporte->id));
 	}
 
@@ -204,6 +219,7 @@ class MakeController extends baseController
         //$modelReporte = $this->findModel($id);
         $model = Reportedetalle::findOne($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //var_dump(Yii::$app->request->post());die();
             //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
             $this->closeModal('buscarvalor','detallerepoGrid');
         } elseif (Yii::$app->request->isAjax) {
@@ -222,7 +238,64 @@ class MakeController extends baseController
         }
   } 
   
-  public function actionCreareporte(){
+  public function actionCreareporte($id, $idfiltro){
+     // echo $this->putLogo($id, $idfiltro);die();
       
+      $pdf=ModuleReporte::getPdf();
+      $this->layout='blank';
+      $model=$this->findModel($id);
+      
+      $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):'';
+      
+         $header=$model->putHeaderReport($id, $idfiltro);
+      
+      $pdf->methods=[ 
+           'SetHeader'=>[($model->tienecabecera)?$header:''], 
+            'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
+        ];
+      
+      $cabecera=$model->putCabecera($id,$idfiltro);
+      //$contenido=$this->render('reporte',['modelo'=>$model,'cabecera'=>$cabecera]);
+      $contenido=$logo.$cabecera;
+     return  $this->prepareFormat($contenido, $model);
+     // return $this->render('reporte',['modelo'=>$model,'cabecera'=>$cabecera]);
   }
+  
+     /*
+       * Hace el logo del Reporte
+       */
+    private function putLogo($id, $idfiltro){
+        $model=$this->findModel($id);        
+        return $this->renderpartial('logo',
+				array(
+			'modelosociedad' =>Sociedades::find()->one(),
+                         'model'=>$model/*->modelToRepor($idfiltro)*/,
+			'idreporte'=>$id,
+					//'xlogo'=>$xlogo,
+					//'ylogo'=>$ylogo,
+					//'rutalogo'=>$rutalogo,
+				),TRUE,	true);
+        
+    }
+  
+ /*Prepar el foramto de salida 
+  * delñ reporte 
+  */
+  private function prepareFormat($contenido,$model){
+      if($model->type=='pdf'){
+          $pdf=ModuleReporte::getPdf();
+           $pdf->methods=[ 
+           'SetHeader'=>[($model->tienecabecera)?$header:''], 
+            'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
+        ];
+        $pdf->content=$contenido;
+         return $pdf->render(); 
+      }elseif($model->type=='html'){
+          return $contenido;
+      }
+      
+      
+      
+        }  
+    
 }

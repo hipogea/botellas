@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'despro', 
             'codigo',
             'fectran',
+            'fecdocu',
             'descripcion',
             'direcllegada',
             //'despro',

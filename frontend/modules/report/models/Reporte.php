@@ -3,6 +3,7 @@
 namespace frontend\modules\report\models;
 use common\models\masters\Centros;
 use common\models\masters\Documentos;
+
 use Yii;
 
 class Reporte extends \common\models\base\modelBase
@@ -91,7 +92,7 @@ class Reporte extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCentros()
+    public function getCentro()
     {
         return $this->hasOne(Centros::className(), ['codcen' => 'codcen']);
     }
@@ -99,7 +100,7 @@ class Reporte extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getDocumentos()
+    public function getDocumento()
     {
         return $this->hasOne(Documentos::className(), ['codocu' => 'codocu']);
     }
@@ -124,5 +125,35 @@ class Reporte extends \common\models\base\modelBase
         
     }
     
+    
+    /*
+     * Hace l acbecera del reporte*
+     */
+    public function putCabecera($id,$idfiltro){        
+        /* $hijos= registros que deen pintarse en la cabcera del reporte   */
+             $hijosCabecera=$this->getReportedetalle()->where(['and', "esdetalle='0'", ['or', "visiblelabel='1'", "visiblecampo='1'"]])->all();
+		$HTML_cabecera="";
+               //var_dump($hijosCabecera);die();
+     foreach( $hijosCabecera as $record) {
+		 $HTML_cabecera.=$record->putStyleField($record->nombre_campo,$this->modelToRepor($idfiltro)->{$record->nombre_campo}); 
+               }
+           unset($modeloToReport);unset($hijosCabecera);unset($clase);
+         return $HTML_cabecera;
+      }
+         
+   
+      /*
+     * Hace cabeera del pdf siempre que sea pdf *
+     */
+    public function putHeaderReport($id,$idfiltro){
+       return  "Date : ".date('Y-m-d H:i:s');
+        
+      }
+      
+    
+    public function modelToRepor($id){
+      $clase=trim($this->modelo);        
+        return $clase::find()->where(['id'=>$id])->one();  
+    }
     
 }

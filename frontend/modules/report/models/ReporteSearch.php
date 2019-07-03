@@ -46,6 +46,7 @@ class ReporteSearch extends Reporte
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            
         ]);
 
         $this->load($params);

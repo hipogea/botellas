@@ -33,6 +33,14 @@ use yii\widgets\ActiveForm;
 	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 		 <?= $form->field($model, 'top')->textInput() ?>
 	</div>
+    
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+		 <?= $form->field($model, 'lbl_left')->textInput() ?>
+	</div>
+
+	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+		 <?= $form->field($model, 'lbl_top')->textInput() ?>
+	</div>
 
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 		 <?= $form->field($model, 'font_size')->textInput() ?>
@@ -57,13 +65,7 @@ use yii\widgets\ActiveForm;
 		 <?= $form->field($model, 'aliascampo')->textInput() ?>
 	</div>
 
-	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-		 <?= $form->field($model, 'lbl_left')->textInput() ?>
-	</div>
-
-	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-		 <?= $form->field($model, 'lbl_top')->textInput() ?>
-	</div>
+	
 	<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
 		 <?= $form->field($model, 'lbl_font_size')->textInput() ?>
 	</div>

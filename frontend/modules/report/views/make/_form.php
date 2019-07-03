@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use common\helpers\ComboHelper;
 use yii\widgets\ActiveForm;
-use kartik\editable\Editable;
+
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\report\models\Reporte */
 /* @var $form yii\widgets\ActiveForm */
@@ -161,109 +161,15 @@ $papeles =['A3'=>'A3','A4'=>'A4','A5-L'=>'A5-L','A5'=>'A5','Letter'=>'Letter','A
 
     
     <?php
-use yii\widgets\Pjax;
+
 
 ?>
-    <div style="overflow:auto;" >
-<?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <?= kartik\grid\GridView::widget([
-        'id'=>'detallerepoGrid',
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\ActionColumn',
-                'template' => '{editar}',
-                'buttons' => [
-	
-                 'editar' => function ($url,$model) {
-			    $url = \yii\helpers\Url::to(['updatedetallerepo','id'=>$model->id,'nombregrilla'=>'detalleRepoGrid']);
-                             return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['class'=>'botonAbre']);
-                            }
-                        ],
-            ],
-           'nombre_campo',
-             [
-                        'class' => 'kartik\grid\EditableColumn',
-                        'editableOptions'=>[
-                                            ],
-                        'attribute' => 'font_size',
-                            //'pageSummary' => 'Total',
-                            'vAlign' => 'middle',
-                            //'width' => '50px',
-                ],
-            
-             // any list of values
-            
-            
-             'aliascampo',
-            'tipodato',
-            'esdetalle',
-            [
-                        'class' => 'kartik\grid\EditableColumn',
-                
-                        'editableOptions'=>[
-                            'format' => Editable::FORMAT_BUTTON,
-                            'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                             'data'=>['arial'=>'arial','courier'=>'courier'], 
-                                            ],
-                        'attribute' => 'font_family',
-                            //'pageSummary' => 'Total',
-                            'vAlign' => 'middle',
-                            //'width' => '50px',
-                ],
-            [
-                        'class' => 'kartik\grid\EditableColumn',
-                
-                        'editableOptions'=>[
-                            'format' => Editable::FORMAT_BUTTON,
-                            'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                             'data'=>['1'=>'Yes',''=>'No'], 
-                                            ],
-                        'attribute' => 'visiblecampo',
-                            //'pageSummary' => 'Total',
-                            'vAlign' => 'middle',
-                            //'width' => '50px',
-                ],
-	    [
-                        'class' => 'kartik\grid\EditableColumn',
-                        'editableOptions'=>[
-                                            ],
-                        'attribute' => 'left',
-                            //'pageSummary' => 'Total',
-                            'vAlign' => 'middle',
-                            //'width' => '50px',
-                ],  
-            [
-                        'class' => 'kartik\grid\EditableColumn',
-                        'editableOptions'=>[
-                                            ],
-                        'attribute' => 'top',
-                            //'pageSummary' => 'Total',
-                            'vAlign' => 'middle',
-                            //'width' => '50px',
-                ],
-		  
-		   'font_weight',
-		   'font_color',		  
-		   'lbl_left',
-		   'lbl_top',
-		   'lbl_font_size',
-		   'lbl_font_family',
-		   'visiblelabel',
-		   'lbl_font_color',
-		  // 'visiblecampo',
-		  // 'hidreporte',		  
-		    'longitudcampo',
-		  // 'tipodato',
-                ],
-        ]
-    ); ?>
-
-<?php Pjax::end(); ?>
-  </div>  
+    <?php echo($model->isNewRecord)?'':$this->render('_grilla',[
+        'searchModel'=>$searchModel,
+        'dataProvider'=>$dataProvider,
+    ]);  ?>
     
+  
     
     
     

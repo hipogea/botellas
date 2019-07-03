@@ -19,6 +19,7 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null){
             'id'=>$this->primaryKey(),
             'xgeneral'=>$this->integer(5),
             'ygeneral'=>$this->integer(5),
+             'type'=>$this->string(5)->notNull()->append($this->collateColumn()),///pfd, xls, cvs,
             'xlogo'=>$this->integer(5),
              'role'=>$this->string(64)->notNull()->append($this->collateColumn()),
             'ylogo'=>$this->integer(5),

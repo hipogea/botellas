@@ -62,6 +62,23 @@ class Reportedetalle extends \common\models\base\modelBase
 	'lbl_font_weight',
 	'lbl_font_color',
     ];
+    
+    private $camposAtributosLabel=[      
+	'lbl_left',
+	'lbl_top',
+	'lbl_font_size',
+	'lbl_font_family',
+	'lbl_font_weight',
+	'lbl_font_color',
+    ];
+    private $camposAtributosValue=[      
+	'left',
+	'top',
+	'font_size',
+	'font_family',
+	'font_weight',
+	'font_color',
+    ];
     /**
      * {@inheritdoc}
      */
@@ -78,7 +95,7 @@ class Reportedetalle extends \common\models\base\modelBase
             [['esatributo', 'totalizable', 'esnumerico'], 'string', 'max' => 1],
             [['aliascampo'], 'string', 'max' => 40],
             [['tipodato'], 'string', 'max' => 30],
-           // [['esdetalle'], 'string', 'max' => 2],
+            [['esdetalle','visiblelabel','visiblecampo'], 'safe'],
             [['adosaren'], 'string', 'max' => 15],
             [['hidreporte'], 'exist', 'skipOnError' => true, 'targetClass' => Reporte::className(), 'targetAttribute' => ['hidreporte' => 'id']],
         ];
@@ -123,9 +140,9 @@ class Reportedetalle extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getHidreporte0()
+    public function getReporte()
     {
-        return $this->hasOne(Reportes::className(), ['id' => 'hidreporte']);
+        return $this->hasOne(Reporte::className(), ['id' => 'hidreporte']);
     }
 
     /**
@@ -151,49 +168,83 @@ class Reportedetalle extends \common\models\base\modelBase
      * @atributo : Es el nombre del campo, debe de estar dentro del 
      * array de la propiedad $camposAtributos
      */
-    private function getStyleElement($atributo){
+    private function putStyleElement($atributo){
         $original=$atributo;
         //$cadenalabel="";
-        $cadena=" ";
-         $atributo = str_replace ( "_" , "-" , $atributo );//REEMPLAZAR  EL "_" por "-" , ya que los nombre de los campos no puedieron nombrarse con el -;
+        $cadena="";
+       if(!empty($this->{$atributo} )){
+          //var_dump($this->{$original},$original);if($this->{$original}=='0')die();
+        $valorcorregido=$this->fixPosition($original);
+         //
          if ( substr ( $atributo , 0 , strpos ( $atributo , "_" ) ) == "lbl" ){
             $atributo = str_replace ( "lbl_" , "" , $atributo );//QUITAR EL PREFIJO X EJ "LB_TOP" => "TOP";
-            $cadena = " " . $atributo . ":" . $this->{$original} . "; "; //ASIGNAR EL ESTILO  XEJ   font-size=8px;
+            $cadena = " " . $atributo . ":" . $valorcorregido . "; "; //ASIGNAR EL ESTILO  XEJ   font-size=8px;
 	}else{
-            $cadena .= " " . $atributo . ":" . $this->{$original} . "; ";
+            $cadena .= " " . $atributo . ":" . $valorcorregido . "; ";
              $cadena = str_replace ( "font-color" , "color" , $cadena );  
         }
-      
+        $cadena = str_replace ( "_" , "-" , $cadena );//REEMPLAZAR  EL "_" por "-" , ya que los nombre de los campos no puedieron nombrarse con el -;
+     // $cadena=str_replace ( "font-color" , "color" , $cadena ); 
+      //$cadena .="yapita: ".$valorcorregido."como la ves; ";
+       }
+       
+        
         return $cadena;
     }
+    
+    
+     private function putStyleElements($atributo,$isvalue){
+      if(!$isvalue){//si es etiqueta
+          $atributostoeach=$this->camposAtributosLabel;
+          
+      }else{
+           $atributostoeach=$this->camposAtributosValue;
+      }
+        $estilo=" position:absolute; ";
+         foreach($atributostoeach as $clave=>$campo){           
+                $estilo.=$this->putStyleElement($campo);
+                }               
+        $estilo=str_replace ( "font-color" , "color" , $estilo);        
+        return $estilo;
+    }
+    
+    
+    
     /*
      * Esta funcion pinta un div <Label> <Valor>
      * C0b sus respectivos estilos
      * @atributo:Nombre de un campo
      * @valor:Valor que aparece en el reporte
      */
-    private function getStyleField($atributo,$valor){
+    public function putStyleField($campo,$valor){
         $cadena="";
-        $estilo=" position:absolute; ";
-        foreach($this->camposAtributos as $clave=>$atributo){
-            $estilo.=$this->getStyleElement($atributo);
-        }
+        $estilolabel="";
+           $estilovalue="";
+       if(!empty($valor)){
+          // echo "d";die();
+            //if(!empty($this->{$atributo}))
+            $estilolabel.=$this->putStyleElements($campo,false); ///label
+            $estilovalue.=$this->putStyleElements($campo,true);///value
         
-      if ($this->visiblelabel == '1')       
-	$cadena= \yii\helpers\Html::tag ("div", $this->aliascampo ,["style" => $estilo]);
-	if ( $record->visiblecampo == '1' )
-         $cadena.= \yii\helpers\Html::tag ("div" , $valor,["style" => $estilo]);   
+        if ($this->visiblelabel)       
+	$cadena= \yii\helpers\Html::tag ("div", $this->aliascampo ,["style" => $estilolabel]);
+	if ( $this->visiblecampo )
+         $cadena.= \yii\helpers\Html::tag ("div" , $valor,["style" => $estilovalue]);   
+      
+       }
+        
+       // var_dump($this->visiblelabel,$this->visiblecampo );die();
        return $cadena;
     }
     
-    public function esdetalle(){
+   /* public function esdetalle(){
         if(trim($this->esdetalle)==='' or is_null($this->detalle) or empty($this->detalle)){
             return false;
         }else{
             return true;
         }
     }
-    
+   */ 
     
     public static function  prepareValues($hidreporte,$codocu,$nameField,$aliasField,$sizeField,$typeField){
         //echo "size " ;var_dump($sizeField);var_dump($typeField);
@@ -232,5 +283,37 @@ class Reportedetalle extends \common\models\base\modelBase
         //unset($nuevo);
     }
     
-    
+  public function camposAtributos(){
+      return $this->camposAtributos;
+  }  
+  
+  /*Si es un campo atributo debde de estar dentro del array camposatributos*/
+  public function isFieldAttribute($nameField){
+      return in_array($nameField,$this->camposAtributos);
+  }
+  /*
+   * Corrige la posicion de acuerdo a las coordenadas generales 
+   *  left= left + xgeneral
+   *  top=  top + topgeneral 
+   */
+  public function fixPosition($nameField){
+     
+      $valor=$this->{$nameField};
+      if(!(strpos($nameField,'left')===false))
+                            {
+                               $lon=(strpos($valor,'px')===false)?strlen($valor):strpos($valor,'px');
+                                $valor=(integer)substr($valor,0,$lon)+(integer)$this->reporte->xgeneral;
+                                $valor=$valor.'px';
+                          
+                            }
+        
+        if(!(strpos($nameField,'top')===false))
+                            {
+                                $lon=(strpos($valor,'px')===false)?strlen($valor):strpos($valor,'px');
+                                $valor=(integer)substr($valor,0,$lon)+(integer)$this->reporte->ygeneral;
+                                $valor=$valor.'px';
+                            }
+    return $valor;
+  }
+  
 }

@@ -37,7 +37,11 @@ class VwDocbotellas extends \common\models\base\modelBase
     /**
      * {@inheritdoc}
      */
-    
+     public $dateorTimeFields=[
+        'fecdocu'=>self::_FDATE,
+        'fectran'=>self::_FTIME,
+        'fectran1'=>self::_FDATE
+        ];
     public $fectran1;
     public $fecdocu1;
     public static function tableName()
