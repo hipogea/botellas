@@ -192,28 +192,7 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    public function actionRequestPasswordReset()
-    {
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
-
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
-        ]);
-    }
+   
 
     /**
      * Resets password.
@@ -300,5 +279,29 @@ The cache data Settings has been cleaned');
            h::response()->format = \yii\web\Response::FORMAT_JSON;
            return $datos;
         }
+    }
+    
+    
+    public function actionRequestPasswordReset()
+    {
+        $this->layout="install";
+        $model = new \mdm\admin\models\form\PasswordResetRequest();
+        if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
+            try{
+                set_time_limit(300); // 5 minutes   
+                $model->sendEmail();
+                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+                return $this->goHome();
+            } catch (\Swift_TransportException $Ste) { 
+                //echo "intenado"; die();
+                Yii::$app->getSession()->setFlash('error',yii::t('base.errors', 'Sorry, we are unable to reset password for email provided.'.$Ste->getMessage()));
+           }
+            
+           
+        }
+
+        return $this->render('requestPasswordResetToken', [
+                'model' => $model,
+        ]);
     }
 }

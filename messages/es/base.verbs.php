@@ -2,7 +2,10 @@
 
 
 return [    
+    'Back to Home'=>'Ir al inicio',
+    'Login'=>'Autenticar',
     'Save'=>'Guardar',
+    'Send'=>'Enviar',
     'Undo'=>'Deshacer',
     'Import'=>'Importar',
     'Export'=>'Exportar',
@@ -18,4 +21,5 @@ return [
     'Create {algo}'=>'Crear {algo}',
     'Update {algo}'=>'Editar {algo}',
     'Choose a Value'=>'Elija un valor',
+    'Request password reset'=>'Reestablecer Contraseña'
 ];
