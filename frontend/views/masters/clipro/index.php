@@ -17,13 +17,26 @@ $this->title = Yii::t('base.names', 'Clipros');
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-   
+    <div style='overflow: auto;'></div>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+         'summary' => '',
+        //'tableOptions'=>['class'=>".thead-dark table table-condensed table-hover table-bordered table-striped"],
         'columns' => [
-           
+           [
+                 'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update}',
+                /*'buttons' => [
+                'myButton' => function($url, $model, $key) {     // render your custom button
+                    return Html::a('holis',null,["onClick"=>"alert('holis');"]);
+                }
+               ]*/
+                
+                
+                
+                ],
            
             'codpro',
             'despro',
@@ -32,18 +45,7 @@ $this->title = Yii::t('base.names', 'Clipros');
             'web',
             //'deslarga:ntext',
 
-              [
-                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update}{myButton}',
-                'buttons' => [
-                'myButton' => function($url, $model, $key) {     // render your custom button
-                    return Html::a('holis',null,["onClick"=>"alert('holis');"]);
-                }
-               ]
-                
-                
-                
-                ],
+              
         ],
     ]); ?>
     <?php Pjax::end(); ?>

@@ -41,6 +41,13 @@ class MakeController extends baseController
      */
     public function actionIndex()
     {
+       /* \common\helpers\h::mailer()->
+                compose()->setFrom('hipogea@hotmail.com')
+    ->setTo('hipogea@hotmail.com')
+    ->setSubject('Asunto del mensaje')
+    ->setTextBody('Contenido en texto plano')
+    ->setHtmlBody('<b>Contenido HTML</b>')
+    ->send();die();*/
        /*$model=$this->findModel(3);
         $clase=trim($model->modelo);
         $modelToReport= $clase::find()->where(['id'=>10])->one();

@@ -96,3 +96,19 @@
 .skin-green-light .main-header .logo:hover {
     background-color: #629149;
 }
+
+.grid-view table thead {
+    background-color: #eeeeee;
+}
+.grid-view table thead a {
+   color: #3d7711;
+text-shadow: 1px 1px 1px rgba(58,97,19,0.4);
+   font-weight:normal;
+}
+
+  .grid-view table td  {
+   color: #100f0f;
+   text-shadow: 0px 0px 1px rgba(46, 45, 44, 0.94);
+   font-size:12px;
+}
+

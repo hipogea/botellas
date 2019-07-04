@@ -172,7 +172,15 @@ class Reporte extends \common\models\base\modelBase
                 $this->id.'_'.h::userId().'_'.uniqid().'.'.$this->type;
     }
     
-    
+    public function sendReportFromMail($fromuser=true){
+        h::mailer()->compose()
+    ->setFrom('from@domain.com')
+    ->setTo('to@domain.com')
+    ->setSubject('Asunto del mensaje')
+    ->setTextBody('Contenido en texto plano')
+    ->setHtmlBody('<b>Contenido HTML</b>')
+    ->send();
+    }
     
     
 }

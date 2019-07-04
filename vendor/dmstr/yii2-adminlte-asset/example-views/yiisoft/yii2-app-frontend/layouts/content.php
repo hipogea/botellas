@@ -37,9 +37,9 @@ use dmstr\widgets\Alert;
 
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 2.3
+       <i class="fa fa-wrench fa-1x" aria-hidden="true"></i> <b>Version</b> 2.3
     </div>
-    Nautilus -Solver  Desarrollado por Neotegnia Consultores SAC
+    Nautilus-Solver ®
 </footer>
 
 <!-- Control Sidebar -->

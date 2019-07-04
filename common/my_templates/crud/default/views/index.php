@@ -34,10 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= "<?= " ?>Html::a(<?= $generator->generateString('Create ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>, ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <div style='overflow:auto;'>
 <?php if ($generator->indexWidgetType === 'grid'): ?>
     <?= "<?= " ?>GridView::widget([
         'dataProvider' => $dataProvider,
+         'summary' => '',
+         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         <?= !empty($generator->searchModelClass) ? "'filterModel' => \$searchModel,\n        'columns' => [\n" : "'columns' => [\n"; ?>
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -77,4 +79,5 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 <?php endif; ?>
 <?= $generator->enablePjax ? "    <?php Pjax::end(); ?>\n" : '' ?>
 </div>
+    </div>
 </div>

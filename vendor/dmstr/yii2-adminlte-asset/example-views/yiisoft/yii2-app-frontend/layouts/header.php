@@ -31,7 +31,7 @@ use common\helpers\h;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="linkajustado" data-toggle="dropdown">
-                        <?= \frontend\widgets\userwidget\userWidget::widget(['size'=>30,'longName'=>true])  ?>
+                        <i class="fa fa-user" aria-hidden="true"></i><?php  echo h::userName() /* \frontend\widgets\userwidget\userWidget::widget(['size'=>30,'longName'=>true])*/  ?>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
