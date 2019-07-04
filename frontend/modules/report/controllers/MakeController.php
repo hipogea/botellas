@@ -97,6 +97,9 @@ class MakeController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+       echo $model->pathFile();die();
+        
+        
 //var_dump($model->existsChildField('deslarga'));die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -292,6 +295,15 @@ class MakeController extends baseController
          return $pdf->render(); 
       }elseif($model->type=='html'){
           return $contenido;
+      }elseif($model->type=='file'){
+          $pdf=ModuleReporte::getPdf();
+           $pdf->methods=[ 
+           'SetHeader'=>[($model->tienecabecera)?$header:''], 
+            'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
+        ];
+        $pdf->content=$contenido;
+        $pdf->output($contenido, $model->pathToStoreFile());
+        return true;
       }
       
       

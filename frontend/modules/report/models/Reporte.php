@@ -3,8 +3,9 @@
 namespace frontend\modules\report\models;
 use common\models\masters\Centros;
 use common\models\masters\Documentos;
-
+use frontend\modules\report\behaviors\FileBehavior;
 use Yii;
+use common\helpers\h;
 
 class Reporte extends \common\models\base\modelBase
 {
@@ -23,8 +24,9 @@ class Reporte extends \common\models\base\modelBase
 	return [
 		
 		'fileBehavior' => [
-			'class' => \nemmo\attachments\behaviors\FileBehavior::className()
-		]
+			'class' => FileBehavior::className()
+		],
+               
 		
 	];
 }
@@ -155,5 +157,22 @@ class Reporte extends \common\models\base\modelBase
       $clase=trim($this->modelo);        
         return $clase::find()->where(['id'=>$id])->one();  
     }
+    /*
+     * Devuel una ruta competa para
+     * grabar un archivo en disco 
+     */
+    public function pathToStoreFile(){
+       return  $this->dirFile().DIRECTORY_SEPARATOR.$this->nameReportFile();
+    }
+    /*
+     * Genera nombre de archivo para el reporte
+     */
+    private function nameReportFile(){
+        $name= str_replace(' ','_',$this->nombrereporte).'_'.
+                $this->id.'_'.h::userId().'_'.uniqid().'.'.$this->type;
+    }
+    
+    
+    
     
 }
