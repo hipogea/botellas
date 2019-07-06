@@ -37,6 +37,7 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null){
           'hidreporte'=>$this->integer(11)->notNull(),
          'aliascampo'=>$this->string(40)->append($this->collateColumn()),
           'longitudcampo'=>$this->integer(5),
+            'orden'=>$this->integer(3),
              'tipodato'=>$this->string(30)->append($this->collateColumn()),
         'esdetalle'=>$this->char(2)->append($this->collateColumn()),
         'esatributo'=>$this->char(1)->append($this->collateColumn()),

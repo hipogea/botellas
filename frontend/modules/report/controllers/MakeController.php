@@ -41,6 +41,19 @@ class MakeController extends baseController
      */
     public function actionIndex()
     {
+         /*yii::$app->session->setFlash('success',yii::t('report.messages','Se agregaron registros hijos '));
+	
+        $this->redirect(\yii\helpers\Url::toRoute('/masters/clipro/index'));*/
+       // $model=$this->findModel(3);
+        //$clase=trim($model->modelo);
+       // $dataProvider=$model->dataProvider(13);
+        
+        //var_dump($dataProvider);DIE();
+        // $dataProvider->pagination->page = 2; //Set page 1
+         // $dataProvider->refresh(); //Refresh models
+         // var_dump($dataProvider->models);die();
+        
+       	
        /* \common\helpers\h::mailer()->
                 compose()->setFrom('hipogea@hotmail.com')
     ->setTo('hipogea@hotmail.com')
@@ -104,7 +117,7 @@ class MakeController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-       echo $model->pathFile();die();
+       //echo $model->pathFile();die();
         
         
 //var_dump($model->existsChildField('deslarga'));die();
@@ -218,7 +231,7 @@ class MakeController extends baseController
         if($contador > 0 ){
                 yii::$app->session->setFlash('success',yii::t('report.messages','Se agregaron '.$contador.' registros hijos '));
 		}else {
-			yii::$app->session->setFlash('notice',yii::t('report.messages', 'No se agregaron registros hijos ya existen todos'));
+			yii::$app->session->setFlash('information',yii::t('report.messages', 'No se agregaron registros hijos ya existen todos'));
 		}
                 if(!$refresh)
 		$this->redirect(array('update','id'=>$modeloreporte->id));
@@ -250,26 +263,55 @@ class MakeController extends baseController
   
   public function actionCreareporte($id, $idfiltro){
      // echo $this->putLogo($id, $idfiltro);die();
-      
-      $pdf=ModuleReporte::getPdf();
+       $model=$this->findModel($id);     
+       
       $this->layout='blank';
-      $model=$this->findModel($id);
-      
-      $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):'';
-      
-         $header=$model->putHeaderReport($id, $idfiltro);
-      
-      $pdf->methods=[ 
+      $model=$this->findModel($id);      
+      $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):'';      
+         $header=$model->putHeaderReport($id, $idfiltro); 
+          $cabecera=$model->putCabecera($id,$idfiltro);
+         
+      /*$pdf->methods=[ 
            'SetHeader'=>[($model->tienecabecera)?$header:''], 
             'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
-        ];
-      
-      $cabecera=$model->putCabecera($id,$idfiltro);
+        ];*/
+    
+       $contenidoSinGrilla=$logo.$cabecera; 
+       //var_dump($model->numeroPaginas($idfiltro));die();
+      $npaginas=$model->numeroPaginas($idfiltro);
+       
+      $contenido="";
+      $dataProvider=$model->dataProvider($idfiltro);
+    
+     // var_dump($dataProvider);die();
+      $pageContents=[]; //aray con las paginas cotneido un elemento potr pagina
+      for($i = 1; $i <= $npaginas; $i++){
+          $dataProvider->pagination->page = $i-1; //Set page 1
+          $dataProvider->refresh(); //Refresh models
+          
+         $pageContents[]=$contenidoSinGrilla.$this->render('reporte',[
+             'modelo'=>$model,
+             'dataProvider'=>$dataProvider,
+             'contenidoSinGrilla'=>$contenidoSinGrilla,
+             'columnas'=>$model->makeColumns(),             
+                 ]).$this->pageBreak();
+         
+         
+              }
+      return $this->prepareFormat($pageContents, $model);
+     
+     }
+     //die();
       //$contenido=$this->render('reporte',['modelo'=>$model,'cabecera'=>$cabecera]);
-      $contenido=$logo.$cabecera;
-     return  $this->prepareFormat($contenido, $model);
+     
+     //return  $this->prepareFormat($contenido, $model);
      // return $this->render('reporte',['modelo'=>$model,'cabecera'=>$cabecera]);
+  
+  
+  private function pageBreak(){
+      return "<div class=\"pagebreak\"> </div>";
   }
+      
   
      /*
        * Hace el logo del Reporte
@@ -293,13 +335,21 @@ class MakeController extends baseController
   */
   private function prepareFormat($contenido,$model){
       if($model->type=='pdf'){
-          $pdf=ModuleReporte::getPdf();
-           $pdf->methods=[ 
+          $mpdf=new \Mpdf\mPDF();
+          /* $pdf->methods=[ 
            'SetHeader'=>[($model->tienecabecera)?$header:''], 
             'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
-        ];
-        $pdf->content=$contenido;
-         return $pdf->render(); 
+        ];*/
+          $paginas=count($contenido);
+         foreach($contenido as $index=>$pagina){
+            $mpdf->WriteHTML($pagina);
+            if($index < $paginas-1)
+             $mpdf->AddPage();
+         }
+              
+         
+        
+         return $mpdf->Output(); 
       }elseif($model->type=='html'){
           return $contenido;
       }elseif($model->type=='file'){

@@ -1,6 +1,6 @@
 <?php
 namespace frontend\components;
-use common\models\Documents;
+use common\models\masters\Documentos;
 use yii\db\ActiveRecord;
 
 
@@ -13,6 +13,25 @@ class documentBase extends ActiveRecord implements documentBaseInterface {
       $this->documento=$documentox::findOne($codigo);   
       
   }
+  
+    public function behaviors()
+{
+        $bh=parent::behaviors();
+        $bb['auditoria'] =[
+			'class' => \common\behaviors\AuditBehavior::className()
+		];
+	return $bb;
+}
+  
+  public function getDocumento()
+    {
+       
+        return $this->hasMany(Documentos::className(), ['codocu' => 'codocu']);
+    
+       }
+ public function isAusdith(){
+     return $this->documento->withaudit;
+ }
   
   public function gettTitle(){
       return $this->documento->desdocu;

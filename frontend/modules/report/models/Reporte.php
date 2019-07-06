@@ -43,6 +43,7 @@ class Reporte extends \common\models\base\modelBase
             [['codocu','role', 'codcen', 'modelo', 'nombrereporte', 'campofiltro', 'tamanopapel'], 'required'],
             [['detalle'], 'string'],
             [['codocu'], 'string', 'max' => 3],
+            [['registrosporpagina'], 'integer', 'min' => 1],
             [['codcen'], 'string', 'max' => 5],
             [['modelo', 'nombrereporte'], 'string', 'max' => 60],
             [['campofiltro'], 'string', 'max' => 40],
@@ -83,6 +84,14 @@ class Reporte extends \common\models\base\modelBase
         ];
     }
 
+    
+    public function init(){
+        parent::init();
+        //if(empty($this->registrosporpagina))
+           // throw new \yii\base\Exception(Yii::t('report.messages', 'The module \'registrosporpagina\'  property is empty'));
+    }
+    
+    
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -182,5 +191,83 @@ class Reporte extends \common\models\base\modelBase
     ->send();
     }
     
+  /*
+   * Funcion que renderiza el detalle del reporte 
+   * Coouna tabla , desde un grid
+   */
+    public function makeColumns(){
+        $hijosDetalle=$this->
+                getReportedetalle()->
+                where(['and', "esdetalle='1'", "visiblecampo='1'"])->
+                orderBy('orden')->all();
+        //echo count( $hijosDetalle);die();
+        $columns=[];
+        foreach($hijosDetalle as $fila){
+             $columns[]=[
+                'attribute'=>$fila->nombre_campo,
+                'label'=>$fila->aliascampo,
+               'format'=>'raw',
+                'options'=>['width'=>
+              $this->sizePercentCampo($fila->nombre_campo).'%'],
+            ];
+          
+          
+        }
+        return $columns;
+        
+    }
+    
+    
+    private function lenghtTotalCampos(){
+        return $this->getReportedetalle()->
+                where(['and', "esdetalle='1'", "visiblecampo='1'"])->
+                sum('longitudcampo');
+    }
+    
+    private function sizePercentCampo($nameField){
+       $total= $this->lenghtTotalCampos();
+       $ancho=$this->childByNameField($nameField)->longitudcampo;
+       return round(100*$ancho/$total);
+       
+    }
+    
+    private function childByNameField($nameField){
+       return $this->getReportedetalle()->where(['and', "esdetalle='1'", "visiblecampo='1'"])
+             ->andWhere(['nombre_campo'=>$nameField])->one();
+    }
+    
+    public function numeroregistros($idfiltro){
+        $model= $this->modelo;
+        return $model::find()->where([$this->campofiltro => $idfiltro])->count();
+    }
+    
+    public function numeroPaginas($idfiltro){
+        try{
+            $paginas= ceil($this->numeroregistros($idfiltro)/($this->registrosporpagina+0));
+        } catch (Exception $ex) {
+            throw new \yii\base\Exception(Yii::t('report.messages', 'The  \'registrosporpagina\'  property is empty'));
+  
+        }
+        return $paginas;
+    }
+    
+    
+    public function dataProvider($idfiltro){
+       $model= $this->modelo;
+       //var_dump($this->campofiltro,$idfiltro);die();
+        $query = $model::find()->where([$this->campofiltro => $idfiltro]);
+                $provider = new \yii\data\ActiveDataProvider([
+                        'query' => $query,
+                            'pagination' => [
+                                        'pageSize' => $this->registrosporpagina,
+                                            ],
+                               /* 'sort' => [
+                                        'defaultOrder' => [
+                                            
+                                                            ]
+                                            ],*/
+                                                ]);
+                return $provider;
+                  }
     
 }

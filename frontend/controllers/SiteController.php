@@ -71,29 +71,19 @@ class SiteController extends Controller
      *
      * @return mixed
      */
-    public function actionIndex()
-    {
-       
-         $this->layout="install";
-        
+    public function actionIndex()    {       
+        // $this->layout="install";       
        
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
-        if(yii::$app->user->isGuest){
-            
+        if(yii::$app->user->isGuest){            
             if(\backend\components\Installer::readEnv('APP_INSTALLED')=='false'){
-                 
-                
-                $this->redirect($urlBackend); 
-            
-            }else{
-               
+                                 
+                $this->redirect($urlBackend);             
+            }else{               
                $this->redirect(\Yii::$app->urlManager->createUrl("/site/login"));
             }
-        }else{
-            
-           //var_dump(Yii::$app->user->authTimeout);die();
-                    //"fotito.jpg");
-             //echo yii::$app->user->identity->username;die();
+        }else{            
+         
             return $this->render('index');
         }
        

@@ -42,6 +42,7 @@ class VwDocbotellas extends \common\models\base\modelBase
         'fectran'=>self::_FTIME,
         'fectran1'=>self::_FDATE
         ];
+    public $booleanFields=['essalida'];
     public $fectran1;
     public $fecdocu1;
     public static function tableName()
@@ -110,5 +111,16 @@ class VwDocbotellas extends \common\models\base\modelBase
     public static function find()
     {
         return new VwDocbotellasQuery(get_called_class());
+    }
+    
+    
+    public static function sum($id, $namefield){
+       return self::find()->where(['=','id',$id])->sum($namefield);
+    }
+    public static function count($id, $namefield){
+       return self::find()->where(['=','id',$id])->count($namefield);
+    }
+    public static  function avg($id, $namefield){
+       return self::find()->where(['=','id',$id])->avg($namefield);
     }
 }

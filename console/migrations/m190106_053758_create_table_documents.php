@@ -24,6 +24,7 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
             'abreviatura'=>$this->string(5)->append($this->collateColumn()),
             'prefijo'=>$this->string(4)->append($this->collateColumn()),            
             'escomprobante'=>$this->char(1)->append($this->collateColumn()),
+              'withAudit'=>$this->char(1)->append($this->collateColumn()),
              'idreportedefault'=>$this->integer(11),
              ], $this->collateTable());
        $this->addPrimaryKey('pk_docus45',static::NAME_TABLE, 'codocu');

@@ -127,4 +127,17 @@ class VwDocbotellasSearch extends VwDocbotellas
 
         return $dataProvider;
     }
+    
+    public function searchByDoc($id,$pageSize){
+         $query = VwDocbotellas::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => [
+                'pageSize' => $pageSize,
+            ],
+        ]);
+    $query->where(['=', 'id', $id]);
+       return $dataProvider;
+
+    }
 }

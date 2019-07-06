@@ -28,7 +28,7 @@ class AuditBehavior extends Behavior
      
    public function events()
     {
-        if($this->owner->hasProperty('withAudit'))
+        if($this->owner->hasProperty('withaudit'))
           if($this->owner->withAudit)
        return  [
            ActiveRecord::EVENT_BEFORE_INSERT => 'doBeforeSave',

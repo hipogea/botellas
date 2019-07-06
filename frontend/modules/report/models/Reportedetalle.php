@@ -316,4 +316,7 @@ class Reportedetalle extends \common\models\base\modelBase
     return $valor;
   }
   
+  
+  
+  
 }
