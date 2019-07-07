@@ -1,7 +1,8 @@
 <?php
 
 
-return [    
+return [   
+    'Signup'=>'Alta de Usuario',
     'Back to Home'=>'Ir al inicio',
     'Login'=>'Autenticar',
     'Save'=>'Guardar',
@@ -21,5 +22,6 @@ return [
     'Create {algo}'=>'Crear {algo}',
     'Update {algo}'=>'Editar {algo}',
     'Choose a Value'=>'Elija un valor',
-    'Request password reset'=>'Reestablecer Contraseña'
+    'Request password reset'=>'Reestablecer Contraseña',
+    'Create User'=>'Crear Usuario'
 ];

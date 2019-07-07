@@ -13,7 +13,8 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
-
+use mdm\admin\components\UserStatus;
+use mdm\admin\models\searchs\User as UserSearch;
 /**
  * Site controller
  */
@@ -168,13 +169,24 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
+       $this->layout="install";
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
+               if($user->status== UserStatus::INACTIVE){
+                  return $this->render('waitsignup', [
+                    'model' => $model,
+                     ]);
+                   
+               }else{
+                   if (Yii::$app->getUser()->login($user)) {
                     return $this->goHome();
-                }
+                         
+               }
+                
+                
             }
+        }
         }
 
         return $this->render('signup', [
@@ -294,4 +306,42 @@ The cache data Settings has been cleaned');
                 'model' => $model,
         ]);
     }
+    
+    public function actionManageUsers(){
+        $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('users', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    /*
+     * Esta funcion es simlar a sign-UP
+     * solo que la usa el daminsitrador de
+     * de la pagina o un usuario con toles para
+     * manejar RBAC
+     */
+       public function actionCreateUser()
+    {
+      // $this->layout="install";
+        $model = new SignupForm();
+        $model->setScenario('createx');
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {   
+                 yii::$app->session->
+               setFlash('success',
+            yii::t('base.actions','The user has been created'));
+		
+                  $this->redirect('manage-users');
+            }
+        }
+        
+
+        return $this->render('createuser', [
+            'model' => $model,
+        ]);
+    }
+
 }

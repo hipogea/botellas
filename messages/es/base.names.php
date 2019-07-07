@@ -1,6 +1,10 @@
 <?php
 return [
     'Code'=>'Código',
+     'Disabled'=>'Inactivo',
+     'Enabled'=>'Activo',
+    'UserName'=>'Usuario',
+    'Remember Me'=>'Mantener Sesión',
     'Description'=>'Descripción',
     'Phone Number'=>'Teléfono',
     'Long Text'=>'Comentario',
