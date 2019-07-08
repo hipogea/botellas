@@ -15,7 +15,7 @@ class m190106_160929_test_table_documents extends baseMigration
     {
        
 if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
-        $this->createTable(static::NAME_TABLE, [
+       /* $this->createTable(static::NAME_TABLE, [
             'codocu' => $this->char(3)->append($this->collateColumn()),
              'codocupadre' => $this->char(3)->append($this->collateColumn()),
             'desdocu' => $this->string(60)->notNull()->append($this->collateColumn()),
@@ -26,12 +26,13 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
             'prefijo'=>$this->string(4)->append($this->collateColumn()),            
             'escomprobante'=>$this->char(1)->append($this->collateColumn()),
              'idreportedefault'=>$this->integer(11),
+            'withaudit'=>$this->char(1)->append($this->collateColumn()),
              ], $this->collateTable());
        $this->addPrimaryKey('pk_docus45',static::NAME_TABLE, 'codocu');
        $comment="Define si es un comprobante ";
        $this->addCommentOnColumn(static::NAME_TABLE, 'escomprobante', $comment);
        $comment="Indica el id del reporte por defaul, sirve para visualizar un documento ";
-       $this->addCommentOnColumn(static::NAME_TABLE, 'idreportedefault', $comment);
+       $this->addCommentOnColumn(static::NAME_TABLE, 'idreportedefault', $comment);*/
     }
     
     }
@@ -42,9 +43,9 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
      */
     public function safeDown()
     {
-       if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) !== null) {
+      /* if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) !== null) {
             $this->dropTable(static::NAME_TABLE);
-        }
+        }*/
 
     }
 

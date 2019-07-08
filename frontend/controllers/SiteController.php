@@ -78,12 +78,13 @@ class SiteController extends Controller
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
         if(yii::$app->user->isGuest){            
             if(\backend\components\Installer::readEnv('APP_INSTALLED')=='false'){
-                                 
+                          
                 $this->redirect($urlBackend);             
             }else{               
                $this->redirect(\Yii::$app->urlManager->createUrl("/site/login"));
             }
-        }else{            
+        }else{     
+          
          
             return $this->render('index');
         }

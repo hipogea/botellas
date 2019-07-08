@@ -23,15 +23,15 @@ class M190508053817Alter_table_direcciones_add_column extends baseMigration
         $table=static::NAME_TABlE_DIRECCIONES;
         if($this->existsTable($table)) {
           if(is_null($this->getDb()->getSchema()
-                ->getTableSchema()->
+                ->getTableSchema($table)->
                 getColumn('codpro'))){
             $this->addColumn($table,
                  'codpro', 
                  $this->char(6)->notNull()->append($this->collateColumn())
                  );
             
-             $this->addForeignKey($this->generateNameFk($table), $table,
-              'codpro', static::NAME_TABLE_CLIPRO,'codpro');
+             $this->addForeignKey('fk_direc_clxxiprod56', $table,
+              'codpro', static::NAME_TABlE_CLIPRO,'codpro');
         
         }
         
@@ -45,10 +45,12 @@ class M190508053817Alter_table_direcciones_add_column extends baseMigration
      */
     public function safeDown()
     {
-        /* $this->dropForeignKey(
-            'fk_direc_cliprod56',
+      /* $this->dropForeignKey(
+            'fk_direc_clxxiprod56',
             static::NAME_TABlE_DIRECCIONES
-        );*/
+        );
+        
+         $table=static::NAME_TABlE_DIRECCIONES;
         if($this->existsTable($table)) {
             if(!is_null($this->getDb()->getSchema()
                 ->getTableSchema($table)->
@@ -56,7 +58,7 @@ class M190508053817Alter_table_direcciones_add_column extends baseMigration
                 $this->dropColumn(            
             $table,'codpro'
         );
-        }
+        }*/
  
     }
 

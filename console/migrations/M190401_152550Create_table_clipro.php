@@ -7,7 +7,7 @@ use console\migrations\baseMigration;
 /**
  * Class M190508051603Create_table_clipro
  */
-class M190508051603Create_table_clipro extends baseMigration
+class M190401_152550Create_table_clipro extends baseMigration
 {
     const NAME_TABLE='{{%clipro}}';
     //const NAME_TABlE_DIRECCIONES='{%direcciones}';

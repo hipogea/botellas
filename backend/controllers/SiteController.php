@@ -25,20 +25,7 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['login','index', 'error'],
-                        'allow' => true,
-                    ],
-                    [
-                        'actions' => ['logout','index'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
+            
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -70,7 +57,8 @@ class SiteController extends Controller
         //Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
        // Command::execute('migrate/down', ['interactive' => false]);die();
        //Installer::setConfigYii('name', 'Pichin',Installer::CONFIG_COMMON_MAIN);die();
-       Installer::ManageInstall();        
+   
+        Installer::ManageInstall();        
         if(!Yii::$app->user->isGuest)        
           return $this->render('index');     
           $this->redirect('site/login');

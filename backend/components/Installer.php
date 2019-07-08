@@ -68,10 +68,10 @@ class Installer
     }
     
     public static function redirectInstall(){
-        
-        Yii::$app->controller->redirect(
-      \yii\helpers\Url::toRoute('install/requirements/show')
-        );
+       /*echo \yii\helpers\Url::to('install/requirements/show'); die();*/
+        // return $this->redirect(['view', 'id' => $model->id]);
+       // echo Yii::$app->controller->id; die();
+     return  Yii::$app->controller->redirect(['install/requirements/show']);
     }
     
     
@@ -81,6 +81,8 @@ class Installer
      * 
      */
     public static function  ManageInstall(){
+        //var_dump(Yii::$app->controller->redirect(['install/requirements/show']));die();
+          //return  Yii::$app->controller->redirect(['install/requirements/show']);
         if(static::isFileEnv()){
             
             if(static::alreadyInstalled()){
@@ -89,7 +91,7 @@ class Installer
             }else{
                 //echo "sewe ewewalñio";die();
                //redirigir al instalador 
-                static::redirectInstall();
+               return  static::redirectInstall();
             }
         }else{
             if(static::isFileEnvExample()){

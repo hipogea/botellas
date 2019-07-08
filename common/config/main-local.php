@@ -10,7 +10,7 @@
 'username'=>'tomasito',
 'password'=>'tomasito',
 'charset'=>'utf8',
-'tablePrefix'=>'civeh_',
+'tablePrefix'=>'8nurj_',
 ],
 ],
 'language'=>'es_PE',
