@@ -47,6 +47,7 @@ class RequirementsController extends Controller
      */
     public function actionShow()
     {
+      
         // Check requirements
         $requirements = Installer::checkServerRequirements();
 

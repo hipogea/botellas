@@ -12,16 +12,16 @@ class baseMigration extends Migration
     }
     
     public function getCollate(){ 
-        return Installer::readEnv('DB_COLLATE', 'utf8_unicode_ci');
+        return trim(Installer::readEnv('DB_COLLATE', 'utf8_unicode_ci'));
     }
     
     public function getCharacterSet(){ 
-        return Installer::readEnv('DB_CHARSET', 'utf8');
+        return trim(Installer::readEnv('DB_CHARSET', 'utf8'));
        }
 
     
     public function getDbEngine(){ 
-       return Installer::readEnv('DB_ENGINET', 'InnoDB');
+       return trim(Installer::readEnv('DB_ENGINET', 'InnoDB'));
          }
     
          
