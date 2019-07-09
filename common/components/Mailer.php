@@ -43,9 +43,11 @@ class Mailer extends Correo
             'class' => 'Swift_SmtpTransport',
                   'host' => $this->gSettingSafe('mail','servermail','mail.neotegnia.com'),//'mail.neotegnia.com'
                   'username' => $this->gSettingSafe('mail','userservermail','jramirez@neotegnia.com'),//'jramirez@neotegnia.com',
-                  'password' => $this->gSettingSafe('mail','passworduserservermail','toxoplasma1'),//'toxoplasma1',
+                  'password' => $this->gSettingSafe('mail','passworduserservermail',''),//'t...1',
                   'port' =>$this->gSettingSafe('mail','portservermail','25'),// '25',
                   'encryption' => 'tls',
+              /*Esta line ase agergo apra que funcione en localhost */
+                  'streamOptions'=>['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]],
         ];
         
         return parent::init();

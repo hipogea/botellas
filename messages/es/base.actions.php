@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Check your email for further instructions.'=>'Revise las instrucciones en su cuenta de correo.',
+    'New password saved.'=>'Su nuevo password ha sido actualizado',
     'If you forgot your password you can'=>'Recuperar Password',
     'Register'=>'Registrarse',
     'Create Clipro'=>'Crear Empresa',
