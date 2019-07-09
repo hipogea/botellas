@@ -17,16 +17,7 @@ class RequirementsController extends Controller
    public function behaviors()
     {
         return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [
-                    [
-                        'actions' => ['show', 'index'],
-                        'allow' => true,
-                    ],
-                   
-                ],
-            ],
+            
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -47,6 +38,7 @@ class RequirementsController extends Controller
      */
     public function actionShow()
     {
+     
         // Check requirements
         $requirements = Installer::checkServerRequirements();
 

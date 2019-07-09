@@ -79,7 +79,11 @@ public function safeDown()
      $nombretabla='docbotellas.estado';
      $condition=['parametro'=>$nombretabla];
      Config::firstOrCreateStatic($condition);
-     $centro=Centros::find()->where(true)->one()->codcen;
+     $registro=Centros::find()->where(true)->one();
+     
+     if(!is_null($registro)){
+     
+     $centro=$registro->codcen;
      $valores=[
          ['nombretabla'=>$nombretabla,
            'codcen'=>$centro,
@@ -105,14 +109,14 @@ public function safeDown()
      foreach($valores as $index=>$atributos){
           Combovalores::firstOrCreateStatic($atributos);
      }
-    
+     }
  }
  
  private function deleteEstados(){
      $nombretabla='docbotellas.estado';
-     $centro=Centros::find()->where(true)->one()->codcen;
+    // $centro=Centros::find()->where(true)->one()->codcen;
      Config::deleteAll(['parametro'=>$nombretabla,]);     
-     $condition=['parametro'=>$nombretabla,'codcen'=>$centro];
+    // $condition=['parametro'=>$nombretabla,'codcen'=>$centro];
      Combovalores::deleteAll(['nombretabla'=>$nombretabla,]);
  }
     
@@ -126,8 +130,11 @@ public function safeDown()
      $nombretabla='docbotellas.envio';
      $condition=['parametro'=>$nombretabla];
      Config::firstOrCreateStatic($condition);
-     $centro=Centros::find()->where(true)->one()->codcen;
-     $valores=[
+     $registro=Centros::find()->where(true)->one();
+     
+     if(!is_null($registro)){
+         $centro=$registro->codcen;
+         $valores=[
          ['nombretabla'=>$nombretabla,
            'codcen'=>$centro,
              'codigo'=>'10',
@@ -147,14 +154,17 @@ public function safeDown()
      foreach($valores as $index=>$atributos){
           Combovalores::firstOrCreateStatic($atributos);
      }
+     }
+     
+     
     
  }
  
  private function deleteEnvios(){
      $nombretabla='docbotellas.envio';
-     $centro=Centros::find()->where(true)->one()->codcen;
+    // $centro=Centros::find()->where(true)->one()->codcen;
      Config::deleteAll(['parametro'=>$nombretabla,]);     
-     $condition=['parametro'=>$nombretabla,'codcen'=>$centro];
+   //  $condition=['parametro'=>$nombretabla,'codcen'=>$centro];
      Combovalores::deleteAll(['nombretabla'=>$nombretabla,]);
  }
     

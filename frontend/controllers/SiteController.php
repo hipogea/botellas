@@ -78,12 +78,13 @@ class SiteController extends Controller
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
         if(yii::$app->user->isGuest){            
             if(\backend\components\Installer::readEnv('APP_INSTALLED')=='false'){
-                                 
+                          
                 $this->redirect($urlBackend);             
             }else{               
                $this->redirect(\Yii::$app->urlManager->createUrl("/site/login"));
             }
-        }else{            
+        }else{     
+          
          
             return $this->render('index');
         }
@@ -205,6 +206,7 @@ class SiteController extends Controller
      */
     public function actionResetPassword($token)
     {
+        $this->layout="install";
         try {
             $model = new ResetPasswordForm($token);
         } catch (InvalidParamException $e) {
@@ -212,7 +214,7 @@ class SiteController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
+            Yii::$app->session->setFlash('success', yii::t('base.actions','New password saved.'));
 
             return $this->goHome();
         }
@@ -287,12 +289,12 @@ The cache data Settings has been cleaned');
     public function actionRequestPasswordReset()
     {
         $this->layout="install";
-        $model = new \mdm\admin\models\form\PasswordResetRequest();
+        $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->getRequest()->post()) && $model->validate()) {
             try{
                 set_time_limit(300); // 5 minutes   
                 $model->sendEmail();
-                Yii::$app->getSession()->setFlash('success', 'Check your email for further instructions.');
+                Yii::$app->getSession()->setFlash('success',yii::t('base.actions','Check your email for further instructions.'));
                 return $this->goHome();
             } catch (\Swift_TransportException $Ste) { 
                 //echo "intenado"; die();

@@ -61,15 +61,17 @@ class Installer
      * Inmportante 
      */
     public static function alreadyInstalled(){
-        if(Installer::readEnv('APP_INSTALLED')=='false')
+        //var_dump(Installer::readEnv('APP_INSTALLED'));die();
+        if(trim(Installer::readEnv('APP_INSTALLED'))=='false')
         return false;
         return true;  
     }
     
     public static function redirectInstall(){
-        Yii::$app->controller->redirect(
-      \yii\helpers\Url::toRoute('install/requirements/show')
-        );
+       /*echo \yii\helpers\Url::to('install/requirements/show'); die();*/
+        // return $this->redirect(['view', 'id' => $model->id]);
+       // echo Yii::$app->controller->id; die();
+     return  Yii::$app->controller->redirect(['install/requirements/show']);
     }
     
     
@@ -79,13 +81,17 @@ class Installer
      * 
      */
     public static function  ManageInstall(){
+        //var_dump(Yii::$app->controller->redirect(['install/requirements/show']));die();
+          //return  Yii::$app->controller->redirect(['install/requirements/show']);
         if(static::isFileEnv()){
             
             if(static::alreadyInstalled()){
+                //echo "salñio";die();
                 return;
             }else{
+                //echo "sewe ewewalñio";die();
                //redirigir al instalador 
-                static::redirectInstall();
+               return  static::redirectInstall();
             }
         }else{
             if(static::isFileEnvExample()){
@@ -269,7 +275,7 @@ class Installer
         ]);*/
 
         $dsn=static::readEnv('DB_CONNECTION','mysql').':host='.$host.'; port='.$port.';dbname='.$database;
-        $charset=static::readEnv('DB_CHARSET', 'utf8mb4');
+        $charset=trim(static::readEnv('DB_CHARSET', 'utf8mb4'));
         $filePathConfig=static::CONFIG_COMMON_LOCAL;
         $routeArray='components\db\\';
         
@@ -277,7 +283,7 @@ class Installer
                 'dsn' => $dsn,
                 'username' => $username,
                 'password' => $password,
-                'charset' => static::readEnv('DB_CHARSET', 'utf8mb4'),
+                'charset' => trim(static::readEnv('DB_CHARSET', 'utf8mb4')),
                 ]); 
    try{
       
@@ -301,7 +307,7 @@ class Installer
    static::setConfigYii($routeArray.'password',$password,$filePathConfig);
       //charset
    static::setConfigYii($routeArray.'charset',
-               static::readEnv('DB_CHARSET', 'utf8mb4'),
+               trim(static::readEnv('DB_CHARSET', 'utf8mb4')),
                $filePathConfig);   
   //takle prefix
     static::setConfigYii($routeArray.'tablePrefix',
@@ -486,7 +492,7 @@ class Installer
                 } 
             }
          
-      return (is_null($retorno))?$default:$retorno;
+      return (is_null($retorno))?$default:trim($retorno);
        
     }
     
@@ -632,10 +638,13 @@ public static function testMail($serverMail,$userMail,$passwordMail,$portMail){
     ->send();
     */
     
+  
     $transport = new \Swift_SmtpTransport();
+    //echo get_class($transport);die();
           $transport->setHost($serverMail)
             ->setPort($portMail)
             ->setEncryption('tls')
+            ->setStreamOptions(['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]] )
             ->setUsername($userMail)
             ->setPassword($passwordMail);
         $mailer = new \Swift_Mailer($transport);
