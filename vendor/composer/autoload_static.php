@@ -153,6 +153,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'kartik\\plugins\\fileinput\\' => 25,
             'kartik\\plugins\\depdrop\\' => 23,
             'kartik\\mpdf\\' => 12,
+            'kartik\\helpers\\' => 15,
             'kartik\\growl\\' => 13,
             'kartik\\grid\\' => 12,
             'kartik\\form\\' => 12,
@@ -165,6 +166,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'kartik\\datetime\\' => 16,
             'kartik\\date\\' => 12,
             'kartik\\color\\' => 13,
+            'kartik\\builder\\' => 15,
             'kartik\\base\\' => 12,
             'kartik\\alert\\' => 13,
             'kartik\\affix\\' => 13,
@@ -434,6 +436,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-mpdf/src',
         ),
+        'kartik\\helpers\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-helpers/src',
+        ),
         'kartik\\growl\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-growl',
@@ -481,6 +487,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'kartik\\color\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-colorinput/src',
+        ),
+        'kartik\\builder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-builder/src',
         ),
         'kartik\\base\\' => 
         array (

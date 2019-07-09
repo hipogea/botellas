@@ -13,5 +13,4 @@ return array(
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/lib'),
     'Diff' => array($vendorDir . '/phpspec/php-diff/lib'),
     'Behat\\Gherkin' => array($vendorDir . '/behat/gherkin/src'),
-    'mPDF' => array($vendorDir . '/mpdf/mpdf'),
 );

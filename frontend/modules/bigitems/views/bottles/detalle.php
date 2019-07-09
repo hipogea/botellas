@@ -26,3 +26,25 @@
         </tbody>                 
      </table>
             </div>
+    <?php 
+   $cadenaJs="$('#button-add-item').on( 'click', function() { 
+            $.ajax({
+              url: '". \yii\helpers\Url::to('ajax-add-item')."',
+              type: 'POST',
+             data: {form: '". base64_encode(serialize($form))."' , model: '".str_replace('\\','_',get_class($item))."'  , orden: 4 },
+              dataType: 'json',        
+            
+               error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(json) {
+                   $('tbody #addItem').before(json);
+                        }
+                        });  "
+            . "})";
+       
+  // echo  \yii\helpers\Html::script($stringJs);
+   $this->registerJs($cadenaJs);
+   ?>

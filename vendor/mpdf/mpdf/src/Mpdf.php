@@ -998,7 +998,9 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	 */
 	public function __construct(array $config = [])
 	{
-		$this->_dochecks();
+                  
+            
+            $this->_dochecks();
 
 		list(
 			$mode,

@@ -120,10 +120,8 @@ class BottlesController extends baseController
                 
                      
                 Model::loadMultiple($items, Yii::$app->request->post('Detdocbotellas'),'');
-              /* ECHO count($items)."<br>";
-               print_r($items[0]->attributes);
-               echo "<br><br>";
-               print_r($items[1]->attributes);
+              /*ECHO count($items)."<br>";
+              
                die();*/
                 h::response()->format = \yii\web\Response::FORMAT_JSON;
                  return array_merge(\yii\widgets\ActiveForm::validate($model),
@@ -278,6 +276,31 @@ class BottlesController extends baseController
                                 $items[$i]->doc_id=$valorId;
            }
        return $items;
+        
+    }
+    
+    
+     /*
+     * Esta funcion rellena un registro hijo 
+      * renderizando la vista detalle 
+     * 
+     */
+    public function actionAjaxAddItem(){
+       if(h::request()->isAjax){
+        $form=unserialize(base64_decode(h::request()->post('form'))); /*new \yii\widgets\ActiveForm;*/
+        $clase=str_replace('_','\\',h::request()->post('model'));
+        $model= new $clase;
+         $orden=h::request()->post('orden');
+         h::response()->format = \yii\web\Response::FORMAT_JSON;
+         return $this->renderAjax('item',
+                 [
+                     'form'=>$form,
+                     'item'=>$model,
+                     'orden'=>$orden
+                 ]);
+       }
+            
+          
         
     }
 }

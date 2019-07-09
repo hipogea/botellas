@@ -37,7 +37,13 @@ return [
                 'class' => 'lo\modules\noty\Module',
             ],
        
+         'export' => [
+                'class' => 'frontend\modules\export\ModuleExport',
+            ],
         
+        'import' => [
+                'class' => 'frontend\modules\import\ModuleImport',
+            ],
         'gridview' =>  [
         'class' => '\kartik\grid\Module'
         // enter optional module parameters below - only if you need to  
@@ -158,7 +164,11 @@ return [
                  'bigitems.labels' => [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => '@frontend/modules/bigitems/messages',
-                                            ],  
+                                            ], 
+                'import.labels' => [
+                                            'class' => 'yii\i18n\PhpMessageSource',
+                                            'basePath' => '@frontend/modules/import/messages',
+                                            ], 
                 'bigitems.errors' => [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => 'frontend\modules\bigitems\messages',

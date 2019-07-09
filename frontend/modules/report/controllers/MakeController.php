@@ -336,6 +336,7 @@ class MakeController extends baseController
   private function prepareFormat($contenido,$model){
       if($model->type=='pdf'){
           $mpdf=new \Mpdf\mPDF();
+          //echo get_class($mpdf);die();
           /* $pdf->methods=[ 
            'SetHeader'=>[($model->tienecabecera)?$header:''], 
             'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
@@ -351,7 +352,7 @@ class MakeController extends baseController
         
          return $mpdf->Output(); 
       }elseif($model->type=='html'){
-          return $contenido;
+          return $contenido[0];
       }elseif($model->type=='file'){
           $pdf=ModuleReporte::getPdf();
            $pdf->methods=[ 

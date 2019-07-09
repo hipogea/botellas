@@ -12,6 +12,13 @@ class FinderController extends  \common\controllers\base\baseController
   public function actions() {
       parent::actions();
       return [
+           
+          'additem'=> [
+                        'class' => 'common\actions\ActionAdditem',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
+                            ],
+          
           'alert'=> [
                         'class' => 'common\actions\ActionAlert',
                         //'property1' => 'value1',

@@ -45,7 +45,7 @@ use yii\helpers\Html;
                         'editableOptions'=>[
                             //'format' => Editable::FORMAT_BUTTON,
                             'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                             'data'=>['verdana'=>'verdana','arial'=>'arial','courier'=>'courier'], 
+                             'data'=>['xbriyaz'=>'xbriyaz','verdana'=>'verdana','arial'=>'arial','courier'=>'courier'], 
                                             ],
                         'attribute' => 'font_family',
                             //'pageSummary' => 'Total',

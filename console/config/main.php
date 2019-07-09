@@ -84,6 +84,7 @@ return [
                          'frontend\modules\people\database\migrations',
                          'frontend\modules\bigitems\database\migrations', 
                          'frontend\modules\report\database\migrations',
+                            'frontend\modules\import\database\migrations',
                             
                             ],
                         ],
