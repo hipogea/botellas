@@ -33,9 +33,9 @@
       // bind change event to select
       $('#cboFavorites').on('change', function () {
           var url = $(this).val(); // get selected value
-          if (url) { // require a URL
-              window.location = url; // redirect
-          }
+          var abso='".\yii\helpers\Url::home(true)."';
+          window.location=abso+url;
+          
           return false;
       });
     });" ); ?>

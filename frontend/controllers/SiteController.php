@@ -249,7 +249,8 @@ class SiteController extends Controller
     
      public function actionAddfavorite(){
          $this->layout="install";
-        $url=Yii::$app->request->referrer;        
+        $url=Yii::$app->request->referrer;  
+        
         if(!is_null($url)){
             $url=str_replace(\yii\helpers\Url::home(true),'',$url);
            

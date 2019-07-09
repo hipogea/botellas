@@ -52,7 +52,9 @@ use common\helpers\h;
                                 
                             </div>
                             <div class="pull-left">
-                                <?= Html::button('Add Favorite', ['value' => Url::to(['site/addfavorite']), 'title' => 'Add this page to Favorites...', 'class' => 'showModalButton btn btn-success']); ?>
+
+
+                                <?= Html::button('Add Favorite', ['href' => Url::to(['site/addfavorite']), 'title' => 'Add this page to Favorites...', 'class' => 'botonAbre btn btn-success']); ?>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(

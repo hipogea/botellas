@@ -32,6 +32,8 @@ class Userfavoritos extends \common\models\base\modelBase
             [['user_id'], 'required'],
             [['user_id', 'order'], 'integer'],
             [['url'], 'string', 'max' => 125],
+             [['url','alias'], 'string', 'max' => 125],
+             [['url','alias'], 'safe'],
             [['ishome'], 'string', 'max' => 1],
         ];
     }

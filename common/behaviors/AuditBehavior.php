@@ -94,7 +94,7 @@ class AuditBehavior extends Behavior
             //'ip'=>yii::$app->request->getUrl(),
             'controlador'=>Yii::$app->controller->id,
             'description'=>Yii::$app->request->getUrl(),
-            'nombrecampo'=>$attribute,
+            'nombrecampo'=>$this->owner->getAttributeLabel($attribute),
             'oldvalue'=>$this->owner->getOldAttribute($attribute),
             'newvalue'=>$this->owner->{$attribute}.'',
              'username'=>yii::$app->user->identity->username, 
