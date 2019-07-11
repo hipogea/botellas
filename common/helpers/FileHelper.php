@@ -87,4 +87,13 @@ class FileHelper extends FileHelperOriginal {
                                 )
                     );
    }
+   
+   public function getUrlImageUserGuest(){
+       $directorio=yii::getAlias('@frontend/web/img').DIRECTORY_SEPARATOR;
+       if(!is_dir($directorio))
+         throw new \yii\base\Exception(Yii::t('base.errors', 'The  \''.$directorio.'\' Directory doesn\'t exists '));
+        if(!is_file($directorio.'anonimus.png'))
+       throw new \yii\base\Exception(Yii::t('base.errors', 'The  \''.$directorio.'anonimus.png\' Picture doesn\'t exists '));
+        return \yii\helpers\Url::base().'/img/anonimus.png';
+   }
 }

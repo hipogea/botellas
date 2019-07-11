@@ -33,6 +33,10 @@ return [
     
     
     'modules' => [
+      
+        'sta' => [
+            'class' => 'frontend\modules\sta\staModule',
+        ],
                 'noty' => [
                 'class' => 'lo\modules\noty\Module',
             ],
@@ -223,6 +227,10 @@ return [
                                  'class' => 'yii\i18n\PhpMessageSource',
                                  'basePath' => '@messages',                                          
                                             ], 
+                 'sta.labels'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sta/messages',                                         
+                                            ], 
                 
                       ],
                   ],
@@ -239,6 +247,7 @@ return [
         'user' => [
          'class' => 'common\components\User',
         'identityClass' => 'mdm\admin\models\User',
+            'identityClass' => 'common\models\User',
         //'loginUrl' => ['admin/user/login'],
          'loginUrl' => ['site/login'],  
            'enableAutoLogin'=>false,

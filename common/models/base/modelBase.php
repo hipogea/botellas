@@ -538,21 +538,27 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
         }
         
         
-        public  static function  firstOrCreateStatic($attributes){  
+        public  static function  firstOrCreateStatic($attributes,$scenario=null){  
             //print_r($attributes);
             //$model=self::find()->where($attributes)->one();
             if(is_null(self::find()->where($attributes)->one())){
                 try{
                     $clase= static::class;
                     $model=new $clase;
+                    if(!is_null($scenario))
+                        $model->setScenario($scenario);
                     //$model->oldAttributes=[];
+                   // echo $model->getScenario();die();
                        $model->attributes=$attributes;
-                      // print_r($model->attributes);
-                    $model->insert();unset($model);
+                       //print_r($model->attributes);die();
+                       
+                   $model->insert();
+                   // print_r($model->getErrors());die();
+                    unset($model);
                     //echo "ok  ----->";
                         return true;
                 } catch (\yii\db\Exception $exception) {
-                    echo "    --->  error  :   ".$model->nombre_campo."  ". $exception->getMessage();
+                    echo "    --->  error  :    ". $exception->getMessage();
                      return false;
              } 
                 
@@ -562,10 +568,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             
         }
         
-        public  function  firstOrCreate($attributes){  
+        public  function  firstOrCreate($attributes,$scenario=null){  
             //print_r($attributes);
             if(is_null($this->find()->where($attributes)->one())){
                 try{
+                    if(!is_null($scenario))
+                        $this->setScenario($scenario);
                        $this->attributes=$attributes;
                     $this->insert();
                     //echo "ok  ----->";

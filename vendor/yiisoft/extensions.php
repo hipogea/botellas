@@ -510,4 +510,13 @@ return array (
       '@kartik/builder' => $vendorDir . '/kartik-v/yii2-builder/src',
     ),
   ),
+  'linslin/yii2-curl' => 
+  array (
+    'name' => 'linslin/yii2-curl',
+    'version' => '1.3.0.0',
+    'alias' => 
+    array (
+      '@linslin/yii2/curl' => $vendorDir . '/linslin/yii2-curl',
+    ),
+  ),
 );
