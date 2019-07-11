@@ -225,15 +225,17 @@ class SiteController extends Controller
     }
     
     public function actionProfile(){
-       //echo yii::getAlias('@root'); die();
-        //var_dump(yii::$app->homeUrl);die();
-      // var_dump('hola');die();
-      // var_dump(\common\helpers\FileHelper::getModels());die();
-        //$enc=new \common\helpers\FileHelper();
-       // print_r($enc->getModels()); die();
+        
+       // echo \common\helpers\FileHelper::getUrlImageUserGuest();die();
+     /* if(h::app()->hasModule('sta')){
+          $this->redirect(\yii\helpers\Url::toRoute('/sta/default/profile'));
+      }*/
         $model =Yii::$app->user->getProfile() ;
+        $identidad=Yii::$app->user->identity;
+        $identidad->setScenario($identidad::SCENARIO_MAIL);
        // var_dump($model);die();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($identidad->load(Yii::$app->request->post()) && $identidad->save() &&                
+                $model->load(Yii::$app->request->post()) && $model->save()) {
            // var_dump($model->getErrors()   );die();
             yii::$app->session->setFlash('success','grabo');
             return $this->redirect(['profile', 'id' => $model->user_id]);
@@ -242,10 +244,27 @@ class SiteController extends Controller
         }
 
         return $this->render('profile', [
+            'identidad'=>$identidad,
             'model' => $model,
         ]);
     }
     
+    /*
+     * Visualiza otros perfiles 
+     */
+     public function actionViewProfile($iduser){
+         $newIdentity=h::user()->identity->findOne($iduser);
+      if(is_null($newIdentity))
+          throw new BadRequestHttpException(yii::t('base.errors','User not found with id '.$iduser));  
+           //echo $newIdentity->id;die();
+     // h::user()->switchIdentity($newIdentity);
+        $profile =$newIdentity->getProfile($iduser);
+        //echo $model->id;die();
+        return $this->render('profileother', [
+            'profile' => $profile,
+            'model'=>$newIdentity,
+        ]);
+    }
     
      public function actionAddfavorite(){
          $this->layout="install";

@@ -33,6 +33,7 @@ return array(
     'mdm\\admin\\' => array($vendorDir . '/mdmsoft/yii2-admin'),
     'lo\\widgets\\modal\\' => array($vendorDir . '/loveorigami/yii2-modal-ajax/src'),
     'lo\\modules\\noty\\' => array($vendorDir . '/loveorigami/yii2-notification-wrapper/src'),
+    'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),
     'kartik\\widgets\\' => array($vendorDir . '/kartik-v/yii2-widgets/src'),
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead/src'),
     'kartik\\touchspin\\' => array($vendorDir . '/kartik-v/yii2-widget-touchspin/src'),

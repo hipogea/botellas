@@ -85,7 +85,7 @@ return [
                          'frontend\modules\bigitems\database\migrations', 
                          'frontend\modules\report\database\migrations',
                             'frontend\modules\import\database\migrations',
-                            
+                            'frontend\modules\sta\database\migrations',
                             ],
                         ],
         'fixture' => [

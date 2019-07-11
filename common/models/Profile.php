@@ -1,7 +1,8 @@
 <?php
 
 namespace common\models;
-
+use common\helpers\h;
+use common\helpers\FileHelper;
 use Yii;
 
 /**
@@ -17,6 +18,8 @@ use Yii;
  */
 class Profile extends \common\models\base\modelBase
 {
+   
+    
     /**
      * {@inheritdoc}
      */
@@ -80,4 +83,61 @@ class Profile extends \common\models\base\modelBase
     {
         return new ProfileQuery(get_called_class());
     }
-}
+    
+    public function getAlu()
+    {
+        if(h::app()->hasModule('sta')){
+             if($this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO){
+           \frontend\modules\sta\models\Alumnos::firstOrCreateStatic(['profile_id'=>$this->id],\frontend\modules\sta\models\Alumnos::SCENARIO_SOLO);
+               return $this->hasOne(\frontend\modules\sta\models\Alumnos::className(), ['profile_id' => 'id']);
+      
+             }
+                  }else{
+            return $this;
+        }
+       
+        
+    }
+    
+   public function afterFind() {
+     // echo "murio"; die();
+       parent::afterFind();
+      /* if(h::app()->hasModule('sta')){
+             if($this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO){
+           \frontend\modules\sta\models\Alumnos::firstOrCreateStatic(['profile_id'=>$this->id],\frontend\modules\sta\models\Alumnos::SCENARIO_SOLO);
+               //return $this->hasOne(\frontend\modules\sta\models\Alumnos::className(), ['profile_id' => 'id']);
+      
+            
+                  }
+    
+          }
+*/
+   
+   }
+   
+   public function hasAtachment(){
+       return (count($this->files)>0);
+   }
+    
+   
+   public function getUrlImage(){
+       if($this->hasAtachment()){
+           return $this->files[0]->getUrl();
+       }else{
+        return $this->sourceExternalImage();
+       }
+   }
+   
+   /*Busnca una fuente extena en el modulo sta
+    * Esi no encuentra deveulve el defaulr 
+    */
+   private function sourceExternalImage(){
+       if(h::app()->hasModule('sta') && $this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO){
+          return \frontend\modules\sta\staModule::getPathImage($this->user->username); 
+       }else{
+          return  FileHelper::getUrlImageUserGuest();  
+       }
+   }
+   
+   
+             }
