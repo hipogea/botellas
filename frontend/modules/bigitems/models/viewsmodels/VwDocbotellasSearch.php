@@ -3,12 +3,13 @@ namespace frontend\modules\bigitems\models\viewsmodels;
 use frontend\modules\bigitems\models\viewsmodels\VwDocbotellas;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-
+use common\models\masters\Clipro;
 /**
  * DocbotellasSearch represents the model behind the search form of `frontend\modules\bigitems\models\Docbotellas`.
  */
 class VwDocbotellasSearch extends VwDocbotellas
 {
+    
     /**
      * {@inheritdoc}
      */
@@ -54,6 +55,11 @@ class VwDocbotellasSearch extends VwDocbotellas
         return Model::scenarios();
     }
 
+     public function getClipro()
+    {
+        return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
+    }
+    
     /**
      * Creates data provider instance with search query applied
      *
@@ -63,6 +69,9 @@ class VwDocbotellasSearch extends VwDocbotellas
      */
     public function search($params)
     {
+       //var_dump($this->fieldsLink(false)); die();
+        
+        
         $query = VwDocbotellas::find();
   /*$query = Docbotellas::find()->
                 innerJoin(Clipro::tableName(),
@@ -74,6 +83,9 @@ class VwDocbotellasSearch extends VwDocbotellas
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        //var_dump($params);die();
+        if(!empty($params))
+     $query= $this->addCriteria($query,$params);
 //var_dump($dataProvider->models);die();
         $this->load($params);
 
@@ -103,6 +115,11 @@ class VwDocbotellasSearch extends VwDocbotellas
                         ]);   
         }
         
+        
+       
+        
+        
+        
         $query->andFilterWhere(['like', 'despro', $this->despro])
           ->andFilterWhere(['like', 'direcpartida', $this->direcpartida])
                  ->andFilterWhere(['like', 'codestado', $this->codestado])
@@ -113,7 +130,7 @@ class VwDocbotellasSearch extends VwDocbotellas
           ->andFilterWhere(['like', 'nombrevendedor', $this->nombrevendedor])
            ->andFilterWhere(['like', 'aptrans', $this->aptrans])
 ->andFilterWhere(['like', 'nombretrans', $this->nombretrans])
-             ->andFilterWhere(['like', 'codpro', $this->codpro])
+          //   ->andFilterWhere(['like', 'codpro', $this->codpro])
             ->andFilterWhere(['like', 'codcen', $this->codcen])
             ->andFilterWhere(['like', 'descripcion', $this->descripcion])
             ->andFilterWhere(['like', 'codenvio', $this->codenvio])
@@ -139,5 +156,26 @@ class VwDocbotellasSearch extends VwDocbotellas
     $query->where(['=', 'id', $id]);
        return $dataProvider;
 
+    }
+    
+    private function addCriteria(&$query,$params){
+        $campos=array_keys($this->fieldsLink(false));
+        $nombreclase=$this->getShortNameClass();
+        
+        foreach($campos as $clave=>$nombrecampo){
+            $valorcampo=$params[$nombreclase][$nombrecampo];
+             if(is_array($valorcampo)){            
+           if(count($valorcampo)>0){               
+               $query->andFilterWhere([$nombrecampo=>$valorcampo]);
+                $params[$nombreclase][$nombrecampo]=$params[$nombreclase][$nombrecampo][0];
+           } else{
+               $params[$nombreclase][$nombrecampo]=''; 
+           }
+        } else{
+           $query->andFilterWhere(['like', $nombrecampo, $this->{$nombrecampo}]);
+        }
+        }
+        return $query;
+        
     }
 }

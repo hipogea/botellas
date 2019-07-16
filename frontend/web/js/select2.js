@@ -777,7 +777,11 @@ S2.define('select2/results',[
     );
 
     if (this.options.get('multiple')) {
-      $results.attr('aria-multiselectable', 'true');
+      $results.attr('aria-multiselectable',
+      
+          
+          
+          'true');
     }
 
     this.$results = $results;

@@ -264,18 +264,26 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
           $relaciones=[];
        $calse=new \ReflectionClass(static::class); //LA CLASE HIJA ACTUAL NO LA PADRE 
        $metods=$calse->getMethods();
+       //print_r($metods);die();
        UNSET($calse);
        foreach($metods as $key=>$object){
-           if (($object->class===static::class))
-           if(substr(trim(strtolower($object->name)),0,3)==='get' ){
-               /*var_dump(method_exists(static::class,$object->name));
+           /*echo trim(static::class)."<br>";
+                echo trim($object->class)."<br>";
+               echo trim(strtolower($object->name))."<br><br><br>";*/
+           if (($object->class===static::class)){
+               
+              if(substr(trim(strtolower($object->name)),0,3)==='get' ){
+               
+              /* var_dump(method_exists(static::class,$object->name));
                var_dump(is_object($this->{$object->name}()));
                var_dump(get_parent_class($this->{$object->name}()));
                var_dump(get_class($this->{$object->name}()));
                 var_dump($object->name);
                 var_dump($this->{$object->name}()->link);*/
+           } 
            }
-               
+           
+               //die();
            if (($object->class===static::class) //es un metodo de la clase actual y no de los parents
                && (substr(trim(strtolower($object->name)),0,3)==='get' ) //comieniza con get
                && (method_exists(static::class,$object->name)) //si es una fucion no una propiedad
@@ -1044,6 +1052,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       return $this->setFormatTimeFromSettings($stringDate,$show,true);
   }
   
+  public function getShortNameClass(){
+     
+        $retazos=explode('\\',self::className());
+        // return $retazos;
+      return $retazos[count($retazos)-1];
+  }
   
   }
   

@@ -16,7 +16,7 @@ class selectWidget extends \yii\base\Widget
     public $form; //El active FOrm 
     public $campo;//el nombre del campo modelo
     public $tabular=false; //Cuando se trata de renderizar en una grilla o tabala 
-  
+    public $multiple=false; //si se puede seleccionar   mas de un valor 
    // public $foreignskeys=[2,3,4];//Orden de los campos del modelo foraneo 
     //que s evan a amostrar o renderizar en el forumlario eta propida debe de especficarse al momento de usar el widget 
     private $_foreignClass; //nombe de la clase foranea
@@ -56,6 +56,8 @@ class selectWidget extends \yii\base\Widget
                 'campo'=>$this->campo,
                  'esnuevo'=>$this->model->isNewRecord,
                'valoresLista'=>$this->getValoresList(),
+               'multiple'=>$this->multiple,
+              'datos'=>$this->getDataSelectedByUser(),
              // 'valores'=>$valores,
                // 'idcontrolprefix'=>$this->getIdControl(),
                 ]);
@@ -69,6 +71,8 @@ class selectWidget extends \yii\base\Widget
                   'esnuevo'=>$this->model->isNewRecord,
                  'valoresLista'=>$this->getValoresList(),
                  'id'=>$this->id,
+                 'multiple'=>$this->multiple,
+                  'datos'=>$this->getDataSelectedByUser(),
                //  'valores'=>$valores,
                //  'idcontrolprefix'=>$this->getIdControl(),
                 ]);
@@ -80,6 +84,7 @@ class selectWidget extends \yii\base\Widget
    $this->getView()->registerJs("$(document).ready(function() {
     $('#".$this->getIdControl()."').select2( 
     {
+  
   ajax: { 
    url: '".\yii\helpers\Url::toRoute($this->controllerName.'/'.$this->actionName)."',
    type: 'post',
@@ -162,7 +167,29 @@ class selectWidget extends \yii\base\Widget
            $this->getModelForeign()->{$this->getSecondField()}
            ];
    }
-           
+  
+   /*
+    * Obtiene el array de datos pasados por GET
+    * cuando se trata de modo multiple, esto para
+    * recordar al sguietne request, que valores
+    * selecciono el usuario antes de enviar el form
+    */
+  private function getDataSelectedByUser(){
+      if(\yii::$app->request->isGet && !empty(\yii::$app->request->params)){
+          $params=\yii::$app->request->queryParams;
+      $valorClave=$params[$this->getShortNameModel()][$this->campo];
+      if(is_array($valorClave && $this->multiple)){
+          return $valorClave;
+      }else{
+          return [];
+      }
+      }else{
+          return [];
+      }
+      
+      
+  }
+   
    
 }
 ?>

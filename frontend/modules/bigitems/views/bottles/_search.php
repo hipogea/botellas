@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use common\widgets\selectwidget\selectWidget;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\bigitems\models\DocbotellasSearch */
 /* @var $form yii\widgets\ActiveForm */
@@ -18,12 +18,23 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-   
+  
 
-    <?= $form->field($model, 'codestado') ?>
+  
 
-    <?= $form->field($model, 'codpro') ?>
-
+     
+   <?php 
+   //var_dump($model->fieldsLink(false));die();
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codpro',
+           'multiple'=>'multiple',
+            //'foreignskeys'=>[1,2,3],
+        ]);  ?>
+    
     <?= $form->field($model, 'numero') ?>
 
     <?= $form->field($model, 'codcen') ?>
@@ -61,3 +72,4 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+

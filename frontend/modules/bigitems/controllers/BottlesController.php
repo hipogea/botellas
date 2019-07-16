@@ -44,6 +44,7 @@ class BottlesController extends baseController
         
         
         $searchModel = new VwDocbotellasSearch();
+       //var_dump($searchModel->getShortNameClass()); die();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

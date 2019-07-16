@@ -104,6 +104,10 @@ class VwDocbotellas extends \common\models\base\modelBase
         ];
     }
 
+    public function getClipro()
+    {
+        return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
+    }
     /**
      * {@inheritdoc}
      * @return VwDocbotellasQuery the active query used by this AR class.
