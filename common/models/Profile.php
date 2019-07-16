@@ -140,4 +140,8 @@ class Profile extends \common\models\base\modelBase
    }
    
    
+   public function getInterlocutor(){
+       
+   }
+  
              }

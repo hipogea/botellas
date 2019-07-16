@@ -19,7 +19,7 @@ $this->title = 'Profile';
 <div class="box box-success">
     <br>
     <div class="row">
-        <div class="col-lg-5">
+        
              
             
             
@@ -73,7 +73,7 @@ $this->title = 'Profile';
             <?php ActiveForm::end(); ?>
             
             
-        </div>
+       
     </div>
     <br>
 </div>
