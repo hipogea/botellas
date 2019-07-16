@@ -107,7 +107,9 @@ public function getCenters(){
     
 }
 
-
+public function isTheFirstLogin(){
+    return (is_null($this->lastLogin()))?true:false;
+}
 
    
 }
