@@ -26,6 +26,7 @@ return array(
     'unclead\\multipleinput\\' => array($vendorDir . '/unclead/yii2-multiple-input/src'),
     'shifrin\\noty\\' => array($vendorDir . '/shifrin/yii2-noty'),
     'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
+    'ruskid\\csvimporter\\' => array($vendorDir . '/ruskid/yii2-csv-importer'),
     'rmrevin\\yii\\fontawesome\\' => array($vendorDir . '/rmrevin/yii2-fontawesome'),
     'reportico\\reportico\\' => array($vendorDir . '/reportico/yii2-reportico'),
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),

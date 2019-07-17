@@ -18,9 +18,15 @@ class m190710_152206_modify_table_profile extends baseMigration
     {
        $table=static::NAME_TABLE;
 if($this->existsTable($table)) {
-   $this->addColumn($table, 'tipo', $this->char(2)->append($this->collateColumn()));
+     $tableSchema = $this->db->getSchema()->getTableSchema($table);
+     $columns = $tableSchema->getColumnNames();
+     if (!in_array('tipo', $columns)) {
+       $this->addColumn($table, 'tipo', $this->char(2)->append($this->collateColumn()));
+            } 
+     }
+   
 }
- }
+ 
 
 public function safeDown()
     {

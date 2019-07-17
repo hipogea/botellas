@@ -1,6 +1,14 @@
 <?php
 
 namespace frontend\modules\import\controllers;
+/*Paquete de importacion */
+/*use ruskid\csvimporter\CSVReader;
+use ruskid\csvimporter\CSVImporter;
+use ruskid\csvimporter\BaseUpdateStrategy;
+use ruskid\csvimporter\BaseImportStrategy;
+use ruskid\csvimporter\ARUpdateStrategy;
+use ruskid\csvimporter\ARImportStrategy;*/
+/*fin del paquetre de importacion*/
 
 use Yii;
 use frontend\modules\import\models\ImportCargamasiva;
@@ -8,11 +16,12 @@ use frontend\modules\import\models\ImportCargamasivaSearch;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\helpers\h;
 
 /**
  * ImportController implements the CRUD actions for ImportCargamasiva model.
  */
-class ImportController extends baseController
+class ImportacionController extends baseController
 {
     /**
      * {@inheritdoc}
@@ -35,6 +44,7 @@ class ImportController extends baseController
      */
     public function actionIndex()
     {
+        $importer = new CSVImporter;  die();
         $searchModel = new ImportCargamasivaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -123,5 +133,32 @@ class ImportController extends baseController
         }
 
         throw new NotFoundHttpException(Yii::t('import.labels', 'The requested page does not exist.'));
+    }
+    
+    
+    
+    
+    public function actionImportar($id){
+        ///$namemodule=$this->module->id;
+      $cargamasiva=$this->findModel($id);
+      $cargamasiva->verifyChilds();
+      $datos=$cargamasiva->dataToImport(); 
+      /*Verifica si las columnas coindicen */
+       $cargamasiva->verifyFirstRow($datos[0]);
+       
+   foreach ($datos as $fila){
+       $modelo=$cargamasiva->modelAsocc();
+       if($cargamasiva->insercion){
+           
+       }else{
+           
+       }
+   }
+      
+      /*Si se ha enviado el post */
+      /*if(isset(h::request()->post($cargamasiva->getShortNameClass()))){
+        
+      }*/
+      
     }
 }

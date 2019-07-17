@@ -519,4 +519,13 @@ return array (
       '@linslin/yii2/curl' => $vendorDir . '/linslin/yii2-curl',
     ),
   ),
+  'ruskid/yii2-csv-importer' => 
+  array (
+    'name' => 'ruskid/yii2-csv-importer',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@ruskid/csvimporter' => $vendorDir . '/ruskid/yii2-csv-importer',
+    ),
+  ),
 );

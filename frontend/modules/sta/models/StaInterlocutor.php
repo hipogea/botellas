@@ -38,7 +38,9 @@ class StaInterlocutor extends \common\models\base\modelBase
      const TYPE_SOCIAL='40';
         const TYPE_COORDINADOR='50';
          const TYPE_AUTORIDAD='60';
+          const TYPE_DOCENTE_TUTOR='70';
         
+     
     /**
      * {@inheritdoc}
      */
@@ -98,9 +100,37 @@ class StaInterlocutor extends \common\models\base\modelBase
             $this->tipo=static::TYPE_ALUMNO;
     }
     
-    protected function getWhereFacultad(){
+    public function getWhereFacultad(){
         if($this->tipo==static::TYPE_AUTORIDAD)
             return ['1'=>'1'];
         return ['codfac'=>$this->codfac];
+    }
+    
+    public function isCompleteData(){
+        switch ($this->tipo) {
+    case static::TYPE_ALUMNO :
+       
+        break;
+    case static::TYPE_ALUMNO_AYUDANTE:
+        echo "i es igual a 1";
+        break;
+    case static::TYPE_AUTORIDAD:
+        echo "i es igual a 2";
+        break;
+     case static::TYPE_COORDINADOR:
+        echo "i es igual a 2";
+        break;
+     case static::TYPE_DOCENTE_TUTOR:
+        echo "i es igual a 2";
+        break;
+     case static::TYPE_PSICOLOGO:
+        echo "i es igual a 2";
+        break;
+    case static::TYPE_SOCIAL:
+        echo "i es igual a 2";
+        break;
+    default:
+       
+}
     }
 }

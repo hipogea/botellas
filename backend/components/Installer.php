@@ -34,14 +34,14 @@ class Installer
     const CONFIG_FRONTEND_MAIN=__dir__.'/../../frontend/config/main_copy.php';
     const CONFIG_FRONTEND_LOCAL=__dir__.'/../../frontend/config/main-local_copy.php';
     const CONFIG_CONSOLE_MAIN=__dir__.'/../../console/config/main_copy.php';
-    const CONFIG_CONOLE_LOCAL=__dir__.'/../../console/config/main-local_copy.php'; 
+    const CONFIG_CONSOLE_LOCAL=__dir__.'/../../console/config/main-local_copy.php'; 
     const CONFIG_X=__dir__.'/../../common/config/main_copy.php'; 
 /*
  * Rutas definidas para los roles
  * que deben aprecer en el widget del menu
  * som funciones basicas que debe de tenr cualquier usuario
  */
-    private static$acciones=[
+    private static $acciones=[
         '/admin/user/login',
         '/admin/user/logout',
         '/admin/user/signup',

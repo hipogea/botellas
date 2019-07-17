@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a73d7c8e936ddc93de6f30ab572d932",
+    "content-hash": "29685a816888c4ed549dff2c8f0b07b0",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -173,7 +173,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -4880,6 +4880,48 @@
             "time": "2017-01-11T14:05:47+00:00"
         },
         {
+            "name": "ruskid/yii2-csv-importer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ruskid/yii2-csv-importer.git",
+                "reference": "2c9a55bc31a643773c4000a6f4457081fbaccb72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ruskid/yii2-csv-importer/zipball/2c9a55bc31a643773c4000a6f4457081fbaccb72",
+                "reference": "2c9a55bc31a643773c4000a6f4457081fbaccb72",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "ruskid\\csvimporter\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Victor Demin",
+                    "email": "demin@trabeja.com"
+                }
+            ],
+            "description": "Helper to import csv files into database",
+            "keywords": [
+                "csv",
+                "excel",
+                "importer",
+                "yii2"
+            ],
+            "time": "2019-05-23T12:13:42+00:00"
+        },
+        {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.1",
             "source": {
@@ -7869,7 +7911,8 @@
         "kartik-v/yii2-grid": 20,
         "kartik-v/yii2-editable": 20,
         "imanilchaudhari/yii2-currency-converter": 20,
-        "kartik-v/yii2-builder": 20
+        "kartik-v/yii2-builder": 20,
+        "ruskid/yii2-csv-importer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

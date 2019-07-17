@@ -2,7 +2,11 @@
 namespace console\migrations;
 use yii\db\Migration;
 use backend\components\Installer;
-
+/*
+ * Clase definida para ayudar asimplificar los procesos de migracion 
+ * valido solo para MYSQL
+ * uSELA Y VERA COMO LE SIMPLKIFICA LA VIDA 
+ */
 class baseMigration extends Migration
 {
       

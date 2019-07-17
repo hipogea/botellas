@@ -18,6 +18,7 @@ if(!$this->existsTable($table)) {
              'id'=>$this->primaryKey(),
             'user_id' => $this->integer(11)->notNull(),//id padre
                'insercion' => $this->char(1)->notNull()->append($this->collateColumn()),//codigo activo
+         'tienecabecera' => $this->char(1)->notNull()->append($this->collateColumn()),//codigo activo
         'escenario'=>$this->string(40)->notNull()->append($this->collateColumn()),
         'lastimport'=>$this->string(18)->append($this->collateColumn()),//ultimo fecha de importacion 
                 'descripcion'=>$this->string(40)->notNull()->append($this->collateColumn()),

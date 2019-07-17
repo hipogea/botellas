@@ -113,6 +113,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'r' => 
         array (
+            'ruskid\\csvimporter\\' => 19,
             'rmrevin\\yii\\fontawesome\\' => 24,
             'reportico\\reportico\\' => 20,
         ),
@@ -334,6 +335,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
+        'ruskid\\csvimporter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ruskid/yii2-csv-importer',
         ),
         'rmrevin\\yii\\fontawesome\\' => 
         array (

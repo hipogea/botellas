@@ -44,7 +44,8 @@
         "kartik-v/yii2-export": "*",
         "unclead/yii2-multiple-input": "~2.0",
         "kartik-v/yii2-builder": "@dev",
-        "linslin/yii2-curl": "*"
+        "linslin/yii2-curl": "*",
+        "ruskid/yii2-csv-importer": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
