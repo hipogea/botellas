@@ -10,8 +10,8 @@
 'username'=>'root',
 'password'=>'',
 'charset'=>'utf8',
-'tablePrefix'=>'e0pgk_',
+'tablePrefix'=>'uwb9i_',
 ],
 ],
-'language'=>'es',
+'language'=>'es_PE',
 ];  ?>

@@ -839,16 +839,20 @@ class Response extends \yii\base\Response
      */
     public function redirect($url, $statusCode = 302, $checkAjax = true)
     {
+        
         if (is_array($url) && isset($url[0])) {
             // ensure the route is absolute
             $url[0] = '/' . ltrim($url[0], '/');
         }
         $url = Url::to($url);
         if (strncmp($url, '/', 1) === 0 && strncmp($url, '//', 2) !== 0) {
+          // echo "que pasa:  ".$url."<br>" ;
             $url = Yii::$app->getRequest()->getHostInfo() . $url;
+          //  echo "que pasa:  ".$url ;die();
         }
 
         if ($checkAjax) {
+            
             if (Yii::$app->getRequest()->getIsAjax()) {
                 if (Yii::$app->getRequest()->getHeaders()->get('X-Ie-Redirect-Compatibility') !== null && $statusCode === 302) {
                     // Ajax 302 redirect in IE does not work. Change status code to 200. See https://github.com/yiisoft/yii2/issues/9670
@@ -860,9 +864,12 @@ class Response extends \yii\base\Response
                     $this->getHeaders()->set('X-Redirect', $url);
                 }
             } else {
+                //echo $url;die();
                 $this->getHeaders()->set('Location', $url);
+               // echo "que pasa:  ".$url ;die();
             }
         } else {
+            
             $this->getHeaders()->set('Location', $url);
         }
 

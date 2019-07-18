@@ -46,9 +46,14 @@ class M190513034739Fill_parametroscombo extends baseMigration
             ['grupoventas','0'],
             ['documento.identidad','1'],
             ['impuesto','1'],
-            ['empresa.area','1'],            
+            ['empresa.area','1'],
+            ['departamentos','1'],
             ];
     }
+    
+    
+    
+    
     
     private static function  setData($model){
         $campos=['parametro','clavecentro'];

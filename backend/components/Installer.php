@@ -70,7 +70,7 @@ class Installer
     public static function redirectInstall(){
        /*echo \yii\helpers\Url::to('install/requirements/show'); die();*/
         // return $this->redirect(['view', 'id' => $model->id]);
-       // echo Yii::$app->controller->id; die();
+       //echo Yii::$app->controller->id; die();
      return  Yii::$app->controller->redirect(['install/requirements/show']);
     }
     
@@ -89,11 +89,13 @@ class Installer
                 //echo "salñio";die();
                 return;
             }else{
+               // echo "papz"; die();
                 //echo "sewe ewewalñio";die();
                //redirigir al instalador 
-               return  static::redirectInstall();
+               return  Yii::$app->controller->redirect(['install/language']);
             }
         }else{
+           
             if(static::isFileEnvExample()){
                 //copiar al archivio .env
                  Installer::createDefaultEnvFile();
