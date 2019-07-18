@@ -24,7 +24,9 @@ class userWidget extends Widget
     
     public function init()
     {
+        
         $profile=h::user()->getProfile();
+        
         if(!is_null($profile) && //Si tiene asociado un profile
             count($profile->files)>0  && //Si tiene adjunto
             trim(substr($profile->files[0]->mime,0,5))=='image' //si es imagen 

@@ -60,6 +60,31 @@ class ComboHelper  {
                 'codocu','desdocu');
     }
     
+    
+      public static function getCboDepartamentos(){
+         //$iduser=is_null($iduser)?static::userId():$iduser;        
+        return ArrayHelper::map(
+                        \common\models\masters\Ubigeos::find()->
+                all(),
+            'coddepa','departamento');
+      }
+        
+       public static function getCboProvincias($depa){
+         //$iduser=is_null($iduser)?static::userId():$iduser;        
+        return ArrayHelper::map(
+                        \common\models\masters\Ubigeos::find()
+                ->where(['coddepa'=>$depa])->all(),
+                'codprov','provincia');
+    }
+    
+     public static function getCboDistritos($prov){
+         //$iduser=is_null($iduser)?static::userId():$iduser;        
+        return ArrayHelper::map(
+                        \common\models\masters\Ubigeos::find()
+                ->where(['codprov'=>$prov])->all(),
+                'coddist','distrito');
+    }
+    
     /*ESTA FUNCION ES DE PRPISTO GENERAL 
      * RECIBE EL NOBRE DE UNA CLASE 
      * CON EL CAMO CLAVE Y CAMPO REFERENCIA

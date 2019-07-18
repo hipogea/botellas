@@ -21,7 +21,12 @@ if(!$this->existsTable(static::NAME_TABLE)) {
    // $this->assignFks();   
         $this->createTable(static::NAME_TABLE, [
             'id'=>$this->primaryKey(),
-            'direc'=>$this->string(80)->append($this->collateColumn()),  
+            'direc'=>$this->string(80)->append($this->collateColumn()), 
+            
+             'coddepa'=>$this->char(3)->append($this->collateColumn()),
+            'coddist'=>$this->char(9)->append($this->collateColumn()),  
+               'codprov'=>$this->char(6)->append($this->collateColumn()),
+            
                'nomlug'=>$this->string(20)->append($this->collateColumn()),
             'distrito'=>$this->string(25)->append($this->collateColumn()),  
                'provincia'=>$this->string(30)->append($this->collateColumn()),

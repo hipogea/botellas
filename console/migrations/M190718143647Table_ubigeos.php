@@ -15,8 +15,8 @@ if(!$this->existsTable($table)) {
     $this->createTable($table, [
              'id'=>$this->primaryKey(),
         'coddepa' => $this->char(3)->notNull()->append($this->collateColumn()),
-         'codprov'=>$this->char(3)->notNull()->append($this->collateColumn()), 
-           'coddist' => $this->char(3)->notNull()->append($this->collateColumn()),
+         'codprov'=>$this->char(6)->notNull()->append($this->collateColumn()), 
+           'coddist' => $this->char(9)->notNull()->append($this->collateColumn()),
              'departamento' => $this->string(35)->notNull()->append($this->collateColumn()),
         'provincia' => $this->string(35)->notNull()->append($this->collateColumn()),
         'distrito' => $this->string(35)->notNull()->append($this->collateColumn()),

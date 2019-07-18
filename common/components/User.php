@@ -71,7 +71,9 @@ class User extends UserOriginal{
      
    public function getProfile(){
       // var_dump($this->id);
+       
        Profile::firstOrCreateStatic(['user_id'=>$this->id]);
+       //echo "sale";die();
        return Profile::find()->where(['user_id'=>$this->id])->one();
        
    }

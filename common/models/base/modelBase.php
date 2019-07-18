@@ -575,7 +575,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
              } 
                 
             } else{
-                echo "habla"; die();
+               
                 return false;
             }
             

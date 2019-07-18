@@ -43,7 +43,7 @@ class TrabajadoresController extends Controller
        //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();
        // var_dump(Trabajadores::find()->where(['codigotra'=>'70w03'])->one());die();
         //echo \common\models\masters\Centros::find()->where(true)->one()->codcen;die();
-        
+       print_r(\common\helpers\ComboHelper::getCboDepartamentos());die();
         $modelo=new Configuracion();
       //print_r($modelo->rules());die();
         $searchModel = new TrabajadoresSearch();

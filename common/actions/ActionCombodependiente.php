@@ -14,9 +14,9 @@ class ActionCombodependiente extends \yii\base\Action
 	public function run(){
 	//Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
            
-            /*$modelo= h::request()->post('clase');
-            $filtro=h::request()->post('valorfiltro');
-            $campoclave=h::request()->post('campoclave');
+            /*$modelo= h::request()->post('clase');*/
+            $valorfiltro=h::request()->post('filtro');
+            /*$campoclave=h::request()->post('campoclave');
             $camporef=h::request()->post('camporef');*/
            $isremote=h::request()->post('isremotesource');
            $source=h::request()->post('source');
@@ -41,6 +41,6 @@ class ActionCombodependiente extends \yii\base\Action
         }
         
         private function generateHtml($datos){
-           return  Html::renderSelectOptions(null, $datos);
+           return  Html::renderSelectOptions('', $datos);
         }
 }

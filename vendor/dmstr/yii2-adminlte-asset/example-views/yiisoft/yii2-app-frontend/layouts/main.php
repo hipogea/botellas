@@ -8,6 +8,7 @@ use yii\helpers\Html;
 
     if (class_exists('frontend\assets\AppAsset')) {
         frontend\assets\AppAsset::register($this);
+       
     } else {
         app\assets\AppAsset::register($this);
     }
@@ -27,7 +28,7 @@ use yii\helpers\Html;
         <?php $this->head() ?>
     </head>
     <body class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?>">
-    <?php $this->beginBody() ?>
+    <?php $this->beginBody(); ?>
     <div class="wrapper">
 
              <?php

@@ -66,6 +66,7 @@ class Direcciones extends \common\models\base\modelBase
     {
         return [
             [['codpro','direc','departamento','provincia','distrito',], 'required'],
+             [['coddepa','codprov','coddist'], 'safe'],
             [['direc'], 'string', 'max' => 80],
             [['nomlug'], 'string', 'max' => 20],
             [['distrito'], 'string', 'max' => 25],
