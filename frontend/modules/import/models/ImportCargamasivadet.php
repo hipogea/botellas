@@ -45,7 +45,7 @@ class ImportCargamasivadet extends \common\models\base\modelBase
             [['cargamasiva_id', 'sizecampo', 'parent_id'], 'integer'],
             [['detalle'], 'string'],
             [['nombrecampo', 'aliascampo', 'modelo'], 'string', 'max' => 60],
-            [['activa', 'requerida', 'esclave', 'esforeign'], 'string', 'max' => 1],
+           // [['activa', 'requerida', 'esclave', 'esforeign'], 'string', 'max' => 1],
             [['tipo'], 'string', 'max' => 20],
             [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasiva::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
         ];

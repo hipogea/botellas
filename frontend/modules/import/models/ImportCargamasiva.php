@@ -3,6 +3,8 @@
 namespace frontend\modules\import\models;
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\helpers\h;
+use common\behaviors\FileBehavior;
+use frontend\modules\import\models\ImportLogcargamasiva;
 use Yii;
 
 /**
@@ -70,7 +72,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
 	return [
 		
 		'fileBehavior' => [
-			'class' => common\behaviors\FileBehavior::className()
+			'class' => FileBehavior::className()
 		]
 		
 	];
@@ -103,7 +105,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
     /*Numero de erores en el log de carga*/
     public function nerrores(){
         if(count($this->nregistros()) >0 ){
-          return  (new ImportLogCargamasivaQuery())->
+          return  ImportLogCargamasiva::find()->
                 andFilterWhere(['level'=>'0','user_id'=>h::userId()])->count();
         }else{
             return 0;
@@ -113,13 +115,13 @@ class ImportCargamasiva extends \common\models\base\modelBase
     /*Numero de registros en el  log de carga*/
     public function nregistros(){
        // $query=new ImportCargamasivaQuery();
-        return (new ImportLogCargamasivaQuery())->where(['cargamasiva_id' =>$this->id])->count();
+        return  ImportLogCargamasiva::find()->where(['cargamasiva_id' =>$this->id])->count();
     }
     
     /*Numero de exitos en el log de carga*/
     public function nexitos(){
         if(count($this->nregistros()) >0 ){
-          return  (new ImportLogCargamasivaQuery())->
+          return   ImportLogCargamasiva::find()->
                 where(['level'=>'1','user_id'=>h::userId()])->count();
         }else{
             return 0;
@@ -147,6 +149,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
             $modeloatratar=$this->modelAsocc();
              $columnas=$modeloatratar->getTableSchema()->columns;
                 $i=1;
+               // print_r($columnas);die();
               foreach($columnas as $nameField=>$oBCol){ 
                 	if($modeloatratar->isAttributeSafe($nameField) &&
                           !$this->existsChildField($nameField) 
@@ -157,8 +160,27 @@ class ImportCargamasiva extends \common\models\base\modelBase
                          } else{
                              $esclave=false;
                              $orden=$i+count($modeloatratar->primaryKey(true));
-                         }  
-                                ImportCargamasivadet::firstOrCreateStatic(
+                         } 
+                        /* $modeli=New ImportCargamasivadet;
+                         $modeli->setAttributes([
+                                           'cargamasiva_id'=>$this->id,
+                                             'nombrecampo'=>$nameField,
+                                            'aliascampo'=>$modeloatratar->getAttributeLabel($nameField),
+                                            'sizecampo'=>$oBCol->size,
+                                            'activa'=>true,
+                                            'requerida'=>$modeloatratar->isAttributeRequired($nameField),
+                                            'tipo'=>$oBCol->dbType,
+                                            'orden'=>$orden,
+                                            'esclave'=>$esclave,
+                                            'esforeign'=>in_array($nameField,array_keys($modeloatratar->getTableSchema()->foreignKeys)),
+                                            
+                                        ]);
+                         if(!$modeli->save())
+                         {
+                             print_r($modeli->getErrors());die();
+                         }*/
+                            //echo "ahi va ".$nameField."<br>";
+                         ImportCargamasivadet::firstOrCreateStatic(
                                         [
                                            'cargamasiva_id'=>$this->id,
                                              'nombrecampo'=>$nameField,
@@ -174,15 +196,16 @@ class ImportCargamasiva extends \common\models\base\modelBase
                                         ]);
                                 $i+=1;
                                  }
-              }
+              } 
     }
     
-    public function afterSave($insert) {
+    public function afterSave($insert,$changedAttributes) {
         if($insert){
+           
            $this->insertChilds();
                                        
         }
-       return parent::afterSave($insert);
+       return parent::afterSave($insert,$changedAttributes);
     }
   
     
@@ -197,13 +220,14 @@ class ImportCargamasiva extends \common\models\base\modelBase
     /*CARGA LOS ESCENARIOS DEL ODELO ASOCIOADO*/
     public function loadScenariosFromModel(){
        return array_keys($this->modelAsocc()->scenarios());
+       
     }
     
     /*
      * El active que3ry de los hijos 
      */
     private function childQuery(){
-        return (new ImportCargamasivadetQuery())->
+        return ImportCargamasivadet::find()->
        where(['cargamasiva_id' =>$this->id]);
     }
     
@@ -300,6 +324,22 @@ class ImportCargamasiva extends \common\models\base\modelBase
        
       return $validacion;
  }
+ /*
+  * prepara los atributos para almacenarlos en el modelo
+  * usa una fila de csv  y los nombres de los campos
+  * en la carga
+  * @row: Una fila del archivo csv (es una array de valores devuelto por la funcion fgetcsv())
+   * @filashijas : array de registros hijos del objeto de carga
+  */
+ public function prepareAttributesToModel($row,$filashijas){
+      //$filashijas=$this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+     //$modelo=$cargamasiva->modelAsocc();
+     $attributes=[];
+      foreach($row as $orden=>$valor){          
+               $attributes[$filashijas[$orden]['nombrecampo']]=$valor;
+           }
+     return $model;  
+ }
  
  private function isTypeChar($tipo){
      return (substr(strtoupper($tipo),0,4)=='CHAR');
@@ -323,7 +363,51 @@ class ImportCargamasiva extends \common\models\base\modelBase
  
  public function camposClave(){
      if(!$this->insercion){
+         $this->childQuery()->
+                 select('nombrecampo')->
+                 where(['esclave'=>'1'])->
+                 asArray()->all();
          
      }
  }
+ 
+ private function flushLogCarga(){
+     (new Query)
+    ->createCommand()
+    ->delete(ImportLogcargamasiva::tableName(), ['user_id' => h::userId()])
+    ->execute();
+    
+   }
+   
+   
+ public function logCargaByLine($line){
+     $errores=$this->getErrors();
+     foreach($errores as $campo=>$detalle){
+         foreach($detalle as $cla=>$mensaje){
+             $this->insertLogCarga($line, $campo, $mensaje, '0');
+         }
+     }
+ }
+   
+ public function insertLogCarga($line,$campo,$mensaje,$level){
+     //$this->flushLogCarga();
+    // 
+     $attributes=[
+         'cargamasiva_id'=>$this->id,
+         'nombrecampo'=> $campo,
+         'mensaje'=>$mensaje,
+         'level'=>$level,
+         'fecha'=>date('Y-m-d H:i:s'),
+         'user_id'=>h::userId(),
+         'numerolinea'=>$line,
+     ];
+     	$model=new ImportLogcargamasiva();
+        $model->setAttributes($attributes);
+        $model->save();
+        unset($model);
+        
+ }
+ 
+ 
+ 
 }

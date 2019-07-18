@@ -39,6 +39,11 @@ class FinderController extends  \common\controllers\base\baseController
                         'class' => 'common\actions\ActionSearchSelect',
                         //'property1' => 'value1',
                         //'property2' => 'value2',
+                            ],
+          'combodependiente'=> [
+                        'class' => 'common\actions\ActionCombodependiente',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
                             ]
       ];
       

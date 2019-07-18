@@ -13,6 +13,7 @@ use ruskid\csvimporter\ARImportStrategy;*/
 use Yii;
 use frontend\modules\import\models\ImportCargamasiva;
 use frontend\modules\import\models\ImportCargamasivaSearch;
+use frontend\modules\import\models\ImportLogcargamasivaSearch;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -44,7 +45,7 @@ class ImportacionController extends baseController
      */
     public function actionIndex()
     {
-        $importer = new CSVImporter;  die();
+       /// $importer = new CSVImporter;  die();
         $searchModel = new ImportCargamasivaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -78,6 +79,8 @@ class ImportacionController extends baseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
+        }else{
+            //print_r($model->getErrors());die();
         }
 
         return $this->render('create', [
@@ -140,25 +143,93 @@ class ImportacionController extends baseController
     
     public function actionImportar($id){
         ///$namemodule=$this->module->id;
-      $cargamasiva=$this->findModel($id);
+      $cargamasiva=$his->findModel($id);
       $cargamasiva->verifyChilds();
       $datos=$cargamasiva->dataToImport(); 
       /*Verifica si las columnas coindicen */
        $cargamasiva->verifyFirstRow($datos[0]);
-       
-   foreach ($datos as $fila){
-       $modelo=$cargamasiva->modelAsocc();
-       if($cargamasiva->insercion){
-           
-       }else{
-           
-       }
+        $model=$cargamasiva->modelAsocc();
+        $cargamasiva->flushLogCarga();
+        $filashijas=$cargamasiva->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+   $linea=1;
+    foreach ($datos as $fila){
+      $model->setAttributes(prepareAttributesToModel($fila,$filashijas));
+      $model->validate();
+      if($model->hasErrors()){
+          $cargamasiva->logCargaByLine($linea);
+      }
+      $linea++;      
    }
-      
-      /*Si se ha enviado el post */
-      /*if(isset(h::request()->post($cargamasiva->getShortNameClass()))){
-        
-      }*/
+   if($cargamasiva->nerrores()==0)
+    return $this->redirect (\yii\helpers\Url::to(['importar-true','id'=>$id]));
+   
+    $searchModel = new ImportLogCargamasivaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+   return $this->render('info',['dataprovider'=>$dataprovider]);
       
     }
+    
+  public function actionImportarTrue($id){
+      ///$namemodule=$this->module->id;
+      $cargamasiva=$his->findModel($id); 
+      
+      /*Si no encuentra errores 
+       * hay que hacerlo*/
+      
+     if($cargamasiva->nerrores()==0){
+        $datos=$cargamasiva->dataToImport();
+        $model=$cargamasiva->modelAsocc();
+        $filashijas=$cargamasiva->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+   
+            foreach ($datos as $fila){
+                $model->setAttributes(prepareAttributesToModel($fila,$filashijas));
+                $model->save();      
+          
+                } 
+          }
+      /*Borramos el archivo csv de carga*/
+        $cargamasiva->deleteCsvFile();
+   $searchModel = new ImportLogCargamasivaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('info',['dataprovider'=>$dataprovider]);
+      
+  }
+  
+  public function actionEscenarios(){
+      /* Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    $out = [];
+    if (isset($_POST['depdrop_parents'])) {
+        $parents = $_POST['depdrop_parents'];
+        if ($parents != null) {
+            $clave = $parents[0];
+           $modelo=new $clave;
+           $escenarios=array_keys($modelo->scenarios());
+           foreach($escenarios as $clave=>$escenario){
+          $out[]=['id'=>$escenario,'name'=>$escenario];
+             }
+           
+            return ['output'=>$out, 'selected'=>''];
+        }
+    }
+    return ['output'=>'', 'selected'=>''];*/
+     if(h::request()->isAjax){
+       $clase=h::request()->post('filtro'); 
+       $clase=new $clase;
+       $arr=array_keys($clase->scenarios());
+     }
+      
+     return \yii\helpers\Html::renderSelectOptions(null,array_combine($arr,$arr));
 }
+
+
+
+
+       
+       
+}
+      
+      
+      
+   
+

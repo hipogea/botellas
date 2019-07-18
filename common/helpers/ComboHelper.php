@@ -13,6 +13,9 @@ class ComboHelper  {
      * Funciones que devuelven arrays para rellenar los combos
      * ma comunes de datos maestros 
      */
+    
+    
+    
     public static function getCboMaterials(){
         return ArrayHelper::map(
                 \common\models\masters\Maestrocompo::find()->all(),
@@ -56,6 +59,26 @@ class ComboHelper  {
                         \common\models\masters\Documentos::find()->all(),
                 'codocu','desdocu');
     }
+    
+    /*ESTA FUNCION ES DE PRPISTO GENERAL 
+     * RECIBE EL NOBRE DE UNA CLASE 
+     * CON EL CAMO CLAVE Y CAMPO REFERENCIA
+     * Y UN VALOR DE FILTRO  Y CON ESTO DEVUEL UN ARRAY D
+     * DE VALORES 
+     */
+    public static function getCboGeneral($valorfiltro,$clase,$campofiltro,$campokey,$camporef){
+         //$iduser=is_null($iduser)?static::userId():$iduser;   
+        if(empty($campofiltro))
+            return ArrayHelper::map(
+                        $clase::find()->all(),
+                $campokey,$camporef);
+        return ArrayHelper::map(
+                        $clase::find()->where([$campofiltro=>$valorfiltro])->all(),
+                $campokey,$camporef);
+    }
+    
+    
+    
     
    /*
     * Obtiene todos los nombres de los modelos de la aplicacion
