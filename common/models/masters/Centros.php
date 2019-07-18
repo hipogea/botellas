@@ -40,7 +40,7 @@ class Centros extends modelBase
             [['nomcen'], 'string', 'max' => 60],
             [['codsoc'], 'string', 'max' => 1],
             [['codcen'], 'unique'],
-            [['codsoc'], 'exist', 'skipOnError' => true, 'targetClass' => Sociedades::className(), 'targetAttribute' => ['codsoc' => 'socio']],
+           [['codsoc'], 'exist', 'skipOnError' => true, 'targetClass' => Sociedades::className(), 'targetAttribute' => ['codsoc' => 'socio']],
         ];
          return   \yii\helpers\ArrayHelper::merge(
               parent::ruleBlockedFields(),

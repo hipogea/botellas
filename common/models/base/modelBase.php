@@ -550,6 +550,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             //print_r($attributes);
             //$model=self::find()->where($attributes)->one();
             if(is_null(self::find()->where($attributes)->one())){
+                                
+
                 try{
                     $clase= static::class;
                     $model=new $clase;
@@ -560,7 +562,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                        $model->attributes=$attributes;
                        //print_r($model->attributes);die();
                        
-                   $model->insert();
+                 IF(!$model->insert()){
+                     return false;
+                 }
                    // print_r($model->getErrors());die();
                     unset($model);
                     //echo "ok  ----->";
@@ -571,6 +575,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
              } 
                 
             } else{
+                echo "habla"; die();
                 return false;
             }
             
@@ -583,7 +588,10 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                     if(!is_null($scenario))
                         $this->setScenario($scenario);
                        $this->attributes=$attributes;
-                    $this->insert();
+                    if($this->insert()){
+                        
+                        return false;
+                    }
                     //echo "ok  ----->";
                         return true;
                 } catch (\yii\db\Exception $exception) {

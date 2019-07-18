@@ -25,16 +25,16 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
             'valor1' => $this->string(3)->append($this->collateColumn()), 
             'valor2' => $this->string(3)->append($this->collateColumn()), 
              ],$this->collateTable());
-         $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+         /*$this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
               'codcen', static::NAME_TABLE_CENTROS,'codcen');
-           }
+           }*/
     $this->createIndex(
             'idx_comnoe_cond34f',
             static::NAME_TABLE,
             'nombretabla'
         );
     }
-
+    }
     
     /**
      * {@inheritdoc}

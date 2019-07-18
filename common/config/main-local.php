@@ -10,7 +10,7 @@
 'username'=>'root',
 'password'=>'',
 'charset'=>'utf8',
-'tablePrefix'=>'uwb9i_',
+'tablePrefix'=>'e0pgk_',
 ],
 ],
 'language'=>'es_PE',
