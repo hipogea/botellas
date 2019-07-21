@@ -51,6 +51,7 @@ use common\helpers\h;
             'model'=>$model,
             'form'=>$form,
             'campo'=>'codpro',
+             'addCampos'=>[2,3],
             //'foreignskeys'=>[1,2,3],
         ]);  ?>
     </div>
@@ -103,7 +104,8 @@ use common\helpers\h;
             'model'=>$model,
             'form'=>$form,
             'campo'=>'codtra',
-        'ordenCampo'=>2
+        'ordenCampo'=>2,
+         'addCampos'=>[3,4,5],
             //'foreignskeys'=>[1,2,3],
         ]);  ?>
  </div> 

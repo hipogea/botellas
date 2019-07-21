@@ -95,35 +95,42 @@ class BottlesController extends baseController
         }
         */
         
-        
-        
-        
+       /* VAR_DUMP(Yii::$app->request->post('Detdocbotellas'));
+        echo "<br>";
+        */
         
         
           $items=[new Detdocbotellas()];
           //$request = Yii::$app->getRequest();
          if(Yii::$app->request->isPost){
-              $count = count(Yii::$app->request->post('Detdocbotellas', []));
-              
+             $arraydetalle=Yii::$app->request->post('Detdocbotellas');
+             $arraycabecera=array_values(Yii::$app->request->post('Docbotellas'));
+             
+             /*Nos aseguramos que los indices se reseteen con array_values
+              * ya que cada vez que borramos con ajax en el form quedan 
+              * vacancias en los indices y al momento de hacer el loadMultiple
+              * no coinciden los indices; algunos modelos no cargan los atributos
+              * y arroja false 
+              */
+             $arraydetalle=array_values($arraydetalle);
+             
+             
+              $count = count($arraydetalle);              
               $items = [new Detdocbotellas()];
+              
                         for($i = 1; $i < $count; $i++) {
                                 $items[] = new Detdocbotellas();
                
                                 }
-                            
+              foreach($items as $item){
+             $item->setScenario($item::SCENARIO_CREACION_TABULAR);
+                   }  
+                           
          if ( h::request()->isAjax &&
-                  $model->load(Yii::$app->request->post('Docbotellas'),'')
-                 //&&
-                 //Model::loadMultiple($items, Yii::$app->request->post('Detdocbotellas'),'')
-                 ) {
-               //ECHO $count."<br>";
+                  $model->load($arraycabecera,'')
+                  ) {
+                 Model::loadMultiple($items, $arraydetalle,'');
               
-                
-                     
-                Model::loadMultiple($items, Yii::$app->request->post('Detdocbotellas'),'');
-              /*ECHO count($items)."<br>";
-              
-               die();*/
                 h::response()->format = \yii\web\Response::FORMAT_JSON;
                  return array_merge(\yii\widgets\ActiveForm::validate($model),
                  \yii\widgets\ActiveForm::validateMultiple($items));
@@ -142,32 +149,59 @@ class BottlesController extends baseController
           VAR_DUMP($items[0]->getErrors());
           
           die();*/
-          //var_dump(Yii::$app->request->post());die();
+        //var_dump($items);
+       /* $arreglo=Yii::$app->request->post('Detdocbotellas');
+        $arreglo=array_values($arreglo);
+        var_dump($arreglo);
+        echo "<br>";
+        echo "<br>";
+        echo "<br><br>";
+        echo " load mulpitple :";
+        var_dump(Model::loadMultiple($items, $arreglo,''));
+        echo "<br><br>";
+       
+             
+       ECHO "SIN LA LINKEADA <BR>";
+         foreach($items as $item){
+            print_r($item->attributes);
+                        if($item->validate(null)){
+                           echo $item->codigo."->".$item->getFirstError()."<br>";
+                        }else{
+                          echo \yii\helpers\Json::encode($item->getErrors())."->fallo <br><br><br>";
+                        }
+                           }
         
-        if ($model->load(Yii::$app->request->post('Docbotellas'),'') &&       
-        Model::loadMultiple($items, Yii::$app->request->post('Detdocbotellas'),'')&&
+        ECHO "<br>AHORA CON LA LINKEADA<BR><BR>";
+        
+         $items=$this->linkeaCampos(18, $items);
+        foreach($items as $item){
+            echo "El form  ".$item->formName()."<br>";
+            print_r($item->attributes);
+                        if($item->validate(null)){
+                           echo $item->codigo."->".$item->getFirstError()."<br>";
+                        }else{
+                          echo \yii\helpers\Json::encode($item->getErrors())."->fallo <br><br><br>";
+                        }
+                           }
+        var_dump(Model::validateMultiple($items));DIE();
+        
+        */
+        
+        if ($model->load($arraycabecera,'') &&       
+        Model::loadMultiple($items, $arraydetalle,'')&&
          $model->validate()   ){
               $model->save();$model->refresh();
                $items=$this->linkeaCampos($model->id, $items);
               if(Model::validateMultiple($items)){
                   foreach($items as $item){
-                        if($item->save()){
-                           
-                        }else{
-                          
+                        if($item->save()){                           
+                        }else{                          
                         }
-                           }
-                    
-                } else{
-                    
-                }
-               
-              }       
-                  
-               
+                           }                    
+                } else{                    
+                }               
+              }
               return $this->redirect(['index']);
-       
-     
          }
              
         
@@ -181,6 +215,9 @@ class BottlesController extends baseController
        for($i = 1; $i < 4; $i++) {
                                 $items[] = new Detdocbotellas();
                             }
+         foreach($items as $item){
+             $item->setScenario($item::SCENARIO_CREACION_TABULAR);
+         }
         return $this->render('create', [
             'model' => $model,'items'=>$items
         ]);
@@ -272,7 +309,7 @@ class BottlesController extends baseController
      * @valorId: Id integer
      * @items: Array de modelos hijos
      */
-    private function linkeaCampos($valorId,$items){
+    private function linkeaCampos($valorId,&$items){
         for($i = 0; $i < count($items); $i++) {
                                 $items[$i]->doc_id=$valorId;
            }
@@ -288,16 +325,21 @@ class BottlesController extends baseController
      */
     public function actionAjaxAddItem(){
        if(h::request()->isAjax){
-        $form=unserialize(base64_decode(h::request()->post('form'))); /*new \yii\widgets\ActiveForm;*/
+        $form=/*unserialize(base64_decode(h::request()->post('form')));*/ new \yii\widgets\ActiveForm;
         $clase=str_replace('_','\\',h::request()->post('model'));
         $model= new $clase;
          $orden=h::request()->post('orden');
-         h::response()->format = \yii\web\Response::FORMAT_JSON;
+         $orden=4;
+         //$form=h::request()->post('form');
+         //var_dump($form);
+        /* var_dump(unserialize($form));*/
+        h::response()->format = \yii\web\Response::FORMAT_JSON;
          return $this->renderAjax('item',
                  [
                      'form'=>$form,
                      'item'=>$model,
-                     'orden'=>$orden
+                     'orden'=>$orden,
+                 'auto'=>false,
                  ]);
        }
             

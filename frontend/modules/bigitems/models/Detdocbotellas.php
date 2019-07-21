@@ -22,6 +22,7 @@ use Yii;
  */
 class Detdocbotellas extends modelBase implements Transport 
 {
+    const SCENARIO_CREACION_TABULAR='creaciontabular';
     public $descripcion; //campo ficticio para simular la descriciond ela botella 
     /**
      * {@inheritdoc}
@@ -49,6 +50,14 @@ class Detdocbotellas extends modelBase implements Transport
         ];
     }
 
+     public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo'];
+       // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
+        return $scenarios;
+    }
+    
     /**
      * {@inheritdoc}
      */

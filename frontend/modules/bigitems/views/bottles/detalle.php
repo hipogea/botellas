@@ -13,7 +13,7 @@
        <?php $orden=0;foreach($items as $item){ ?>
            <?php 
            
-           echo $this->render('item',['form'=>$form,'item'=>$item,'orden'=>$orden]);
+           echo $this->render('item',['auto'=>true,'form'=>$form,'item'=>$item,'orden'=>$orden]);
            $orden+=1;
            ?>
                    
@@ -28,10 +28,11 @@
             </div>
     <?php 
    $cadenaJs="$('#button-add-item').on( 'click', function() { 
+    
             $.ajax({
               url: '". \yii\helpers\Url::to('ajax-add-item')."',
               type: 'POST',
-             data: {form: '". base64_encode(serialize($form))."' , model: '".str_replace('\\','_',get_class($item))."'  , orden: 4 },
+             data: { model: '".str_replace('\\','_',get_class($item))."'  , orden: 4 },
               dataType: 'json',        
             
                error:  function(xhr, textStatus, error){               
@@ -45,6 +46,6 @@
                         });  "
             . "})";
        
-  // echo  \yii\helpers\Html::script($stringJs);
+  
    $this->registerJs($cadenaJs);
    ?>
