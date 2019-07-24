@@ -42,13 +42,13 @@ use Yii;
  */
 class Docbotellas extends DocumentBase implements Transport
 {
-   
+   const SCENARIO_CHANGE_STATUS='escenario_estado';
     public $prefijo='79';
     public $fieldCodocu='codocu';
     public $fectran1; ///ficitica para poder establecer un rango de echas para busqueda
     public $dateorTimeFields=[
         'fecdocu'=>self::_FDATE,
-        'fectran'=>self::_FTIME,
+        'fectran'=>self::_FDATE,
         'fectran1'=>self::_FDATE
         ];
     /**
@@ -79,7 +79,8 @@ class Docbotellas extends DocumentBase implements Transport
             [[ 'codpro', 'essalida', 
                 //'codcen','codestado',
                 'descripcion', 'codenvio', 'fecdocu', 'ptopartida_id', 'ptollegada_id'], 'required'],
-            [['ptopartida_id', 'ptollegada_id'], 'integer'],
+            [['ptopartida_id', 'ptollegada_id'], 'validateDirecciones'],
+             [['ptopartida_id', 'ptollegada_id'], 'integer'],
             [['comentario'], 'string'],
             [['codestado', 'codenvio'], 'string', 'max' => 2],
             [['codpro', 'codtra', 'codven'], 'string', 'max' => 6],
@@ -96,6 +97,13 @@ class Docbotellas extends DocumentBase implements Transport
         ];
     }
 
+     public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_CHANGE_STATUS] = ['codestado'];
+       // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
+        return $scenarios;
+    }
     /**
      * {@inheritdoc}
      */
@@ -254,4 +262,13 @@ class Docbotellas extends DocumentBase implements Transport
     public function setAssetOnTransport(){
        
     }
+    
+    public function validateDirecciones($attribute, $params)
+    {
+      if($this->ptollegada_id==$this->ptopartida_id){
+          $this->addError('ptollegada_id',yii::t('bigitems.errors','
+            Arrival address is the same as the issuing address'));
+      }
+    }
+ 
 }

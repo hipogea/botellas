@@ -33,19 +33,19 @@
               url: '". \yii\helpers\Url::to('ajax-add-item')."',
               type: 'POST',
              data: { model: '".str_replace('\\','_',get_class($item))."'  , orden: 4 },
-              dataType: 'json',        
+              dataType: 'html',        
             
                error:  function(xhr, textStatus, error){               
                             var n = Noty('id');                      
                               $.noty.setText(n.options.id, error);
                               $.noty.setType(n.options.id, 'error');       
                                 }, 
-              success: function(json) {
-                   $('tbody #addItem').before(json);
+              success: function(html) {
+                   $('tbody #addItem').before(html);
                         }
                         });  "
             . "})";
        
   
-   $this->registerJs($cadenaJs);
+   $this->registerJs($cadenaJs, \yii\web\View::POS_LOAD);
    ?>

@@ -1,19 +1,26 @@
 <?php
-namespace common\widgets\selectwidget;
+namespace common\widgets\prueba;
 use common\models\base\modelBase;
 use yii\base\Widget;
 use yii\web\View;
+
 use yii\helpers\Url;
 use yii\base\InvalidConfigException;
-class selectWidget extends \yii\base\Widget
+class pruebaWidget extends \yii\widgets\inputWidget
 {
-    public $id=null;
+    public $id;
+    //public $attribute='';
+     //public $model;//EL modelo
+    public $form; //El active FOrm 
+    ///public $value;
+    //public $options;
+     //public $id=null;
     public $controllerName='finder';
     public $actionName='searchselect';
     //public $actionNameModal='busquedamodal';
     public $model;//EL modelo
-    public $form; //El active FOrm 
-    public $campo;//el nombre del campo modelo
+    //public $form; //El active FOrm 
+   // public $campo;//el nombre del campo modelo
     public $tabular=false; //Cuando se trata de renderizar en una grilla o tabala 
     public $multiple=false; //si se puede seleccionar   mas de un valor 
    // public $foreignskeys=[2,3,4];//Orden de los campos del modelo foraneo 
@@ -26,63 +33,39 @@ class selectWidget extends \yii\base\Widget
     public $addCampos=[];///Campos adicionales 
     private $_modelForeign=null; //El obejto modelo foraneo
     PRIVATE $_orden=null; //para renderizar widgets en tabulares
-    public $inputOptions=[];//Array de opciones del active Field 
+    //public $inputOptions=[];//Array de opciones del active Field 
     
-    /*
-     * Atributos para hacer cumplir le widget
-     * en el active field
-     */
-     public $attribute=null;
-     public $value=null;
-      public $options=null;
-      /********************************/
-      
     public function init()
     {
-       
-       $this->options=$this->inputOptions;
-      // $this->_orden=1;
+        
         parent::init();
-        // echo get_class($this->model);die();
+        //echo get_class($this->model);die();
         if(!($this->model instanceof modelBase))
-        throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
-        if(!($this->form instanceof \yii\widgets\ActiveForm))
-        throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".'.get_class($this->form));
-       if(substr($this->campo,0,1)=='['){
-           $punto=strpos($this->campo,']');
-           
-           
-           $this->_orden=substr($this->campo,1,$punto-1)+0;
-           //var_dump($this->campo,$punto,$this->_orden);die();
-            $this->campo=substr($this->campo,$punto+1);
-            //var_dump($this->campo);die();
-            $this->attribute=$this->campo;
-          $this->value=$this->model->{$this->campo};
-       }
-        $this->_foreignClass=$this->model->obtenerForeignClass($this->campo);
-        $this->_foreignField=$this->model->obtenerForeignField($this->campo);
-        //var_dump($this->getAditionalFields());die();
-           //var_dump( $this->_foreignClass);die();
-        //echo $this->_foreignField."<br>";
-        //echo $this->_foreignClass;
+       throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
+        /*if(!($this->form instanceof \yii\widgets\ActiveForm))
+        throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".');
+        */
+        $this->_foreignClass=$this->model->obtenerForeignClass($this->attribute);
+        $this->_foreignField=$this->model->obtenerForeignField($this->attribute);
     }
-    public function run()
+
+   public function run()
     {
          // Register AssetBundle
-        selectWidgetAsset::register($this->getView());
+        pruebaWidgetAsset::register($this->getView());
         $this->makeJs();
         if($this->model->isNewRecord){
             //$valores=[];
           return  $this->render('controls',[
                 'model'=>$this->model,
                 'form'=>$this->form,
-                'campo'=>$this->campo,
+                'campo'=>$this->attribute,
                  'esnuevo'=>$this->model->isNewRecord,
                'valoresLista'=>$this->getValoresList(),
                'multiple'=>$this->multiple,
-              'datos'=>$this->getDataSelectedByUser(),
-              'orden'=>$this->_orden,
-              'opciones'=>$this->inputOptions,
+             // 'datos'=>$this->getDataSelectedByUser(),
+              //'orden'=>$this->_orden,
+              'opciones'=>$this->options,
              // 'valores'=>$valores,
                // 'idcontrolprefix'=>$this->getIdControl(),
                 ]);
@@ -92,14 +75,14 @@ class selectWidget extends \yii\base\Widget
              return  $this->render('controls',[
                 'model'=>$this->model,
                 'form'=>$this->form,
-                'campo'=>$this->campo,
+                'campo'=>$this->attribute,
                   'esnuevo'=>$this->model->isNewRecord,
                  'valoresLista'=>$this->getValoresList(),
                  'id'=>$this->id,
                  'multiple'=>$this->multiple,
-                  'datos'=>$this->getDataSelectedByUser(),
-                  'orden'=>$this->_orden,
-                 'opciones'=>$this->inputOptions,
+                //  'datos'=>$this->getDataSelectedByUser(),
+                  //'orden'=>$this->_orden,
+                 'opciones'=>$this->options,
                //  'valores'=>$valores,
                //  'idcontrolprefix'=>$this->getIdControl(),
                 ]);
@@ -147,10 +130,10 @@ class selectWidget extends \yii\base\Widget
      private function getModelForeign(){
      if(is_null($this->_modelForeign)){
         if($this->model->isNewRecord){
-               if(!empty($this->model->{$this->campo})){
+               if(!empty($this->model->{$this->attribute})){
                    $modelForeign=$this->_foreignClass::find()->where([
                     $this->_foreignField=>
-                    $this->model->{$this->campo}
+                    $this->model->{$this->attribute}
                                                             ])->one();
                }else{
                    $modelForeign=new $this->_foreignClass; 
@@ -159,14 +142,13 @@ class selectWidget extends \yii\base\Widget
             }else{
             $modelForeign=$this->_foreignClass::find()->where([
                 $this->_foreignField=>
-                $this->model->{$this->campo}
+                $this->model->{$this->attribute}
                                                             ])->one();                                                        
         }
         $this->_modelForeign=$modelForeign; unset($modelForeign);       
      }
     return  $this->_modelForeign;
  }      
-   
    
    
    private function getShortNameModel(){
@@ -181,7 +163,7 @@ class selectWidget extends \yii\base\Widget
     */
    private function getIdControl(){
        if(is_null($this->id))
-       return strtolower($this->getShortNameModel().'-'.$this->campo);
+       return strtolower($this->getShortNameModel().'-'.$this->attribute);
        return $this->id;
    }
       
@@ -215,7 +197,7 @@ class selectWidget extends \yii\base\Widget
   private function getDataSelectedByUser(){
       if(\yii::$app->request->isGet && !empty(\yii::$app->request->params)){
           $params=\yii::$app->request->queryParams;
-      $valorClave=$params[$this->getShortNameModel()][$this->campo];
+      $valorClave=$params[$this->getShortNameModel()][$this->attribute];
       if(is_array($valorClave && $this->multiple)){
           return $valorClave;
       }else{
@@ -241,6 +223,12 @@ class selectWidget extends \yii\base\Widget
       array_unshift($campos, $this->_foreignField);
      return $campos;
   }
+  
+  public function runf()
+    {
+          //
+        return \yii\helpers\Html::activeDropDownList($this->model, $this->attribute, ['uno'=>'uno','dos'=>'dos'], $this->options);
+        }
    
 }
 ?>

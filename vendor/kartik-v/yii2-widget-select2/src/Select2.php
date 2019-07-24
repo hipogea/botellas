@@ -194,9 +194,12 @@ class Select2 extends InputWidget
      * @throws \ReflectionException
      * @throws \yii\base\InvalidConfigException
      */
+   
     public function run()
     {
+        
         parent::run();
+      
         $this->renderWidget();
     }
 
@@ -207,6 +210,7 @@ class Select2 extends InputWidget
      */
     public function renderWidget()
     {
+      
         if (!isset($this->theme)) {
             $this->theme = $this->isBs4() ? self::THEME_KRAJEE_BS4 : self::THEME_KRAJEE;
         }
@@ -243,6 +247,7 @@ class Select2 extends InputWidget
         $this->initLanguage('language', true);
         $this->renderToggleAll();
         $this->registerAssets();
+        
         $this->renderInput();
     }
 
@@ -362,6 +367,7 @@ class Select2 extends InputWidget
             $this->_loadIndicator = '<div class="kv-plugin-loading loading-' . $this->options['id'] . '">&nbsp;</div>';
             Html::addCssStyle($this->options, 'display:none');
         }
+       
         Html::addCssClass($this->options, 'form-control');
         $input = $this->getInput('dropDownList', true);
         echo $this->_loadIndicator . $this->embedAddon($input);

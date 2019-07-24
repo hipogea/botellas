@@ -5,11 +5,12 @@ use yii\helpers\Url;
 use common\widgets\selectwidget\selectWidget;
 ?>
 
-<tr>
-    <td class="text-center" style="vertical-align: middle;">
-                <button type="button" onclick="$('#item-detbotella-<?=$orden?>').remove(); " data-toggle="tooltip" title="Borrar" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
-   </td>
-  <td><?= 
+<div class="contenedor-fila">
+    <div class="contenedor-columna text-center">
+         <button type="button" onclick="$('#item-detbotella-<?=$orden?>').remove(); " data-toggle="tooltip" title="Borrar" class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>
+    </div> 
+  <div class="contenedor-columna text-center">
+        <?= 
           selectWidget::widget([
               'id'=> strtolower($item->getShortNameClass().'-'.$orden.'-codigo'),
               'model'=>$item,
@@ -19,11 +20,12 @@ use common\widgets\selectwidget\selectWidget;
               'inputOptions'=>['labelOptions'=>['label'=>false]],
             // 'addCampos'=>[2,5],
           ]
-         ) ?></td>               
-   <td><?= $form->field($item,"[$orden]descripcion",['labelOptions'=>['label'=>false]]); ?>
+         ) ?>
+  </div>               
+   <div class="contenedor-columna text-center"><?= $form->field($item,"[$orden]descripcion",['labelOptions'=>['label'=>false]]); ?>
     <?= $form->field($item, "[$orden]id")->hiddenInput(['value' => $item->id])->label(false);?>   
-   </td> 
-</tr>
+   </div> 
+</div>
 
 
 <?php

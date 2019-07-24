@@ -102,6 +102,7 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
      */
     public function init()
     {
+       
         $this->initBsVersion();
         parent::init();
         $this->mergeDefaultOptions();
@@ -115,6 +116,7 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
      */
     protected function initInputWidget()
     {
+         
         $this->initI18N(__DIR__, 'kvbase');
         if (!isset($this->language)) {
             $this->language = Yii::$app->language;
@@ -124,6 +126,8 @@ class InputWidget extends YiiInputWidget implements BootstrapInterface
             $this->_loadIndicator = self::LOAD_PROGRESS;
         }
         if ($this->hasModel()) {
+            
+           
             $this->name = !isset($this->options['name']) ? Html::getInputName($this->model,
                 $this->attribute) : $this->options['name'];
             $this->value = !isset($this->options['value']) ? Html::getAttributeValue($this->model,

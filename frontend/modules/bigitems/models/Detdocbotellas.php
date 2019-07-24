@@ -38,7 +38,7 @@ class Detdocbotellas extends modelBase implements Transport
     public function rules()
     {
         return [
-            [['doc_id', 'codigo'], 'required'],
+            [['doc_id', 'codigo','coditem'], 'required'],
             [['doc_id'], 'integer'],
             [['tarifa'], 'number'],
             [['detalle'], 'string'],
@@ -53,7 +53,7 @@ class Detdocbotellas extends modelBase implements Transport
      public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo'];
+        $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo','coditem'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }

@@ -296,6 +296,7 @@ class DatePicker extends InputWidget
      */
     protected function validateConfig()
     {
+       
         if ($this->type < 1 || $this->type > 6 || !is_int($this->type)) {
             static::err("Invalid value for the property 'type'. Must be an integer between 1 and 6.");
         }
@@ -311,9 +312,11 @@ class DatePicker extends InputWidget
                 );
             }
         }
+        
         if (!isset($this->form)) {
             return;
         }
+         
         if (!$this->form instanceof ActiveForm) {
             static::err("The 'form' property must be of type \\yii\\widgets\\ActiveForm");
         }
@@ -338,12 +341,15 @@ class DatePicker extends InputWidget
             }
             Html::addCssClass($this->options, ['input-sm', 'text-center']);
         }
+        
         if (isset($this->form) && ($this->type !== self::TYPE_RANGE)) {
             $vars = call_user_func('get_object_vars', $this);
             unset($vars['form']);
             return $this->form->field($this->model, $this->attribute)->widget(self::class, $vars);
         }
+        
         $input = $this->type == self::TYPE_BUTTON ? 'hiddenInput' : 'textInput';
+       
         return $this->parseMarkup($this->getInput($input));
     }
 

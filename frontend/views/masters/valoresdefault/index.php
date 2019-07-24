@@ -4,20 +4,20 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\modules\import\models\ImportCargamasivaSearch */
+/* @var $searchModel common\models\masters\ValoresdefaultSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('import.labels', 'Import Cargamasivas');
+$this->title = Yii::t('base.names', 'Valoresdefaults');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="import-cargamasiva-index">
+<div class="valoresdefault-index">
 <div class="box box-success">
     <h4><?= Html::encode($this->title) ?></h4>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('import.labels', 'Create Import Cargamasiva'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('base.names', 'Create Valoresdefault'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
     <?= GridView::widget([
@@ -29,13 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
+            'codocu',
             'user_id',
-            'insercion',
-            'escenario',
-            'lastimport',
-            //'descripcion',
-            //'format',
-            //'modelo',
+            'nombrecampo',
+            'valor:ntext',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

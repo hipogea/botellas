@@ -1662,6 +1662,7 @@ class BaseHtml
     public static function activeDropDownList($model, $attribute, $items, $options = [])
     {
         if (empty($options['multiple'])) {
+           
             return static::activeListInput('dropDownList', $model, $attribute, $items, $options);
         }
 
@@ -1823,7 +1824,9 @@ class BaseHtml
      */
     protected static function activeListInput($type, $model, $attribute, $items, $options = [])
     {
+        
         $name = isset($options['name']) ? $options['name'] : static::getInputName($model, $attribute);
+       
         $selection = isset($options['value']) ? $options['value'] : static::getAttributeValue($model, $attribute);
         if (!array_key_exists('unselect', $options)) {
             $options['unselect'] = '';
@@ -1831,6 +1834,8 @@ class BaseHtml
         if (!array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
+       
+
 
         return static::$type($name, $selection, $items, $options);
     }
@@ -2271,6 +2276,7 @@ class BaseHtml
     public static function getInputName($model, $attribute)
     {
         $formName = $model->formName();
+     
         if (!preg_match(static::$attributeRegex, $attribute, $matches)) {
             throw new InvalidArgumentException('Attribute name must contain word characters only.');
         }

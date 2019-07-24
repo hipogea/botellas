@@ -25,7 +25,9 @@ if(!$this->existsTable($table)) {
          'numdocuref'=>$this->string(16)->append($this->collateColumn()),//Documento de referencia
         'detalle'=>$this->text()->append($this->collateColumn()),        
         'codestado' => $this->char(2)->notNull()->append($this->collateColumn()),
-           ],$this->collateTable());
+           'coditem' => $this->char(3)->notNull()->append($this->collateColumn()),
+        
+        ],$this->collateTable());
              
                 $this->addForeignKey($this->generateNameFk($table), $table,
               'doc_id', static::NAME_TABLE_DOCBOTELLAS,'id');

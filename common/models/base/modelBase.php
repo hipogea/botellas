@@ -1067,6 +1067,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       return $retazos[count($retazos)-1];
   }
   
+
+  
+  
   }
   
   /*public function  addDay($fieldDate){

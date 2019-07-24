@@ -173,7 +173,7 @@ use common\helpers\h;
     'items' => [
         [
             'label' => yii::t('base.names','Items'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('detalle',[ 'form' => $form, 'items' => $items]),
+            'content'=> $this->render('detalle_1',[ 'form' => $form, 'items' => $items]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => true
         ],

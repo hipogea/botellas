@@ -91,13 +91,18 @@ class cboDepWidget extends \yii\base\Widget
    $this->getView()->registerJs("$(document).ready(function() {
     $('#".$this->getIdControl()."').on('change',function(){
   var_filtro=$('#".$this->getIdControl()." option:selected').val();
-     alert(var_filtro);
+     //alert(var_filtro);
   $.ajax({ 
    url:'".\yii\helpers\Url::toRoute('/'.$this->controllerName.'/'.$this->actionName)."',
    type:'post',
    dataType:'html',
    data:{isremotesource:'".$this->isSourceFromDb()."' ,filtro:var_filtro,source:".Json::encode($this->source)."},
-   success: function (data) {// success callback function
+   error:  function(xhr, status, error){ 
+                            var n = Noty('id');                      
+                             $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ xhr.responseText);
+                              $.noty.setType(n.options.id, 'error');         
+                                }, 
+success: function (data) {// success callback function
            $('#".$this->idcombodep."').html(data);
     }
        }); //ajax 

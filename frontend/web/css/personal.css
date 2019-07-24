@@ -5,3 +5,20 @@
     margin: 0px;
     padding:0px;
 }
+.contenedor-tabla{
+
+display: table;
+
+}
+
+.contenedor-fila{
+
+display: table-row;
+
+}
+
+.contenedor-columna{
+
+display: table-cell;
+
+}

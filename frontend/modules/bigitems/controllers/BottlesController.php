@@ -104,7 +104,7 @@ class BottlesController extends baseController
           //$request = Yii::$app->getRequest();
          if(Yii::$app->request->isPost){
              $arraydetalle=Yii::$app->request->post('Detdocbotellas');
-             $arraycabecera=array_values(Yii::$app->request->post('Docbotellas'));
+             $arraycabecera=Yii::$app->request->post('Docbotellas');
              
              /*Nos aseguramos que los indices se reseteen con array_values
               * ya que cada vez que borramos con ajax en el form quedan 
@@ -112,7 +112,14 @@ class BottlesController extends baseController
               * no coinciden los indices; algunos modelos no cargan los atributos
               * y arroja false 
               */
+             
+             //Pero primero guardamos los indices del form antes de resetearlo
+             //para despues restablecerlos; esto para enviar los mensajes de error
+             // con la accion Form::ValidateMultiple()
+             $OldIndices=array_keys($arraydetalle);
+             //Ahora si reseteamos los indices para hacerl el loadMultiple
              $arraydetalle=array_values($arraydetalle);
+             
              
              
               $count = count($arraydetalle);              
@@ -122,15 +129,25 @@ class BottlesController extends baseController
                                 $items[] = new Detdocbotellas();
                
                                 }
-              foreach($items as $item){
+              foreach($items as$item){
              $item->setScenario($item::SCENARIO_CREACION_TABULAR);
+             
                    }  
                            
          if ( h::request()->isAjax &&
-                  $model->load($arraycabecera,'')
+                  $model->load($arraycabecera,'')&& 
+                 Model::loadMultiple($items, $arraydetalle,'')
                   ) {
-                 Model::loadMultiple($items, $arraydetalle,'');
-              
+                // var_dump( $model->load($arraycabecera,''));
+               // VAR_DUMP($model->attributes);DIE();
+              //VAR_DUMP($arraycabecera);DIE();
+             
+             
+             /*Antes de hacer Form::ValidateMultiple() , reestablecemos los 
+              * indices originales, de esta manera nos aseguramos que los
+              * mensajes de error salgan cada cual en su sitio
+              */
+             $items=array_combine($OldIndices,$items);
                 h::response()->format = \yii\web\Response::FORMAT_JSON;
                  return array_merge(\yii\widgets\ActiveForm::validate($model),
                  \yii\widgets\ActiveForm::validateMultiple($items));
@@ -215,8 +232,10 @@ class BottlesController extends baseController
        for($i = 1; $i < 4; $i++) {
                                 $items[] = new Detdocbotellas();
                             }
-         foreach($items as $item){
+         foreach($items as $index=> $item){
              $item->setScenario($item::SCENARIO_CREACION_TABULAR);
+             $valor=100+$index;
+             $item->coditem= $valor.'';
          }
         return $this->render('create', [
             'model' => $model,'items'=>$items
@@ -333,7 +352,7 @@ class BottlesController extends baseController
          //$form=h::request()->post('form');
          //var_dump($form);
         /* var_dump(unserialize($form));*/
-        h::response()->format = \yii\web\Response::FORMAT_JSON;
+        //h::response()->format = \yii\web\Response::FORMAT_JSON;
          return $this->renderAjax('item',
                  [
                      'form'=>$form,
