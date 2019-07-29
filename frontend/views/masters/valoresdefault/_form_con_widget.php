@@ -8,16 +8,14 @@ use common\models\masters\Documentos;
 /* @var $model common\models\masters\Valoresdefault */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<?php
 
-?>
-<div class="valoresdefault-form">
-
-    <?php $form = ActiveForm::begin([
+    <?php    
+    $form = ActiveForm::begin([
     'enableAjaxValidation'=> true
 ]); ?>
 
      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+         
     <?= ComboDep::widget([
                'model'=>$model,               
                'form'=>$form,
@@ -50,14 +48,31 @@ use common\models\masters\Documentos;
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
  <?= $form->field($model, 'activo')->checkBox() ?>
  </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
-     <div id="insertar_aqui">
-        
-          <?= $form->field($model, 'valor')->textarea(['rows' => 6]) ?>
-        
-     </div>
 
- </div>     
+
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
+     
+        
+         <?php 
+         //var_dump($data);die();
+         echo $this->render('_campo_value_para_update',
+                            [
+                        'table'=>$modeltabla,
+                         'campo'=>$model->nombrecampo,
+                     // 'modeloPadre'=>$model,
+                               // 'data'=>$data,
+                                'ordenCampo'=>$ordenCampo,
+                                'campos'=>$campos
+                                
+                    ]).Html::activeHiddenInput($model, 'aliascampo',['value'=>$model->getAttributeLabel($model->nombrecampo)]);
+                          ?>
+        
+     
+
+ </div>   
+
+
+
  
  <div class="form-group">
         <?= Html::submitButton(Yii::t('base.names', 'Save'), ['class' => 'btn btn-success']) ?>
@@ -65,7 +80,7 @@ use common\models\masters\Documentos;
 
     <?php ActiveForm::end(); ?>
 
-</div>
+
 
 <?php
     $cadenaJs="$('#valoresdefault-nombrecampo').on( 'change', function() { 

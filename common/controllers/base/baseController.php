@@ -225,7 +225,22 @@ private static function findKeyArrayInPost(){
  }
  
 
- 
+ /*
+ * Genera un array de objetos hijos y 
+ * losprepara en el escenario indicado
+ */
+    public function generateItems(string $clase,$n,$escenario=null){
+        $itemsp=[];
+        for($i = 1; $i <= $n; $i++) {
+             $itemsp[]=new $clase;         
+           }
+        if(!is_null($escenario)){
+            foreach($itemsp as $item){
+                $item->setScenario($escenario);
+            }
+        }
+        return $itemsp;
+    }
   
   
 }

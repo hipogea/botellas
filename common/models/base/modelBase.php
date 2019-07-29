@@ -1060,14 +1060,40 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       return $this->setFormatTimeFromSettings($stringDate,$show,true);
   }
   
-  public function getShortNameClass(){
+  public static function getShortNameClass(){
      
         $retazos=explode('\\',self::className());
         // return $retazos;
       return $retazos[count($retazos)-1];
   }
   
-
+/*Esta funcion devuelve una array con los posibles
+ * campos "buscables" , indice el nombre del campo => valores el tamaño del campo
+ * en la base de datos sizeField() por ejemlo 
+ * en tabla empresas devolvería: ['despro'=>40 ]
+ * en la tabla trabajadores devolveria : ['nombres'=>40, 'ap'=>35, 'am'=>35]
+ * Util cuando se busca un valor por un  codigo , en espcial lo usaran los widgets 
+ * 
+ */
+  public function possibleSearchables(){
+      $arrayCampos=[];
+      $obCampos=$this->getTableSchema()->columns;
+      foreach($obCampos as $nombrecampo=>$obCampo){
+          if($obCampo->size > 20 && is_string($this->{$nombrecampo})){
+             $arrayCampos[$nombrecampo]=$obCampo->size; 
+          }
+          
+      }
+      unset($obCampos);
+      arsort($arrayCampos);//ordernar por tamaño descendentemente
+      if(count($arrayCampos)>2){
+         array_slice($arrayCampos,-(count($arrayCampos)-2));
+      }
+      
+      
+      return $arrayCampos;
+  }
+  
   
   
   }

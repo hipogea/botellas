@@ -4,6 +4,7 @@ use frontend\modules\bigitems\models\Docbotellas;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use kartik\tabs\TabsX;
 //use kartik\depdrop\DepDrop;
 use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 /* @var $this yii\web\View */
@@ -29,7 +30,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
  </div> 
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
    <?= $form->field($model, 'escenario')->
-            dropDownList([],
+            dropDownList(($model->isNewRecord)?[]:[$model->escenario=>$model->escenario],
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                        ]
@@ -39,13 +40,8 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
    <?= $form->field($model, 'lastimport')->textInput(['maxlength' => true]) ?>
 
  </div>
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
-  <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
-
- </div>  
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
-  <?=$this->render('widgetUpload',['model'=>$model]) ?>
- </div>
+  
+    
    
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
   <?= $form->field($model, 'format')->textInput(['maxlength' => true]) ?>
@@ -88,14 +84,49 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
         )  ?>
  </div>  
     
-    
-    <div class="form-group">
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+.
+   </div>
+    <div class="form-group-lg">
         <?= Html::submitButton(Yii::t('import.labels', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+
+   </div>
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+ <?php  
+ //var_dump($this->context);die();
+ echo TabsX::widget([
+    'position' => TabsX::POS_ABOVE,
+    'align' => TabsX::ALIGN_LEFT,
+    'items' => [
+        [
+            'label' => yii::t('base.names','Fields'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_campos',[ 'form' => $form, 'dataProvider' => $itemsFields]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => true,
+             'options' => ['id' => 'myveryownID3'],
+        ],
+        [
+            'label' => yii::t('base.names','Loads'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_loads',[ 'form' => $form, 'dataProvider' => $itemsLoads]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => false,
+             'options' => ['id' => 'myveryownID4'],
+        ],
+       
+    ],
+]);  
+    
+    ?> 
+
+
 
     
     

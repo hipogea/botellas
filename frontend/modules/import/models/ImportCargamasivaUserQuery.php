@@ -7,7 +7,7 @@ namespace frontend\modules\import\models;
  *
  * @see ImportCargaUser
  */
-class ImportCargaUserQuery extends \yii\db\ActiveQuery
+class ImportCargamasivaUserQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

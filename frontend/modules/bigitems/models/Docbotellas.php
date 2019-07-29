@@ -44,6 +44,7 @@ class Docbotellas extends DocumentBase implements Transport
 {
    const SCENARIO_CHANGE_STATUS='escenario_estado';
     public $prefijo='79';
+    public $codocu='478';
     public $fieldCodocu='codocu';
     public $fectran1; ///ficitica para poder establecer un rango de echas para busqueda
     public $dateorTimeFields=[

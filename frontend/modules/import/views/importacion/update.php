@@ -17,7 +17,8 @@ $this->params['breadcrumbs'][] = Yii::t('import.labels', 'Update');
     <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model,'itemsFields'=> $itemsFields,
+            'itemsLoads'=> $itemsLoads,
     ]) ?>
 
 </div>

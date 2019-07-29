@@ -16,8 +16,8 @@ $this->params['breadcrumbs'][] = Yii::t('base.names', 'Update');
 <div class="box box-success">
     <h4><?= Html::encode($this->title) ?></h4>
 
-    <?= $this->render('_form', [
-        'model' => $model,'campos'=>$campos
+    <?= $this->render('_form_con_widget', ['modeltabla'=>$modeltabla,
+        'model' => $model,/*'data'=>$data,*/'ordenCampo'=>$ordenCampo,'campos'=>$campos
     ]) ?>
 
 </div>

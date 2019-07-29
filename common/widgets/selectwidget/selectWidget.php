@@ -27,7 +27,7 @@ class selectWidget extends \yii\base\Widget
     private $_modelForeign=null; //El obejto modelo foraneo
     PRIVATE $_orden=null; //para renderizar widgets en tabulares
     public $inputOptions=[];//Array de opciones del active Field 
-    
+    public $data=[]; //DATOS PARA RENDERIZAR POR DEFAULT 
     /*
      * Atributos para hacer cumplir le widget
      * en el active field
@@ -39,11 +39,11 @@ class selectWidget extends \yii\base\Widget
       
     public function init()
     {
-       
+       //echo "e";die();
        $this->options=$this->inputOptions;
       // $this->_orden=1;
         parent::init();
-        // echo get_class($this->model);die();
+        //var_dump($this->model);die();
         if(!($this->model instanceof modelBase))
         throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
         if(!($this->form instanceof \yii\widgets\ActiveForm))
@@ -73,6 +73,7 @@ class selectWidget extends \yii\base\Widget
         $this->makeJs();
         if($this->model->isNewRecord){
             //$valores=[];
+            
           return  $this->render('controls',[
                 'model'=>$this->model,
                 'form'=>$this->form,
@@ -87,6 +88,7 @@ class selectWidget extends \yii\base\Widget
                // 'idcontrolprefix'=>$this->getIdControl(),
                 ]);
         }else{
+            
             //$valores=[$model->{$campo}=>
             //$this->getModelForeign()->{$this->getSecondField()}];
              return  $this->render('controls',[
@@ -197,13 +199,15 @@ class selectWidget extends \yii\base\Widget
    }
    
    private function getValoresList(){
-       if($this->model->isNewRecord){
-           return [];
-       }
+       
+       if($this->model->isNewRecord && $this->getModelForeign()->isNewRecord){          
+           return [];       
+       }else{           
        return [
            $this->getModelForeign()->{$this->_foreignField}=>
            $this->getModelForeign()->{$this->getSecondField()}
            ];
+       }
    }
   
    /*

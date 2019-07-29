@@ -9,9 +9,13 @@ use common\helpers\h;
 use frontend\modules\bigitems\models\viewsmodels\VwDocbotellasSearch;
 use frontend\modules\bigitems\models\Detdocbotellas;
 use common\controllers\base\baseController;
+use common\models\base\modelBase;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
 use yii\base\Model;
+use yii\web\Response;
+use yii\filters\VerbFilter;
+
 /**
  * BottlesController implements the CRUD actions for Docbotellas model.
  */
@@ -41,7 +45,7 @@ class BottlesController extends baseController
         
         //echo get_class(Activos::find());die();
     
-        
+       //var_dump( h::settings()->get('general','esnumerico')); die();
         
         $searchModel = new VwDocbotellasSearch();
        //var_dump($searchModel->getShortNameClass()); die();
@@ -53,6 +57,7 @@ class BottlesController extends baseController
         ]);
     }
 
+   
     /**
      * Displays a single Docbotellas model.
      * @param integer $id
@@ -74,8 +79,9 @@ class BottlesController extends baseController
     public function actionCreate()
     {
         $model = new Docbotellas();
+        //$model->valuesDefault();
 
-       // var_dump($model->codocu);die();
+       //var_dump($model->attributes);die();
         
         /*$models = [new Item()];
         $request = Yii::$app->getRequest();
@@ -100,7 +106,7 @@ class BottlesController extends baseController
         */
         
         
-          $items=[new Detdocbotellas()];
+          //$items=[new Detdocbotellas()];
           //$request = Yii::$app->getRequest();
          if(Yii::$app->request->isPost){
              $arraydetalle=Yii::$app->request->post('Detdocbotellas');
@@ -122,17 +128,13 @@ class BottlesController extends baseController
              
              
              
-              $count = count($arraydetalle);              
-              $items = [new Detdocbotellas()];
+             /*Generamos los items necesarios*/           
+              $items = $this->generateItems(Detdocbotellas::className(),
+                      count($arraydetalle),
+                      Detdocbotellas::SCENARIO_CREACION_TABULAR
+                      );
               
-                        for($i = 1; $i < $count; $i++) {
-                                $items[] = new Detdocbotellas();
-               
-                                }
-              foreach($items as$item){
-             $item->setScenario($item::SCENARIO_CREACION_TABULAR);
-             
-                   }  
+              
                            
          if ( h::request()->isAjax &&
                   $model->load($arraycabecera,'')&& 
@@ -148,9 +150,9 @@ class BottlesController extends baseController
               * mensajes de error salgan cada cual en su sitio
               */
              $items=array_combine($OldIndices,$items);
-                h::response()->format = \yii\web\Response::FORMAT_JSON;
-                 return array_merge(\yii\widgets\ActiveForm::validate($model),
-                 \yii\widgets\ActiveForm::validateMultiple($items));
+                h::response()->format = Response::FORMAT_JSON;
+                 return array_merge(ActiveForm::validate($model),
+                 ActiveForm::validateMultiple($items));
                 
         }
             /* foreach(Yii::$app->request->post('Parametrosdocu') as $index=>$valor){
@@ -229,14 +231,15 @@ class BottlesController extends baseController
             print_r($model->attributes
                     );die();
         }*/
-       for($i = 1; $i < 4; $i++) {
-                                $items[] = new Detdocbotellas();
-                            }
-         foreach($items as $index=> $item){
-             $item->setScenario($item::SCENARIO_CREACION_TABULAR);
+         $items=$this->generateItems(Detdocbotellas::className(),
+         Docbotellas::gsettingConfig('nitemsdefault', 7), //cantidad de items por defeto al crear
+                 Detdocbotellas::SCENARIO_CREACION_TABULAR);
+         foreach($items as $index=> $item){           
              $valor=100+$index;
              $item->coditem= $valor.'';
          }
+         
+         $model->valuesDefault();
         return $this->render('create', [
             'model' => $model,'items'=>$items
         ]);
@@ -252,45 +255,71 @@ class BottlesController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
-         
-        
-        
-         
-        
-        
-        
-        
-        
-        
-        
-        
-       /* $q=new \yii\db\Query();
-        $q->select(['a.numero','a.codcen','a.descripcion','b.despro'])
-                ->from('{{%bigitems_docbotellas}} as a' )
-                -> innerJoin(\common\models\masters\Clipro::tableName().' as b',
-                        'a.codpro='.'b.codpro'
-                        );
-        echo $q->createCommand()->getRawSql();die();*/
-        
-        //var_dump($model->getGeneralFormat('hh::ii::ss', 'time', true));die();
-       //var_dump(DateTime::createFromFormat($model->getGeneralFormat('dd.mm.yyyy hh::ii::ss', 'datetime', true), '09.07.2015 23:45:01'));die();
-       //DateTime::createFromFormat('j/n/Y H:i:s', '09.07.2015 23:45:01')
-       /* $model->fectran='23:45:01';
-        echo $model->fectran."<br>";
-        echo $model->openBorder('fectran',true);die();*/
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }else{
-           // print_r($model->getErrors());die();
+       
+          $items=$model->detdocbotellas;
+         $contador=count($items);
+         $indexOrigin=array_keys($items);
+         if(h::request()->isPost){
+             $arraydetalle=h::request()->post('Detdocbotellas');
+             $arraycabecera=h::request()->post('Docbotellas');             
+             //print_r($arraydetalle);die();
+             $indexNew=array_keys($arraydetalle);
+             $borrados=array_diff($indexOrigin,$indexNew);
+             $agregados=array_diff($indexNew,$indexOrigin);
+             //$actualizados= array_intersect($indexNew, $indexOrigin);
+             
+             /*
+              * PARA LOS BORRADOS*/
+               foreach($borrados as $key){
+                   $items[$key]->delete();
+                   unset($items[$key]);
+               }
+               
+            /*PARA LOS AGREGADOS*/
+               foreach($agregados as $key){
+                   $items[$key]=new Detdocbotellas;
+               }
+           
+                           
+         if ( h::request()->isAjax &&
+                  $model->load($arraycabecera,'')&& 
+                 Model::loadMultiple($items, $arraydetalle,'')
+                  ) {
+               //echo count($items);die();
+               h::response()->format = Response::FORMAT_JSON;
+                 return array_merge(ActiveForm::validate($model),
+                 ActiveForm::validateMultiple($items));
+                
         }
-
+            
+        
+        if ($model->load($arraycabecera,'') &&       
+        Model::loadMultiple($items, $arraydetalle,'')&&
+         $model->validate()   ){
+              $model->save();$model->refresh();
+               $items=array_values($items);//resetear
+               $items=$this->linkeaCampos($model->id, $items);
+              if(Model::validateMultiple($items)){
+                  foreach($items as $item){
+                        if($item->save()){                           
+                        }else{                          
+                        }
+                           }                    
+                } else{  
+                    
+                }               
+              }
+              return $this->redirect(['index']);
+         }
+         
+         foreach($items as $index=> $item){
+             $item->setScenario($item::SCENARIO_UPDATE_TABULAR);            
+         }
+         
         return $this->render('update', [
-            'model' => $model,
+            'model' => $model,'items'=>$items
         ]);
     }
-
     /**
      * Deletes an existing Docbotellas model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
@@ -336,33 +365,9 @@ class BottlesController extends baseController
         
     }
     
-    
-     /*
-     * Esta funcion rellena un registro hijo 
-      * renderizando la vista detalle 
-     * 
-     */
-    public function actionAjaxAddItem(){
-       if(h::request()->isAjax){
-        $form=/*unserialize(base64_decode(h::request()->post('form')));*/ new \yii\widgets\ActiveForm;
-        $clase=str_replace('_','\\',h::request()->post('model'));
-        $model= new $clase;
-         $orden=h::request()->post('orden');
-         $orden=4;
-         //$form=h::request()->post('form');
-         //var_dump($form);
-        /* var_dump(unserialize($form));*/
-        //h::response()->format = \yii\web\Response::FORMAT_JSON;
-         return $this->renderAjax('item',
-                 [
-                     'form'=>$form,
-                     'item'=>$model,
-                     'orden'=>$orden,
-                 'auto'=>false,
-                 ]);
-       }
-            
-          
-        
+
+    public function actionAjaxBorrarBotella(){
+        $this->deleteModel($id, $modelClass);
     }
+    
 }

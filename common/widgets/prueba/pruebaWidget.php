@@ -34,6 +34,7 @@ class pruebaWidget extends \yii\widgets\inputWidget
     private $_modelForeign=null; //El obejto modelo foraneo
     PRIVATE $_orden=null; //para renderizar widgets en tabulares
     //public $inputOptions=[];//Array de opciones del active Field 
+    public $data=[];//datos para llenar por defaulr 
     
     public function init()
     {
@@ -178,14 +179,16 @@ class pruebaWidget extends \yii\widgets\inputWidget
        
    }
    
-   private function getValoresList(){
-       if($this->model->isNewRecord){
-           return [];
-       }
+  private function getValoresList(){
+       
+       if($this->model->isNewRecord && $this->getModelForeign()->isNewRecord){          
+           return [];       
+       }else{           
        return [
            $this->getModelForeign()->{$this->_foreignField}=>
            $this->getModelForeign()->{$this->getSecondField()}
            ];
+       }
    }
   
    /*

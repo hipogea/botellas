@@ -127,7 +127,8 @@ class ValoresdefaultController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+       // var_dump($model->attributes,$model->getAttributes());die();
+       // var_dump(h::request()->post());die();
         if(h::request()->isPost){
             
          if(h::request()->isAjax){
@@ -157,13 +158,46 @@ class ValoresdefaultController extends baseController
             return $this->redirect(['view', 'id' => $model->id]);
         }
         }
-       // var_dump($model->documentos->tabla);die();
-        $table=new $model->documentos->tabla;
         
+        /*Sis e trata de un campo link*/
+        if($model->isFieldLinkForTable()){
+            $data=[];
+           $table=new $model->documento->tabla;
+           $table->{$model->nombrecampo}=$model->valor;
+            $claseforanea=$table->obtenerForeignClass($model->nombrecampo);
+            $campoforaneo=$table->obtenerForeignField($model->nombrecampo);
+            $registro=$claseforanea::find()->where([$campoforaneo=>$model->valor])->one();
+           //var_dump($registro->possibleSearchables());die();
+            $camposbuscables=array_keys($registro->possibleSearchables());
+            $j=0;
+            foreach($registro->attributes as $nombretemp=>$valortemp){
+                if($camposbuscables[0]==$nombretemp){
+                    break;
+                }
+                $j++;
+            }
+            //VAR_DUMP($camposbuscables,$j);DIE();
+            $ordenCampo=$j;
+            
+            $data[$model->valor]=$registro->{$camposbuscables[0]};
+            //var_dump($data);die();
+            //$campos=[];
+           return $this->render('update_con_widget', ['modeltabla'=>$table,
+            'model' => $model,/*'data'=>$data,*/'ordenCampo'=>$ordenCampo,'campos'=>$table->attributeLabels()
+                        ]); 
+            
+        }else{
+            // var_dump($model->documentos->tabla);die();
+        $table=new $model->documento->tabla;
+       // $claseforanea=$table->obtenerForeignClass($model->nombrecampo);        
         $campos=$table->attributeLabels();
+       
         return $this->render('update', [
             'model' => $model,'campos'=>$campos
-        ]);
+        ]); 
+        }
+        
+      
     
 }
     /**
@@ -253,12 +287,13 @@ public function actionAjaxProposalValues(){
             }
                //throw new \yii\base\Exception(Yii::t('base.errors','The attribute "tabla" from {Documento} is empty',['{Documento}'=>$docu->desdocu]));
                       
-            return $datos;
+            
                 }else{
                     $datos['error']=yii::t('base.errors','Document with {code} not found',['code'=>h::request()->post('filtro')]);
            
               
                 }
+                return $datos;
         
     }
 }

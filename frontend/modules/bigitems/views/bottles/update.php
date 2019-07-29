@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = Yii::t('bigitems.errors', 'Update');
     <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
-        'model' => $model,
+        'model' => $model,'items'=>$items
     ]) ?>
 
 </div>

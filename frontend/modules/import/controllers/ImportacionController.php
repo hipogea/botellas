@@ -14,6 +14,11 @@ use Yii;
 use frontend\modules\import\models\ImportCargamasiva;
 use frontend\modules\import\models\ImportCargamasivaSearch;
 use frontend\modules\import\models\ImportLogcargamasivaSearch;
+use frontend\modules\import\models\ImportCargamasivadet;
+use frontend\modules\import\models\ImportCargamasivadetSearch;
+use frontend\modules\import\models\ImportCargamasivaUser;
+use frontend\modules\import\models\ImportCargamasivaUserSearch;
+//use frontend\modules\import\models\ImportLogcargamasivaSearch;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -98,6 +103,12 @@ class ImportacionController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
+        $searchModelFields = new ImportCargamasivadetSearch();
+        $dataProviderFields = $searchModelFields->searchById($id);
+            $searchModelLoads = new ImportCargamasivaUserSearch();
+        $dataProviderLoads = $searchModelLoads->searchById($id);
+
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -105,6 +116,8 @@ class ImportacionController extends baseController
 
         return $this->render('update', [
             'model' => $model,
+            'itemsFields'=> $dataProviderFields,
+            'itemsLoads'=> $dataProviderLoads,
         ]);
     }
 
@@ -145,22 +158,25 @@ class ImportacionController extends baseController
         ///$namemodule=$this->module->id;
       $cargamasiva=$his->findModel($id);
       $cargamasiva->verifyChilds();
-      $datos=$cargamasiva->dataToImport(); 
+      $carga=$cargamasiva->activeRecordLoad();
+      
+      $datos=$carga->dataToImport(); 
       /*Verifica si las columnas coindicen */
-       $cargamasiva->verifyFirstRow($datos[0]);
-        $model=$cargamasiva->modelAsocc();
-        $cargamasiva->flushLogCarga();
+       $carga->verifyFirstRow($datos[1]); //datos[1] porsiacaso datos[0] sea la cabecera y no una fila de dartos 
+        
+       $model=$cargamasiva->modelAsocc();
+        $carga->flushLogCarga();
         $filashijas=$cargamasiva->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
    $linea=1;
     foreach ($datos as $fila){
-      $model->setAttributes(prepareAttributesToModel($fila,$filashijas));
+      $model->setAttributes($cargamasiva->prepareAttributesToModel($fila,$filashijas));
       $model->validate();
       if($model->hasErrors()){
           $cargamasiva->logCargaByLine($linea);
       }
       $linea++;      
    }
-   if($cargamasiva->nerrores()==0)
+   if($carga->nerrores()==0)
     return $this->redirect (\yii\helpers\Url::to(['importar-true','id'=>$id]));
    
     $searchModel = new ImportLogCargamasivaSearch();

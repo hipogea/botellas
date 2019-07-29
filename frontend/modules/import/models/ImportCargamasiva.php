@@ -102,21 +102,9 @@ class ImportCargamasiva extends \common\models\base\modelBase
         return new ImportCargamasivaQuery(get_called_class());
     }
     
-    /*Numero de erores en el log de carga*/
-    public function nerrores(){
-        if(count($this->nregistros()) >0 ){
-          return  ImportLogCargamasiva::find()->
-                andFilterWhere(['level'=>'0','user_id'=>h::userId()])->count();
-        }else{
-            return 0;
-        }
-    }
+   
     
-    /*Numero de registros en el  log de carga*/
-    public function nregistros(){
-       // $query=new ImportCargamasivaQuery();
-        return  ImportLogCargamasiva::find()->where(['cargamasiva_id' =>$this->id])->count();
-    }
+   
     
     /*Numero de exitos en el log de carga*/
     public function nexitos(){
@@ -258,72 +246,11 @@ class ImportCargamasiva extends \common\models\base\modelBase
        return (count($this->files)>0)?true:false;
    }
    
-   /*Retorna un archivo csv adjunto (El primero) */
-   public function pathFileCsv(){
-       
-    $registros=$this->getFilesByExtension(static::EXTENSION_CSV);
-    if(count($registros)>0){
-        return $registros[0]->getPath();
-    }else{
-        return null;
-    } 
-       
-   }
-   
-  public function dataToImport(){
-       $csv= New MyCSVReader(
-              [
-                 'filename' => $this->pathFileCsv(),
-                 'fgetcsvOptions' => [
-                                        'startFromLine' =>($this->tienecabecera)?1:0,
-                                     'delimiter' => h::settings()->
-                                            get(
-                                             Yii::$app->controller->module->id,
-                                             'delimiterCsv'
-                                             ),
-                                ] 
-              ]);
-      return $csv->readFile();
-  } 
   
-  /*
-   * Verifica que la estrucutra de las columnas
-   * del csv coinciden en forma con las columnas 
-   * especificadas en lso registros hijos,
-   * detectando posibles incositencas en el formato 
-   * @row: Una fila del archivo csv (es una array de valores devuelto por la funcion fgetcsv())
-   * normalmente es la primera fila
-   */
- public function verifyFirstRow($row){
-      if($this->countChilds() <> count($row))
-       throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row[0]),'ncolsload'=>$this->countChilds()]));
-      /*  las Filas hijas*/
-      $filashijas=$this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
-     // $countFieldsInPrimaryKey=count($this->modelAsocc()->primaryKey(true));
-      $validacion=true;
-      foreach($row as $index=>$valor){
-          $tipo=$filashijas[$index]['tipo'];
-          $longitud=$filashijas[$index]['sizecampo'];
-          $nombrecampo=$filashijas[$index]['nombrecampo'];
-          
-          /*Detectando inconsistencias*/
-          if(($this->isTypeChar($tipo)&&($longitud <> strlen($valor))) or
-           ($this->isTypeVarChar($tipo) &&($longitud < strlen($valor))) or                
-           ($this->isNumeric($tipo)&& (!is_numeric($valor)) ) or                   
-         ( $this->isDateorTime($tipo,$nombrecampo)&& (
-                            (strpos($valor,"-")===false) &&
-                            (strpos($valor,"/")===false) &&
-                             (strpos($valor,".")===false)
-                          ))
-          )
-            $validacion=false;
-          break;
-      }
-      if(!$validacion)
-         throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same type columns  than type fields in this load data'));
-       
-      return $validacion;
- }
+   
+  
+  
+  
  /*
   * prepara los atributos para almacenarlos en el modelo
   * usa una fila de csv  y los nombres de los campos
@@ -371,43 +298,21 @@ class ImportCargamasiva extends \common\models\base\modelBase
      }
  }
  
- private function flushLogCarga(){
-     (new Query)
-    ->createCommand()
-    ->delete(ImportLogcargamasiva::tableName(), ['user_id' => h::userId()])
-    ->execute();
-    
-   }
+ 
    
    
- public function logCargaByLine($line){
-     $errores=$this->getErrors();
-     foreach($errores as $campo=>$detalle){
-         foreach($detalle as $cla=>$mensaje){
-             $this->insertLogCarga($line, $campo, $mensaje, '0');
-         }
-     }
- }
+
    
- public function insertLogCarga($line,$campo,$mensaje,$level){
-     //$this->flushLogCarga();
-    // 
-     $attributes=[
-         'cargamasiva_id'=>$this->id,
-         'nombrecampo'=> $campo,
-         'mensaje'=>$mensaje,
-         'level'=>$level,
-         'fecha'=>date('Y-m-d H:i:s'),
-         'user_id'=>h::userId(),
-         'numerolinea'=>$line,
-     ];
-     	$model=new ImportLogcargamasiva();
-        $model->setAttributes($attributes);
-        $model->save();
-        unset($model);
-        
- }
+ /*
+  * Esta funcion devuelve el registro hijo de 
+  * solo registro activo, estre registro es el que 
+  * gestionara la carga    */
+ public function activeRecordLoad(){
+    $registro=$this->childQueryLoads()->where(['activo'=>'1'])->one();
+ } 
  
  
+ 
+  
  
 }

@@ -9,7 +9,9 @@ use common\models\masters\Documentos;
 use common\models\masters\Centros;
 use common\models\config\Config;
 use common\models\base\modelBase as ModeloGeneral ;
+use common\models\masters\Valoresdefault ;
 use common\interfaces\documents\documentBaseInterface as docuInterface;
+use common\helpers\h;
 use Yii;
 class DocumentBase extends ModeloGeneral implements docuInterface
 {
@@ -152,6 +154,8 @@ class DocumentBase extends ModeloGeneral implements docuInterface
                 $this->{$this->codigodoc},
                $this->{$this->fieldCodCenter}
                 );    }
+    
+                
     
     public static function getConfig($code,$codocu,$codcen){
         $query=Config::find()->where([
@@ -432,6 +436,24 @@ class DocumentBase extends ModeloGeneral implements docuInterface
           $this->{$this->fieldCodocu}=$this->existsDocuMaster();
          //$this->{$this->fieldCodocu}=($coddocu)?$coddocu:$this->{$this->fieldCodocu};
            }
+   }
+   
+   public function valuesDefault(){
+       $defarr= Valoresdefault::atributesForDefault($this->codocu);
+      // var_dump($defarr);die();
+       foreach($defarr as $nombre=>$valor){
+           $this->{$nombre}=$valor;
+       }
+   }
+   
+   public static function gsettingConfig($llave,$valorsino){
+       //var_dump(static::keySetting());die();
+       return h::gsetting(static::keySetting(), $llave, $valorsino);
+   }
+   
+   private static function keySetting(){
+      return h::app()->controller->module->id.'.'.self::getShortNameClass();
+       
    }
 }
    

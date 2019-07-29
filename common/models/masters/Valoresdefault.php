@@ -17,6 +17,7 @@ class Valoresdefault extends \common\models\base\modelBase
 {
     const ESCENARIO_CREACION='creacion';
     public $booleanFields=['activo'];
+    public $_tabla;
     /**
      * {@inheritdoc}
      */
@@ -81,11 +82,48 @@ class Valoresdefault extends \common\models\base\modelBase
         return new ValoresdefaultQuery(get_called_class());
     }
     
-    public function getDocumentos()
+    public function getDocumento()
     {       
         return $this->hasOne(Documentos::className(), ['codocu' => 'codocu']);
      
        }
+       
+    public function afterfind(){
+        $cadena=$this->documento->tabla;
+        if(!is_string($cadena))
+           throw new \yii\base\Exception(Yii::t('base.errors', 'Property "Table" from Documents is empty'));
+        $this->_tabla=$cadena;
+        $this->isModelBase();
+        
+        return parent::afterfind();
+    }
     
+    private function isModelBase(){
+        $table=new $this->_tabla;    
+         if(!$table instanceof \common\models\base\modelBase ){
+             //var_dump(get_class($table));die();
+           throw new \yii\base\Exception(Yii::t('base.errors', 'The model {modelo} is not instance from modelBase',['modelo'=>$this->_tabla]));
+         
+         }
+    }
+    /*Veriica si el campo a tratar es una cmpo clave para el modelo "table"*/
+    public function isFieldLinkForTable(){
+        $table=new $this->_tabla;     
+        return in_array($this->nombrecampo,array_keys($table->fieldsLink(false)));
+        
+    }
+    
+    /*Funcion que obetiene los campos y sus valores 
+     * para asignlos directamente al modelo 
+     * beneficiado 
+     * ['nombrecampo'=>'valor',   ...]
+     */
+    public static function atributesForDefault($codocu){
+       // var_dump($codocu);die();
+       return \yii\helpers\ArrayHelper::map(
+     static::find()->where(['[[user_id]]'=>h::userId(),
+         '[[codocu]]'=>$codocu])->all(),
+                'nombrecampo','valor');
+          }
     
 }

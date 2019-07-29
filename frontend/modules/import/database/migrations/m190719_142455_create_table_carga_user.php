@@ -27,6 +27,7 @@ if(!$this->existsTable($table)) {
                 'descripcion'=>$this->string(40)->notNull()->append($this->collateColumn()),
                 'current_linea'=>$this->integer(11),//
                 'total_linea'=>$this->integer(11),//
+         'activo'=>$this->char(1)->append($this->collateColumn()),
                 'tienecabecera'=>$this->char(1)->append($this->collateColumn()),
                 'duracion'=>$this->string(40)->append($this->collateColumn()),
         ],$this->collateTable());

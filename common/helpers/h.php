@@ -7,6 +7,7 @@ namespace common\helpers;
 use yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use common\models\masters\Valoresdefault;
 class h {
      const DATE_FORMAT = 'php:Y-m-d';
     const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
@@ -75,6 +76,13 @@ class h {
         return yii::$app->settings;
     }
     
+    public static function gsetting($seccion,$llave,$valorsino){
+        if(yii::$app->settings->has($seccion,$llave))
+        return yii::$app->settings->get($seccion,$llave);
+        return $valorsino;
+    }
+    
+    
     public static function UserLongName(){
         return yii::$app->user->getProfile()->names;
     }
@@ -140,6 +148,17 @@ class h {
         return ArrayHelper::map(
                         \common\models\Userfavoritos::find()->where(['[[user_id]]'=>$iduser])->all(),
                 'url','alias');
+    }
+    
+    /*Devuelve valores por defecto de cualquier 
+     * modelo siempre que se hayan regsitrado estos valores e
+     * mediante edfafultvalues 
+     */
+    public function defaultValues(&$modelo){
+        ArrayHelper::map(
+                Valoresdefault::find()->where(['[[nombretabla]]'=>$tableName])->all(),
+                'codigo','valor');
+        
     }
     
    public static function getDimensions(){

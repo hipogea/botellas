@@ -23,6 +23,7 @@ use Yii;
 class Detdocbotellas extends modelBase implements Transport 
 {
     const SCENARIO_CREACION_TABULAR='creaciontabular';
+    const SCENARIO_UPDATE_TABULAR='updatetabular';
     public $descripcion; //campo ficticio para simular la descriciond ela botella 
     /**
      * {@inheritdoc}
@@ -54,6 +55,7 @@ class Detdocbotellas extends modelBase implements Transport
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo','coditem'];
+        $scenarios[self::SCENARIO_UPDATE_TABULAR] = ['codigo','coditem'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }
