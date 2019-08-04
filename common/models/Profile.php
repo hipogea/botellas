@@ -3,6 +3,7 @@
 namespace common\models;
 use common\helpers\h;
 use common\helpers\FileHelper;
+use frontend\modules\sta\helpers\comboHelper;
 use Yii;
 
 /**
@@ -18,8 +19,8 @@ use Yii;
  */
 class Profile extends \common\models\base\modelBase
 {
-   
-    
+   const SCENARIO_INTERLOCUTOR='tipo';
+    public $interlocutor='';
     /**
      * {@inheritdoc}
      */
@@ -49,10 +50,21 @@ class Profile extends \common\models\base\modelBase
             [['photo', 'detalle'], 'string'],
             [['names'], 'string', 'max' => 60],
              [['names','duration','durationabsolute'], 'safe'],
+            [['tipo'],'required','on'=>self::SCENARIO_INTERLOCUTOR],
+            [['tipo'],'safe','on'=>self::SCENARIO_INTERLOCUTOR],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios[self::SCENARIO_INTERLOCUTOR] = ['tipo'];
+        //$scenarios[self::SCENARIO_UPDATE_TABULAR] = ['codigo','coditem'];
+       // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
+        return $scenarios;
+    }
+    
     /**
      * {@inheritdoc}
      */
@@ -64,6 +76,7 @@ class Profile extends \common\models\base\modelBase
             'names' => Yii::t('base.names', 'Names'),
             'photo' => Yii::t('base.names', 'Photo'),
             'detalle' => Yii::t('base.names', 'Detalle'),
+            'interlocutor' => Yii::t('base.names', 'Type'),
         ];
     }
 
@@ -100,6 +113,8 @@ class Profile extends \common\models\base\modelBase
     }
     
    public function afterFind() {
+       if(!empty($this->tipo))
+       $this->interlocutor= comboHelper::getCboValores('sta.tipoprofile')[$this->tipo];
      // echo "murio"; die();
        parent::afterFind();
       /* if(h::app()->hasModule('sta')){
@@ -140,8 +155,5 @@ class Profile extends \common\models\base\modelBase
    }
    
    
-   public function getInterlocutor(){
-       
-   }
   
              }

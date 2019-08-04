@@ -320,10 +320,6 @@ class ActiveForm extends Widget
      */
     public function field($model, $attribute, $options = [])
     {
-        /*if($model instanceof \frontend\modules\bigitems\models\Detdocbotellas){
-          var_dump($attribute);  dIE();
-        }*/
-            
         $config = $this->fieldConfig;
         if ($config instanceof \Closure) {
             $config = call_user_func($config, $model, $attribute);

@@ -1,14 +1,15 @@
 <?php
 // your_app/votewidget/VoteWidgetAsset.php
-namespace common\widgets\cbodepwidget;
+namespace common\widgets\imagewidget;
 use yii\web\AssetBundle;
-class cboDepWidgetAsset extends AssetBundle
+class ImageWidgetAsset extends AssetBundle
 {
     public $js = [
         
     ];
 
     public $css = [
+        'css/imagen.css',
          // CDN lib
        // '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
       // 'css/select2.css'

@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\masters\Trabajadores */
 
-$this->title = Yii::t('control.errors', 'Update Trabajadores: {name}', [
+$this->title = Yii::t('base.actions', 'Update Worker: {name}', [
     'name' => $model->codigotra,
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('control.errors', 'Trabajadores'), 'url' => ['index']];
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = Yii::t('control.errors', 'Update');
 ?>
 <div class="trabajadores-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
         'model' => $model,

@@ -238,11 +238,13 @@ class BottlesController extends baseController
              $valor=100+$index;
              $item->coditem= $valor.'';
          }
+         /*Aqui colocamos los valores por default*/
          
          $model->valuesDefault();
         return $this->render('create', [
             'model' => $model,'items'=>$items
         ]);
+        
     }
     
     /**

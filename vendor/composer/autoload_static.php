@@ -109,7 +109,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         's' => 
         array (
             'shifrin\\noty\\' => 13,
-            'setasign\\Fpdi\\' => 14,
         ),
         'r' => 
         array (
@@ -137,6 +136,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'k' => 
         array (
+            'kv4nt\\owlcarousel\\' => 18,
             'kartik\\widgets\\' => 15,
             'kartik\\typeahead\\' => 17,
             'kartik\\touchspin\\' => 17,
@@ -219,6 +219,8 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
+            'Psr\\Container\\' => 14,
+            'Prophecy\\' => 9,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'M' => 
@@ -244,6 +246,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\Common\\Lexer\\' => 22,
             'DeepCopy\\' => 9,
         ),
         'C' => 
@@ -252,6 +255,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'Codeception\\PHPUnit\\' => 20,
             'Codeception\\Extension\\' => 22,
             'Codeception\\' => 12,
+            'Carbon\\' => 7,
         ),
     );
 
@@ -332,10 +336,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/shifrin/yii2-noty',
         ),
-        'setasign\\Fpdi\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
-        ),
         'ruskid\\csvimporter\\' => 
         array (
             0 => __DIR__ . '/..' . '/ruskid/yii2-csv-importer',
@@ -373,6 +373,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'linslin\\yii2\\curl\\' => 
         array (
             0 => __DIR__ . '/..' . '/linslin/yii2-curl',
+        ),
+        'kv4nt\\owlcarousel\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kv4nt/yii2-owl-carousel2',
         ),
         'kartik\\widgets\\' => 
         array (
@@ -618,6 +622,14 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'Psr\\Container\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Prophecy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
@@ -658,6 +670,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Doctrine\\Common\\Lexer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
+        ),
         'DeepCopy\\' => 
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
@@ -681,10 +697,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             1 => __DIR__ . '/..' . '/codeception/codeception/src/Codeception',
             2 => __DIR__ . '/..' . '/codeception/stub/src',
         ),
-    );
-
-    public static $fallbackDirsPsr4 = array (
-        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
+        'Carbon\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -693,20 +709,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'cebe\\gravatar\\' => 
             array (
                 0 => __DIR__ . '/..' . '/cebe/yii2-gravatar',
-            ),
-        ),
-        'U' => 
-        array (
-            'UpdateHelper\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/kylekatarnls/update-helper/src',
-            ),
-        ),
-        'P' => 
-        array (
-            'Prophecy\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
             ),
         ),
         'H' => 
@@ -718,10 +720,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'D' => 
         array (
-            'Doctrine\\Common\\Lexer\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
-            ),
             'Diff' => 
             array (
                 0 => __DIR__ . '/..' . '/phpspec/php-diff/lib',
@@ -737,6 +735,11 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
     );
 
     public static $classMap = array (
+        'FPDF_TPL' => __DIR__ . '/..' . '/setasign/fpdi/fpdf_tpl.php',
+        'FPDI' => __DIR__ . '/..' . '/setasign/fpdi/fpdi.php',
+        'FilterASCII85' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCII85.php',
+        'FilterASCIIHexDecode' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
+        'FilterLZW' => __DIR__ . '/..' . '/setasign/fpdi/filters/FilterLZW.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert.php',
@@ -964,6 +967,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'PHP_Token_CLOSE_SQUARE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_CLOSE_TAG' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_COALESCE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_COALESCE_EQUAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_COLON' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_COMMA' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_COMMENT' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1009,6 +1013,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'PHP_Token_FILE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_FINAL' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_FINALLY' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_FN' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_FOR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_FOREACH' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_FUNCTION' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1099,6 +1104,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'PHP_Token_UNSET_CAST' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_USE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_USE_FUNCTION' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
+        'PHP_Token_Util' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token/Util.php',
         'PHP_Token_VAR' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_VARIABLE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_WHILE' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1281,6 +1287,8 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'TheSeer\\Tokenizer\\TokenCollectionException' => __DIR__ . '/..' . '/theseer/tokenizer/src/TokenCollectionException.php',
         'TheSeer\\Tokenizer\\Tokenizer' => __DIR__ . '/..' . '/theseer/tokenizer/src/Tokenizer.php',
         'TheSeer\\Tokenizer\\XMLSerializer' => __DIR__ . '/..' . '/theseer/tokenizer/src/XMLSerializer.php',
+        'fpdi_pdf_parser' => __DIR__ . '/..' . '/setasign/fpdi/fpdi_pdf_parser.php',
+        'pdf_context' => __DIR__ . '/..' . '/setasign/fpdi/pdf_context.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -1288,7 +1296,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr4 = ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5::$classMap;
 

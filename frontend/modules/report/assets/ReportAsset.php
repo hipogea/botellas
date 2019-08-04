@@ -1,27 +1,32 @@
 <?php
 // your_app/votewidget/VoteWidgetAsset.php
-namespace common\widgets\cbodepwidget;
+namespace frontend\modules\report\assets;
 use yii\web\AssetBundle;
-class cboDepWidgetAsset extends AssetBundle
+class ReportAsset extends AssetBundle
 {
     public $js = [
         
     ];
 
     public $css = [
+        'css/report.css',
          // CDN lib
        // '//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css',
       // 'css/select2.css'
     ];
 
     public $depends = [
-       // 'yii\web\JqueryAsset'
+      // 'yii\bootstrap\BootstrapAsset'
     ];
 
     public function init()
     {
         // Tell AssetBundle where the assets files are
-        $this->sourcePath = __DIR__ . "/assets";
-        parent::init();
+        $this->sourcePath = __DIR__ . "/../web";
+        //var_dump($this->className());die();
+         parent::init();
+    // resetting BootstrapAsset to not load own css files
+    
+        //parent::init();
     }
 }

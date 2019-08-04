@@ -7,6 +7,7 @@ use frontend\modules\bigitems\models\LogTransporte;
 use frontend\modules\bigitems\Module as BigItemsModule;
 use frontend\modules\bigitems\interfaces\Transport;
 use frontend\modules\bigitems\traits\assetTrait;
+use common\behaviors\FileBehavior;
 use Yii;
 //use common\traits\baseTrait;
 /**
@@ -29,6 +30,18 @@ class Activos extends \common\models\base\modelBase implements Transport
         return '{{%activos}}';
     }
 
+    
+    public function behaviors()
+{
+	return [
+		
+		'fileBehavior' => [
+			'class' => FileBehavior::className()
+		],
+               
+		
+	];
+}
     /**
      * {@inheritdoc}
      */

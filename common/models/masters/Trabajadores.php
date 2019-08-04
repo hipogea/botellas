@@ -25,7 +25,7 @@ use Yii;
 class Trabajadores extends modelBase
 {
    
-   
+   public $nombrecompleto;
     
      
     public function behaviors()
@@ -71,6 +71,7 @@ class Trabajadores extends modelBase
             [['telfijo'], 'string', 'max' => 13],
             [['telmoviles', 'referencia'], 'string', 'max' => 30],
             [['codigotra'], 'unique'],
+             [['dni'], 'unique'],
         ];
     }
 
@@ -80,20 +81,20 @@ class Trabajadores extends modelBase
     public function attributeLabels()
     {
         return [
-            'codigotra' => Yii::t('models.labels', 'Codigotra'),
-            'ap' => Yii::t('models.labels', 'Ap'),
-            'am' => Yii::t('models.labels', 'Am'),
-            'nombres' => Yii::t('models.labels', 'Nombres'),
-            'dni' => Yii::t('models.labels', 'Dni'),
-            'ppt' => Yii::t('models.labels', 'Ppt'),
-            'pasaporte' => Yii::t('models.labels', 'Pasaporte'),
-            'codpuesto' => Yii::t('models.labels', 'Codpuesto'),
-            'cumple' => Yii::t('models.labels', 'Cumple'),
-            'fecingreso' => Yii::t('models.labels', 'Fecingreso'),
-            'domicilio' => Yii::t('models.labels', 'Domicilio'),
-            'telfijo' => Yii::t('models.labels', 'Telfijo'),
-            'telmoviles' => Yii::t('models.labels', 'Telmoviles'),
-            'referencia' => Yii::t('models.labels', 'Referencia'),
+            'codigotra' => Yii::t('base.names', 'Code'),
+            'ap' => Yii::t('base.names', 'Last Name'),
+            'am' => Yii::t('base.names', "Mother's last name"),
+            'nombres' => Yii::t('base.names', 'Names'),
+            'dni' => Yii::t('base.names', 'Identity Document'),
+            'ppt' => Yii::t('base.names', 'Safe passage'),
+            'pasaporte' => Yii::t('base.names', 'Passport'),
+            'codpuesto' => Yii::t('base.names', 'Position'),
+            'cumple' => Yii::t('base.names', 'Date of Birth'),
+            'fecingreso' => Yii::t('base.names', 'Admission date'),
+            'domicilio' => Yii::t('base.names', 'Address'),
+            'telfijo' => Yii::t('base.names', 'Phone Number'),
+            'telmoviles' => Yii::t('base.names', 'Moviles Phone Numbers'),
+            'referencia' => Yii::t('base.names', 'References'),
         ];
     }
 
@@ -124,5 +125,9 @@ class Trabajadores extends modelBase
        return parent::beforeSave($insert);
     }
     
+    public function afterFind(){
+        $this->nombrecompleto=$this->ap.'-'.$this->am.'-'.$this->nombres;
+        parent::afterFind();
+    }
 
 }

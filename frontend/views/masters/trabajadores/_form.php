@@ -95,29 +95,12 @@ use yii\widgets\ActiveForm;
 </div>
     
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('control.errors', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('base.verbs', 'Save'), ['class' => 'btn btn-success']) ?>
     </div>
 
     
-    
-    <?= \nemmo\attachments\components\AttachmentsInput::widget([
-	'id' => 'file-input', // Optional
-	'model' => $model,
-	'options' => [ // Options of the Kartik's FileInput widget
-		'multiple' => true, // If you want to allow multiple upload, default to false
-	],
-	'pluginOptions' => [ // Plugin options of the Kartik's FileInput widget 
-		'maxFileCount' => 10 // Client max files
-	]
-]) ?>
-    
-    
-     <?= Html::button('Create New Company', ['value' => Url::to(['masters/trabajadores']), 'title' => 'Creating New Company', 'class' => 'showModalButton btn btn-success']); ?>
-    
-    
-    <?php ActiveForm::end(); ?>
 
     
-    <?= \nemmo\attachments\components\AttachmentsTable::widget(['model' => $model]) ?>
-    <?= \nemmo\attachments\components\AttachmentsTableWithPreview::widget(['model' => $model]) ?>
+   
+    <?php ActiveForm::end(); ?>
 </div>

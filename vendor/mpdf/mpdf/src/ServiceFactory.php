@@ -23,6 +23,7 @@ use Mpdf\Writer\FormWriter;
 use Mpdf\Writer\ImageWriter;
 use Mpdf\Writer\JavaScriptWriter;
 use Mpdf\Writer\MetadataWriter;
+use Mpdf\Writer\ObjectWriter;
 use Mpdf\Writer\OptionalContentWriter;
 use Mpdf\Writer\PageWriter;
 
@@ -114,6 +115,7 @@ class ServiceFactory
 		$optionalContentWriter = new OptionalContentWriter($mpdf, $writer);
 		$colorWriter = new ColorWriter($mpdf, $writer);
 		$backgroundWriter = new BackgroundWriter($mpdf, $writer);
+		$objectWriter = new ObjectWriter($mpdf, $writer);
 		$javaScriptWriter = new JavaScriptWriter($mpdf, $writer);
 
 		$resourceWriter = new ResourceWriter(
@@ -127,6 +129,7 @@ class ServiceFactory
 			$backgroundWriter,
 			$bookmarkWriter,
 			$metadataWriter,
+			$objectWriter,
 			$javaScriptWriter,
 			$logger
 		);
@@ -164,6 +167,7 @@ class ServiceFactory
 			'optionalContentWriter' => $optionalContentWriter,
 			'colorWriter' => $colorWriter,
 			'backgroundWriter' => $backgroundWriter,
+			'objectWriter' => $objectWriter,
 			'javaScriptWriter' => $javaScriptWriter,
 
 			'resourceWriter' => $resourceWriter

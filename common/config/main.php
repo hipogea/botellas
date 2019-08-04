@@ -231,6 +231,10 @@ return [
                                  'class' => 'yii\i18n\PhpMessageSource',
                                  'basePath' => '@frontend/modules/sta/messages',                                         
                                             ], 
+                'sta.actions'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sta/messages',                                         
+                                            ], 
                 
                       ],
                   ],

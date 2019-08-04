@@ -4,6 +4,8 @@ namespace common\models\masters;
 use common\models\base\modelBaseTrait;
 use common\models\base\modelBase;
 use common\models\masters\Parametrosdocu;
+use yii\data\ActiveDataProvider;
+use common\models\config\Parametroscentrosdocu;
 use Yii;
 
 /**
@@ -75,7 +77,9 @@ class Documentos extends modelBase
         //$this->loadParametros();
         return parent::afterSave($insert,$changedAttributes);
     }
-    
+    /*
+     * Carga los parametros en la talba parametros docu a llenar autoamticamente 
+     */
     private function loadParametros(){
       $params=Parametros::find()->where(['activo' => '1', 'flag' => 'D'])->all();
       $codocu=$this->codocu;
@@ -87,4 +91,24 @@ class Documentos extends modelBase
           Parametrosdocu::firstOrCreateStatic($attributes);
       }
    }
+   
+   
+   public function getParametroscentrosdocu(){
+       return $this->hasMany(Parametroscentrosdocu::className(), ['codocu' => 'codocu']);
+       
+   }
+   
+   /*Devuelve un data provider de lso parametros de configurtacionb
+    * Observe que hace reerencia a la clase Parametroscentrosdocu tabla
+    *   'parametrosdocucentros'
+    */
+   public function providerParam(){
+            return new ActiveDataProvider([
+                'query' =>Parametroscentrosdocu::find()->where(['codocu'=>$this->codocu]),
+                'pagination' => [
+                    'pageSize' => 20,
+                            ],
+                                    ]);
+        }
+   
 }

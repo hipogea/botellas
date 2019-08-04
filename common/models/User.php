@@ -231,6 +231,11 @@ class User extends ActiveRecord implements IdentityInterface
     return $this->status == self::STATUS_ACTIVE;
 }
 
+public static function dataComboStatus(){
+    return [static::STATUS_DELETED => yii::t('base.names','Active'),
+            static::STATUS_ACTIVE => yii::t('base.names','Disabled')];
+    
+}
  /* public function afterFind() {
       parent::afterFind();
       $this->status=($this->status == '10')?'1':'0';

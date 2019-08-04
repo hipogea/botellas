@@ -117,8 +117,7 @@ class MakeController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-       //echo $model->pathFile();die();
-        
+       
         
 //var_dump($model->existsChildField('deslarga'));die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -234,7 +233,7 @@ class MakeController extends baseController
 			yii::$app->session->setFlash('information',yii::t('report.messages', 'No se agregaron registros hijos ya existen todos'));
 		}
                 if(!$refresh)
-		$this->redirect(array('update','id'=>$modeloreporte->id));
+		return $this->redirect(array('update','id'=>$modeloreporte->id));
 	}
 
   public function actionUpdatedetallerepo($id){
@@ -263,12 +262,14 @@ class MakeController extends baseController
   
   public function actionCreareporte($id, $idfiltro){
      // echo $this->putLogo($id, $idfiltro);die();
-       $model=$this->findModel($id);     
-       
-      $this->layout='blank';
+       $model=$this->findModel($id); 
+       $this->layout='blank';
+      // return $this->render('reporte_1');
+      
       $model=$this->findModel($id);      
       $logo=($model->tienelogo)?$this->putLogo($id, $idfiltro):'';      
          $header=$model->putHeaderReport($id, $idfiltro); 
+         
           $cabecera=$model->putCabecera($id,$idfiltro);
          
       /*$pdf->methods=[ 
@@ -291,6 +292,7 @@ class MakeController extends baseController
           
          $pageContents[]=$contenidoSinGrilla.$this->render('reporte',[
              'modelo'=>$model,
+             
              'dataProvider'=>$dataProvider,
              'contenidoSinGrilla'=>$contenidoSinGrilla,
              'columnas'=>$model->makeColumns(),             
@@ -341,6 +343,8 @@ class MakeController extends baseController
            'SetHeader'=>[($model->tienecabecera)?$header:''], 
             'SetFooter'=>[($model->tienepie)?'{PAGENO}':''],
         ];*/
+           $mpdf->simpleTables = true;
+                 $mpdf->packTableData = true;
           $paginas=count($contenido);
          foreach($contenido as $index=>$pagina){
             $mpdf->WriteHTML($pagina);

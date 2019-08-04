@@ -7,6 +7,7 @@
 use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use common\helpers\h;
+use frontend\modules\sta\helpers\comboHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = 'Profile';
@@ -26,8 +27,8 @@ $this->title = 'Profile';
               <?php 
               $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-              <?=Html::img($profile->getUrlImage(), ['border'=>2,'width'=>120,'height'=>120])
-             
+              <?=Html::img($profile->getUrlImage(), ['class'=>"img-thumbnail"])
+               
               ?>
                     </div>
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -56,27 +57,42 @@ $this->title = 'Profile';
                 <?= Html::checkbox('agreeff', false, [ 'disabled'=>'disabled', 'label' =>yii::t('base.forms','Enabled')]) ?>
              </diV>
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <?= $form->field($profile, 'names')->textInput([]) ?>
+                <?= $form->field($profile, 'names')->textInput(['disabled'=>'disabled']) ?>
                     </diV>
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <?= $form->field($profile, 'duration')->textInput([]) ?>
+                <?= $form->field($profile, 'duration')->textInput(['disabled'=>'disabled']) ?>
                     </diV>
             
              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <?= $form->field($profile, 'durationabsolute')->textInput([]) ?>
+                <?= $form->field($profile, 'durationabsolute')->textInput(['disabled'=>'disabled']) ?>
+                    </diV>
+            
+              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+               <?= $form->field($profile, 'tipo')->
+            dropDownList(comboHelper::getCboValores('sta.tipoprofile'),
+                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                     //'class'=>'probandoSelect2',
+                        ]
+                    ) ?>
+
                     </diV>
                 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                <?php
-// Usage with ActiveForm and model and initial value set to true
-//$model->status = true;
-echo $form->field($model, 'status')->checkbox();
+            
+
+ <?= $form->field($model, 'status')->
+            dropDownList($model->dataComboStatus(),
+                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                     //'class'=>'probandoSelect2',
+                        ]
+                    ) ?>
                 
-?>
                     
                 </div>
               
 
- 
+ <div class="form-group">
+        <?= Html::submitButton(Yii::t('base.names', 'Save'), ['class' => 'btn btn-success']) ?>
+    </div>
                
                 
             <?php ActiveForm::end(); ?>

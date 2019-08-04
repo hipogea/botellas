@@ -342,8 +342,6 @@ class MetadataWriter implements \Psr\Log\LoggerAwareInterface
 			$this->writer->write('/OpenAction [3 0 R /XYZ null null 1]');
 		} elseif (!is_string($this->mpdf->ZoomMode)) {
 			$this->writer->write('/OpenAction [3 0 R /XYZ null null ' . ($this->mpdf->ZoomMode / 100) . ']');
-		} elseif ($this->mpdf->ZoomMode === 'none') {
-			// do not write any zoom mode / OpenAction
 		} else {
 			$this->writer->write('/OpenAction [3 0 R /XYZ null null null]');
 		}

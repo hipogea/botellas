@@ -401,7 +401,21 @@ class Response extends \yii\base\Response
             if ($cookie->expire != 1 && isset($validationKey)) {
                 $value = Yii::$app->getSecurity()->hashData(serialize([$cookie->name, $value]), $validationKey);
             }
-            setcookie($cookie->name, $value, $cookie->expire, $cookie->path, $cookie->domain, $cookie->secure, $cookie->httpOnly);
+            if (PHP_VERSION_ID >= 70300) {
+                setcookie($cookie->name, $value, [
+                    'expires' => $cookie->expire,
+                    'path' => $cookie->path,
+                    'domain' => $cookie->domain,
+                    'secure' => $cookie->secure,
+                    'httpOnly' => $cookie->httpOnly,
+                    'sameSite' => !empty($cookie->sameSite) ? $cookie->sameSite : null,
+                ]);
+            } else {
+                if (!is_null($cookie->sameSite)) {
+                    throw new InvalidConfigException(get_class($cookie) . '::sameSite is not supported by PHP versions < 7.3.0 (set it to null in this environment)');
+                }
+                setcookie($cookie->name, $value, $cookie->expire, $cookie->path, $cookie->domain, $cookie->secure, $cookie->httpOnly);
+            }
         }
     }
 
@@ -767,8 +781,8 @@ class Response extends \yii\base\Response
     protected function getDispositionHeaderValue($disposition, $attachmentName)
     {
         $fallbackName = str_replace(
-            ['%', '/', '\\', '"'],
-            ['_', '_', '_', '\\"'],
+            ['%', '/', '\\', '"', "\x7F"],
+            ['_', '_', '_', '\\"', '_'],
             Inflector::transliterate($attachmentName, Inflector::TRANSLITERATE_LOOSE)
         );
         $utfName = rawurlencode(str_replace(['%', '/', '\\'], '', $attachmentName));
@@ -839,20 +853,16 @@ class Response extends \yii\base\Response
      */
     public function redirect($url, $statusCode = 302, $checkAjax = true)
     {
-        
         if (is_array($url) && isset($url[0])) {
             // ensure the route is absolute
             $url[0] = '/' . ltrim($url[0], '/');
         }
         $url = Url::to($url);
         if (strncmp($url, '/', 1) === 0 && strncmp($url, '//', 2) !== 0) {
-          // echo "que pasa:  ".$url."<br>" ;
             $url = Yii::$app->getRequest()->getHostInfo() . $url;
-          //  echo "que pasa:  ".$url ;die();
         }
 
         if ($checkAjax) {
-            
             if (Yii::$app->getRequest()->getIsAjax()) {
                 if (Yii::$app->getRequest()->getHeaders()->get('X-Ie-Redirect-Compatibility') !== null && $statusCode === 302) {
                     // Ajax 302 redirect in IE does not work. Change status code to 200. See https://github.com/yiisoft/yii2/issues/9670
@@ -864,12 +874,9 @@ class Response extends \yii\base\Response
                     $this->getHeaders()->set('X-Redirect', $url);
                 }
             } else {
-                //echo $url;die();
                 $this->getHeaders()->set('Location', $url);
-               // echo "que pasa:  ".$url ;die();
             }
         } else {
-            
             $this->getHeaders()->set('Location', $url);
         }
 

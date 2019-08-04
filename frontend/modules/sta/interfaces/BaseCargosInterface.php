@@ -1,25 +1,26 @@
 <?php
-namespace frontend\modules\bigitems\interfaces;
-
-interface  PlaceInterface {
+namespace frontend\modules\sta\interfaces;
+/*Esta interfaz es base
+ * para los interlocutores oargos
+ */
+interface  BaseCargosInterface{
     
-    /*  Extrae o saca del lugar un activo
-     *   @asset: Un item activo 
+    /*  Cambia de facultad
      */
-    public function purgeAsset($asset);
+    public function changeFacultad($codNewfac);
+    
+    /*Se matricula o registra en un periodo
+     * determinado**
+     */    
+    public function registerPeriodo($codperiodo);
     
     
-    /*  Ingresa al lugar un activo
-     *   @asset: Un item activo 
+    /*Obitene los datos de asistencia de 
+     * un alumno 
      */
-    public function inputAsset($asset);
     
-    /*  El lugar cambia de lugar; valga la redundncia
-     *   aplica para locaiones móviles , como embarcaciones 
-     * vehiculos contenedores de activos 
-     *   @newPoint: Un punto o direccion física 
-     */
-    public function move($newPoint);
+    public function assistance($codalu);
     
+     
     
 }

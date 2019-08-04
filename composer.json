@@ -20,8 +20,7 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "codeception/codeception": "^2.5",
         "yii2mod/yii2-settings": "*",
-        "reportico/yii2-reportico": "dev-master",
-        "kartik-v/yii2-mpdf": "dev-master",
+        "reportico/yii2-reportico": "dev-master",        
         "dmstr/yii2-adminlte-asset": "^2.1",
         "yidas/yii2-adminlte": "^2.2",
         "kartik-v/yii2-widget-typeahead": "dev-master",
@@ -45,7 +44,8 @@
         "unclead/yii2-multiple-input": "~2.0",
         "kartik-v/yii2-builder": "@dev",
         "linslin/yii2-curl": "*",
-        "ruskid/yii2-csv-importer": "dev-master"
+        "ruskid/yii2-csv-importer": "dev-master",
+        "kv4nt/yii2-owl-carousel2": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

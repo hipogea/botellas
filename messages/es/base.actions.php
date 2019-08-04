@@ -1,6 +1,11 @@
 <?php
 
 return [
+    'Create Worker'=>'Crear Trabajador',
+    'View {name}'=>'Visualizar {name}',
+    'Update Worker: {name}'=>'Editar Trabajador: {name}',
+    'Workers'=>'Trabajadores',
+    
     'Check your email for further instructions.'=>'Revise las instrucciones en su cuenta de correo.',
     'New password saved.'=>'Su nuevo password ha sido actualizado',
     'If you forgot your password you can'=>'Recuperar Password',

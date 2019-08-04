@@ -27,11 +27,16 @@ use yii\helpers\Html;
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
+    
+    
+    
+    
     <body class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?>">
     <?php $this->beginBody(); ?>
     <div class="wrapper">
 
              <?php
+
 
 use lo\widgets\modal\ModalAjax;
 

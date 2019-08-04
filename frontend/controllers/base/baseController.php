@@ -102,16 +102,21 @@ private static function findKeyArrayInPost(){
   * @nombremodal: Nombre de la ventana Modal
   * @grillas: Array con el nombre de las grillas
   */
- public function closeModal($nombremodal,$grillas){
-     if(!is_array($grillas)){
-     echo Html::script(" $('#".$nombremodal."').modal('hide'); "
-             . "window.parent.$.pjax({container: '#".$grillas."'})");
-     }else{
+ public function closeModal($nombremodal,$grillas=null){
+     if(is_array($grillas)){
          echo Html::script(" $('#".$nombremodal."').modal('hide');"); 
          foreach($grillas as $v=>$grilla){
            echo Html::script("window.parent.$.pjax({container: '#".$grilla."'});");   
          }
+     
+     }elseif(is_null($grillas)){
+        echo Html::script(" $('#".$nombremodal."').modal('hide');");   
+     }else{
+        echo Html::script(" $('#".$nombremodal."').modal('hide'); "
+             . "window.parent.$.pjax({container: '#".$grillas."'})"); 
      }
   
  }
+ 
+
 }

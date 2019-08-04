@@ -45,11 +45,9 @@ class Facultades extends \common\models\base\modelBase
     public function attributeLabels()
     {
         return [
-            'codfac' => Yii::t('sta.labels', 'Codfac'),
-            'desfac' => Yii::t('sta.labels', 'Desfac'),
-            'code1' => Yii::t('sta.labels', 'Code1'),
-            'code2' => Yii::t('sta.labels', 'Code2'),
-            'code3' => Yii::t('sta.labels', 'Code3'),
+            'codfac' => Yii::t('base.names', 'Code'),
+            'desfac' => Yii::t('base.names', 'Name'),
+           
         ];
     }
 

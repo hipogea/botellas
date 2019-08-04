@@ -37,7 +37,7 @@ class Carreras extends \common\models\base\modelBase
             [['codfac', 'code3'], 'string', 'max' => 3],
             [['descar'], 'string', 'max' => 60],
             [['codcar'], 'unique'],
-            [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => StaFacultades::className(), 'targetAttribute' => ['codfac' => 'codfac']],
+            [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => Facultades::className(), 'targetAttribute' => ['codfac' => 'codfac']],
         ];
     }
 
@@ -59,9 +59,9 @@ class Carreras extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodfac0()
+    public function getFacultad()
     {
-        return $this->hasOne(StaFacultades::className(), ['codfac' => 'codfac']);
+        return $this->hasOne(Facultades::className(), ['codfac' => 'codfac']);
     }
 
     /**

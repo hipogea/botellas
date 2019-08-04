@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use mdm\admin\components\Helper;
 
@@ -17,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('base.verbs', 'Create User'), ['create-user'], ['class' => 'btn btn-success']) ?>
     </p>
+    <?php $url= Url::to('view-users') ;?>
     <?=
     GridView::widget([
         'dataProvider' => $dataProvider,
@@ -26,6 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
            
             'username',
             'email:email',
+            //'profile.interlocutor',
+            [
+                'attribute' => 'interlocutor',
+                'value' => function($model) {
+                    return $model->profile->interlocutor;
+                },
+                
+            ],
             [
                 'attribute' => 'status',
                 'value' => function($model) {
@@ -41,18 +51,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
             'template' => '{update}{activate}',
                 'buttons' => [
-                    'activate' => function($url, $model) {
-                        if ($model->status == 10) {
-                            return '';
-                        }
+                    'update' => function($url, $model) {                        
                         $options = [
                             'title' => Yii::t('rbac-admin', 'Activate'),
                             'aria-label' => Yii::t('rbac-admin', 'Activate'),
-                            'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'data-method' => 'post',
+                            //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
+                            'data-method' => 'get',
                             'data-pjax' => '0',
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, []/*$options*/);
+                        return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                     }
                     ]
                 ],

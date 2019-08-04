@@ -23,7 +23,7 @@ use yii\helpers\Html;
         <?= Html::csrfMetaTags() ?>
            <?php $this->registerCssFile("@web/css/bootstrap.min.css", [], 'css-install2'); ?>
  <?php $this->registerCssFile("@web/css/install.css", [], 'css-install'); ?>
-   
+ 
          <?php $this->registerCssFile("@web/css/font-awesome.min.css", [], 'css-install22'); ?>
          <?php $this->registerCssFile("@web/css/AdminLTE.min.css", [], 'css-install222'); ?>
          <?php $this->registerCssFile("@web/css/skin-green-light.min.css", [], 'css-install22222'); ?> 

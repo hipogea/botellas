@@ -1,25 +1,43 @@
 <?php
-namespace frontend\modules\bigitems\interfaces;
-
-interface  PlaceInterface {
+namespace frontend\modules\sta\interfaces;
+use Carbon;
+/*Esta interfaz es base
+ * para los interlocutores Alumnos y profesores
+ * que asisten a clases y tutorias
+ */
+interface  AluDoceInterface extends BaseCargosInterface{
     
-    /*  Extrae o saca del lugar un activo
-     *   @asset: Un item activo 
+   
+      /*  Se matricula en la tutoria  
      */
-    public function purgeAsset($asset);
+    public function registerProgram($codNewfac);
     
-    
-    /*  Ingresa al lugar un activo
-     *   @asset: Un item activo 
+    /*  Cambia de tutoria 
      */
-    public function inputAsset($asset);
+    public function changeProgram($codNewfac);
     
-    /*  El lugar cambia de lugar; valga la redundncia
-     *   aplica para locaiones móviles , como embarcaciones 
-     * vehiculos contenedores de activos 
-     *   @newPoint: Un punto o direccion física 
+    
+    
+    /*  Abandona o se retira de tutoria
      */
-    public function move($newPoint);
+    public function expireProgram($codNewfac);
     
+    
+    
+    /*  Obtiene sus horarios 
+     */
+    public function schedule();
+    
+   
+    
+    /*  Registra asistencia
+     */
+    public function assistance(Carbon $date);
+    
+    
+    
+    
+    
+     
     
 }

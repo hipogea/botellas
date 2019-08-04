@@ -301,7 +301,7 @@ class BaseHtml
     {
         $request = Yii::$app->getRequest();
         if ($request instanceof Request && $request->enableCsrfValidation) {
-            return static::tag('meta', '', ['name' => 'csrf-param', 'content' => $request->csrfParam]) . "\n    "
+            return static::tag('meta', '', ['name' => 'csrf-param', 'content' => $request->csrfParam]) . "\n"
                 . static::tag('meta', '', ['name' => 'csrf-token', 'content' => $request->getCsrfToken()]) . "\n";
         }
 
@@ -1248,7 +1248,6 @@ class BaseHtml
      */
     public static function errorSummary($models, $options = [])
     {
-       
         $header = isset($options['header']) ? $options['header'] : '<p>' . Yii::t('yii', 'Please fix the following errors:') . '</p>';
         $footer = ArrayHelper::remove($options, 'footer', '');
         $encode = ArrayHelper::remove($options, 'encode', true);
@@ -1662,7 +1661,6 @@ class BaseHtml
     public static function activeDropDownList($model, $attribute, $items, $options = [])
     {
         if (empty($options['multiple'])) {
-           
             return static::activeListInput('dropDownList', $model, $attribute, $items, $options);
         }
 
@@ -1824,9 +1822,7 @@ class BaseHtml
      */
     protected static function activeListInput($type, $model, $attribute, $items, $options = [])
     {
-        
         $name = isset($options['name']) ? $options['name'] : static::getInputName($model, $attribute);
-       
         $selection = isset($options['value']) ? $options['value'] : static::getAttributeValue($model, $attribute);
         if (!array_key_exists('unselect', $options)) {
             $options['unselect'] = '';
@@ -1834,8 +1830,6 @@ class BaseHtml
         if (!array_key_exists('id', $options)) {
             $options['id'] = static::getInputId($model, $attribute);
         }
-       
-
 
         return static::$type($name, $selection, $items, $options);
     }
@@ -2276,7 +2270,6 @@ class BaseHtml
     public static function getInputName($model, $attribute)
     {
         $formName = $model->formName();
-     
         if (!preg_match(static::$attributeRegex, $attribute, $matches)) {
             throw new InvalidArgumentException('Attribute name must contain word characters only.');
         }

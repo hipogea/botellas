@@ -1,9 +1,12 @@
 <?php
 
 namespace frontend\modules\sta\controllers;
-
+use yii\web\BadRequestHttpException;
 use yii\web\Controller;
-
+use yii;
+use common\helpers\h;
+use common\models\User;
+use mdm\admin\models\searchs\User as UserSearch;
 /**
  * Default controller for the `sta` module
  */
@@ -32,5 +35,47 @@ class DefaultController extends Controller
         return $this->render('profile', [
             'model' => $model,
         ]);
+    }
+    
+    /*
+     * Visualiza otros perfiles 
+     */
+     public function actionViewProfile($iduser){
+         $newIdentity=h::user()->identity->findOne($iduser);
+      if(is_null($newIdentity))
+          throw new BadRequestHttpException(yii::t('base.errors','User not found with id '.$iduser));  
+           //echo $newIdentity->id;die();
+     // h::user()->switchIdentity($newIdentity);
+         
+        $profile =$newIdentity->getProfile($iduser);
+        $profile->setScenario($profile::SCENARIO_INTERLOCUTOR);
+        if(h::request()->isPost){
+            $arrpost=h::request()->post();
+            $profile->tipo=$arrpost[$profile->getShortNameClass()]['tipo'];
+           if ($profile->save()) {
+            yii::$app->session->setFlash('success','Se grabaron los datos ');
+            return $this->redirect(['view-users']);
+           }
+            //var_dump(h::request()->post());die();
+        }
+        //echo $model->id;die();
+        return $this->render('profileother', [
+            'profile' => $profile,
+            'model'=>$newIdentity,
+        ]);
+    }
+    
+     public function actionViewUsers(){
+         $searchModel = new UserSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('users', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionComplete(){
+       return $this->render('completar');
     }
 }

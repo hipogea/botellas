@@ -2,6 +2,11 @@
 
 namespace Mpdf;
 
+use fpdi_pdf_parser;
+use pdf_parser;
+
+use Mpdf\Strict;
+
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 
@@ -37,9 +42,8 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 {
 
 	use Strict;
-	use FpdiTrait;
 
-	const VERSION = '8.0.0';
+	const VERSION = '7.1.9';
 
 	const SCALE = 72 / 25.4;
 
@@ -190,7 +194,6 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	var $allow_html_optional_endtags;
 
 	var $img_dpi;
-	var $whitelistStreamWrappers;
 
 	var $defaultheaderfontsize;
 	var $defaultheaderfontstyle;
@@ -284,6 +287,17 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	var $OutputIntentRoot;
 	var $InfoRoot;
 	var $associatedFilesRoot;
+
+	var $current_filename;
+	var $parsers;
+	var $current_parser;
+	var $_obj_stack;
+	var $_don_obj_stack;
+	var $_current_obj_id;
+	var $tpls;
+	var $tpl;
+	var $tplprefix;
+	var $_res;
 
 	var $pdf_version;
 
@@ -724,6 +738,8 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	var $CurOrientation; // current orientation
 	var $OrientationChanges; // array indicating orientation changes
 
+	var $k; // scale factor (number of points in user unit)
+
 	var $fwPt;
 	var $fhPt; // dimensions of page format in points
 	var $fw;
@@ -934,57 +950,62 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	private $writer;
 
 	/**
-	 * @var \Mpdf\Writer\FontWriter
+	 * @var Mpdf\Writer\FontWriter
 	 */
 	private $fontWriter;
 
 	/**
-	 * @var \Mpdf\Writer\MetadataWriter
+	 * @var Mpdf\Writer\MetadataWriter
 	 */
 	private $metadataWriter;
 
 	/**
-	 * @var \Mpdf\Writer\ImageWriter
+	 * @var Mpdf\Writer\ImageWriter
 	 */
 	private $imageWriter;
 
 	/**
-	 * @var \Mpdf\Writer\FormWriter
+	 * @var Mpdf\Writer\FormWriter
 	 */
 	private $formWriter;
 
 	/**
-	 * @var \Mpdf\Writer\PageWriter
+	 * @var Mpdf\Writer\PageWriter
 	 */
 	private $pageWriter;
 
 	/**
-	 * @var \Mpdf\Writer\BookmarkWriter
+	 * @var Mpdf\Writer\BookmarkWriter
 	 */
 	private $bookmarkWriter;
 
 	/**
-	 * @var \Mpdf\Writer\OptionalContentWriter
+	 * @var Mpdf\Writer\OptionalContentWriter
 	 */
 	private $optionalContentWriter;
 
 	/**
-	 * @var \Mpdf\Writer\ColorWriter
+	 * @var Mpdf\Writer\ColorWriter
 	 */
 	private $colorWriter;
 
 	/**
-	 * @var \Mpdf\Writer\BackgroundWriter
+	 * @var Mpdf\Writer\BackgroundWriter
 	 */
 	private $backgroundWriter;
 
 	/**
-	 * @var \Mpdf\Writer\JavaScriptWriter
+	 * @var Mpdf\Writer\ObjectWriter
+	 */
+	private $objectWriter;
+
+	/**
+	 * @var Mpdf\Writer\JavaScriptWriter
 	 */
 	private $javaScriptWriter;
 
 	/**
-	 * @var \Mpdf\Writer\ResourceWriter
+	 * @var Mpdf\Writer\ResourceWriter
 	 */
 	private $resourceWriter;
 
@@ -998,9 +1019,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	 */
 	public function __construct(array $config = [])
 	{
-                  
-            
-            $this->_dochecks();
+		$this->_dochecks();
 
 		list(
 			$mode,
@@ -1514,6 +1533,13 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 		$this->specialcontent = '';
 		$this->selectoption = [];
+
+		/* -- IMPORTS -- */
+		$this->parsers = [];
+		$this->tpls = [];
+		$this->tpl = 0;
+		$this->tplprefix = "/TPL";
+		/* -- END IMPORTS -- */
 	}
 
 	public function cleanup()
@@ -1734,17 +1760,14 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 	function SetDisplayMode($zoom, $layout = 'continuous')
 	{
-		$allowedZoomModes = ['fullpage', 'fullwidth', 'real', 'default', 'none'];
-
-		if (in_array($zoom, $allowedZoomModes, true) || is_numeric($zoom)) {
+		// Set display mode in viewer
+		if ($zoom == 'fullpage' or $zoom == 'fullwidth' or $zoom == 'real' or $zoom == 'default' or ! is_string($zoom)) {
 			$this->ZoomMode = $zoom;
 		} else {
 			throw new \Mpdf\MpdfException('Incorrect zoom display mode: ' . $zoom);
 		}
 
-		$allowedLayoutModes = ['single', 'continuous', 'two', 'twoleft', 'tworight', 'default'];
-
-		if (in_array($layout, $allowedLayoutModes, true)) {
+		if ($layout == 'single' or $layout == 'continuous' or $layout == 'two' or $layout == 'twoleft' or $layout == 'tworight' or $layout == 'default') {
 			$this->LayoutMode = $layout;
 		} else {
 			throw new \Mpdf\MpdfException('Incorrect layout display mode: ' . $layout);
@@ -3141,24 +3164,20 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		$this->_beginpage($orientation, $mgl, $mgr, $mgt, $mgb, $mgh, $mgf, $ohname, $ehname, $ofname, $efname, $ohvalue, $ehvalue, $ofvalue, $efvalue, $pagesel, $newformat);
 
 		if ($this->docTemplate) {
-			$currentReaderId = $this->currentReaderId;
-
-			$pagecount = $this->setSourceFile($this->docTemplate);
+			$pagecount = $this->SetSourceFile($this->docTemplate);
 			if (($this->page - $this->docTemplateStart) > $pagecount) {
 				if ($this->docTemplateContinue) {
-					$tplIdx = $this->importPage($pagecount);
-					$this->useTemplate($tplIdx);
+					$tplIdx = $this->ImportPage($pagecount);
+					$this->UseTemplate($tplIdx);
 				}
 			} else {
-				$tplIdx = $this->importPage(($this->page - $this->docTemplateStart));
-				$this->useTemplate($tplIdx);
+				$tplIdx = $this->ImportPage(($this->page - $this->docTemplateStart));
+				$this->UseTemplate($tplIdx);
 			}
-
-			$this->currentReaderId = $currentReaderId;
 		}
 
 		if ($this->pageTemplate) {
-			$this->useTemplate($this->pageTemplate);
+			$this->UseTemplate($this->pageTemplate);
 		}
 
 		// Tiling Patterns
@@ -3442,8 +3461,11 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		if (isset($cw[$u * 2 + 1])) {
 			$w = (ord($cw[$u * 2]) << 8) + ord($cw[$u * 2 + 1]);
 		}
-
-		return (bool) $w;
+		if ($w) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	function GetCharWidthCore($c)
@@ -7287,16 +7309,12 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 				} elseif ($objattr['btype'] === 'QR') {
 
-					if (!class_exists('Mpdf\QrCode\QrCode')) {
-						throw new \Mpdf\MpdfException('Class Mpdf\QrCode\QrCode does not exists. Install the package from Packagist with "composer require mpdf/qrcode"');
-					}
-
 					$barcodeContent = str_replace('\r\n', "\r\n", $objattr['code']);
 					$barcodeContent = str_replace('\n', "\n", $barcodeContent);
 
-					$qrcode = new QrCode\QrCode($barcodeContent, $objattr['errorlevel']);
+					$this->qrcode = new QrCode\QrCode($barcodeContent, $objattr['errorlevel']);
 					if ($objattr['disableborder']) {
-						$qrcode->disableBorder();
+						$this->qrcode->disableBorder();
 					}
 
 					$bgColor = [255, 255, 255];
@@ -7318,9 +7336,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 						);
 					}
 
-					$out = new QrCode\Output\Mpdf();
-					$out->output(
-						$qrcode,
+					$this->qrcode->displayFPDF(
 						$this,
 						$objattr['INNER-X'],
 						$objattr['INNER-Y'],
@@ -7328,8 +7344,6 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 						$bgColor,
 						$color
 					);
-
-					unset($qrcode);
 
 				} else {
 
@@ -9896,6 +9910,15 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 		$this->buffer .= '%%EOF';
 		$this->state = 3;
+
+		// Imports
+		if ($this->enableImports && count($this->parsers) > 0) {
+			foreach ($this->parsers as $k => $_) {
+				$this->parsers[$k]->closeFile();
+				$this->parsers[$k] = null;
+				unset($this->parsers[$k]);
+			}
+		}
 	}
 
 	function _beginpage(
@@ -12955,7 +12978,13 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 
 		// Check the mode is valid
 		if (in_array($mode, HTMLParserMode::getAllModes(), true) === false) {
-			throw new \Mpdf\MpdfException('WriteHTML() requires $mode to be one of the modes defined in HTMLParserMode');
+			// We only throw an exception if it's in debug
+			if ($this->debug === true) {
+				throw new \Mpdf\MpdfException('WriteHTML() requires $mode to be one of the modes defined in HTMLParserMode');
+			}
+
+			// If it's not an accepted mode, set it to the default mode
+			$mode = HTMLParserMode::DEFAULT_MODE;
 		}
 
 		/* Cast $html as a string */
@@ -17913,7 +17942,7 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		// Set font size first so that e.g. MARGIN 0.83em works on font size for this element
 		if (isset($arrayaux['FONT-SIZE'])) {
 			$v = $arrayaux['FONT-SIZE'];
-			if (is_numeric($v[0]) || ($v[0] === '.')) {
+			if (is_numeric($v[0])) {
 				if ($type == 'BLOCK' && $this->blklvl > 0 && isset($this->blk[$this->blklvl - 1]['InlineProperties']) && isset($this->blk[$this->blklvl - 1]['InlineProperties']['size'])) {
 					$mmsize = $this->sizeConverter->convert($v, $this->blk[$this->blklvl - 1]['InlineProperties']['size']);
 				} elseif ($type == 'TABLECELL') {
@@ -19176,19 +19205,19 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 					$c['padding']['B'] /= $k;
 					$c['padding']['L'] /= $k;
 
-					$c['maxs'] = isset($c['maxs']) ? $c['maxs'] /= $k : null;
-					$c['w'] = isset($c['w']) ? $c['w'] /= $k : null;
+					$c['maxs'] = isset($c['maxs']) ? $c['maxs'] /= $k : 0;
+					$c['w'] = isset($c['w']) ? $c['w'] /= $k : 0;
 
 					$c['s'] = isset($c['s']) ? $c['s'] /= $k : 0;
-					$c['h'] = isset($c['h']) ? $c['h'] /= $k : null;
+					$c['h'] = isset($c['h']) ? $c['h'] /= $k : 0;
 
 					$c['miw'] = isset($c['miw']) ? $c['miw'] /= $k : 0;
 					$c['maw'] = isset($c['maw']) ? $c['maw'] /= $k : 0;
 
-					$c['absmiw'] = isset($c['absmiw']) ? $c['absmiw'] /= $k : null;
+					$c['absmiw'] = isset($c['absmiw']) ? $c['absmiw'] /= $k : 0;
 
-					$c['nestedmaw'] = isset($c['nestedmaw']) ? $c['nestedmaw'] /= $k : null;
-					$c['nestedmiw'] = isset($c['nestedmiw']) ? $c['nestedmiw'] /= $k : null;
+					$c['nestedmaw'] = isset($c['nestedmaw']) ? $c['nestedmaw'] /= $k : 0;
+					$c['nestedmiw'] = isset($c['nestedmiw']) ? $c['nestedmiw'] /= $k : 0;
 
 					if (isset($c['textbuffer'])) {
 						foreach ($c['textbuffer'] as $n => $tb) {
@@ -25682,14 +25711,14 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 	{
 		if ($string === mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32")) {
 			return true;
+		} else {
+			if ($this->ignore_invalid_utf8) {
+				$string = mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32");
+				return true;
+			} else {
+				return false;
+			}
 		}
-
-		if ($this->ignore_invalid_utf8) {
-			$string = mb_convert_encoding(mb_convert_encoding($string, "UTF-32", "UTF-8"), "UTF-8", "UTF-32");
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -26797,6 +26826,123 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		return date($matches[1]);
 	}
 
+	// ===========================
+	/* -- IMPORTS -- */
+	function SetImportUse()
+	{
+		if (!class_exists('fpdi_pdf_parser')) {
+			throw new \Mpdf\MpdfException('Class fpdi_pdf_parser not found. Please run composer update or require setasign/fpdi 1.6.* manually');
+		}
+
+		$this->enableImports = true;
+	}
+
+	// from mPDFI
+	function hex2str($hex)
+	{
+		return pack("H*", str_replace(["\r", "\n", " "], "", $hex));
+	}
+
+	function str2hex($str)
+	{
+		return current(unpack("H*", $str));
+	}
+
+	function pdf_write_value(&$value)
+	{
+		switch ($value[0]) {
+			case pdf_parser::TYPE_TOKEN:
+				$this->writer->write($value[1] . ' ', false);
+				break;
+
+			case pdf_parser::TYPE_NUMERIC:
+			case pdf_parser::TYPE_REAL:
+				if (is_float($value[1]) && $value[1] != 0) {
+					$this->writer->write(rtrim(rtrim(sprintf('%F', $value[1]), '0'), '.') . ' ', false);
+				} else {
+					$this->writer->write($value[1] . ' ', false);
+				}
+				break;
+
+			case pdf_parser::TYPE_ARRAY:
+				// An array. Output the proper
+				// structure and move on.
+				$this->writer->write("[", false);
+				for ($i = 0; $i < count($value[1]); $i++) {
+					$this->pdf_write_value($value[1][$i]);
+				}
+				$this->writer->write("]");
+				break;
+
+			case pdf_parser::TYPE_DICTIONARY:
+				// A dictionary.
+				$this->writer->write("<<", false);
+
+				foreach ($value[1] as $k => $v) {
+					$this->writer->write($k . ' ', false);
+					$this->pdf_write_value($v);
+				}
+
+				$this->writer->write(">>");
+				break;
+
+			case pdf_parser::TYPE_OBJREF:
+				// An indirect object reference
+				// Fill the object stack if needed
+				$cpfn = $this->current_parser->filename;
+				if (!isset($this->_don_obj_stack[$cpfn][$value[1]])) {
+					$this->writer->object(false, true);
+					$this->_obj_stack[$cpfn][$value[1]] = [$this->n, $value];
+					$this->_don_obj_stack[$cpfn][$value[1]] = [$this->n, $value];
+				}
+				$objid = $this->_don_obj_stack[$cpfn][$value[1]][0];
+				$this->writer->write("{$objid} 0 R"); // {$value[2]}
+				break;
+
+			case pdf_parser::TYPE_STRING:
+				if ($this->encrypted) {
+					$value[1] = $this->writer->unescape($value[1]);
+					$value[1] = $this->protection->rc4($this->protection->objectKey($this->_current_obj_id), $value[1]);
+					$value[1] = $this->writer->escape($value[1]);
+				}
+				// A string.
+				$this->writer->write('(' . $value[1] . ')');
+				break;
+
+			case pdf_parser::TYPE_STREAM:
+				// A stream. First, output the
+				// stream dictionary, then the
+				// stream data itself.
+				$this->pdf_write_value($value[1]);
+				if ($this->encrypted) {
+					$value[2][1] = $this->protection->rc4($this->protection->objectKey($this->_current_obj_id), $value[2][1]);
+				}
+				$this->writer->write("stream");
+				$this->writer->write($value[2][1]);
+				$this->writer->write("endstream");
+				break;
+
+			case pdf_parser::TYPE_HEX:
+				if ($this->encrypted) {
+					$value[1] = $this->hex2str($value[1]);
+					$value[1] = $this->protection->rc4($this->protection->objectKey($this->_current_obj_id), $value[1]);
+					// remake hexstring of encrypted string
+					$value[1] = $this->str2hex($value[1]);
+				}
+				$this->writer->write("<" . $value[1] . ">");
+				break;
+
+			case pdf_parser::TYPE_BOOLEAN:
+				$this->writer->write($value[1] ? 'true' : 'false');
+				break;
+
+			case pdf_parser::TYPE_NULL:
+				// The null object.
+				$this->writer->write("null");
+				break;
+		}
+	}
+
 	// ========== OVERWRITE SEARCH STRING IN A PDF FILE ================
 	function OverWrite($file_in, $search, $replacement, $dest = Destination::DOWNLOAD, $file_out = "mpdf")
 	{
@@ -26957,6 +27103,26 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		}
 	}
 
+	function GetTemplateSize($tplidx, $_w = 0, $_h = 0)
+	{
+		if (!$this->tpls[$tplidx]) {
+			return false;
+		}
+		$w = $this->tpls[$tplidx]['box']['w'];
+		$h = $this->tpls[$tplidx]['box']['h'];
+		if ($_w == 0 and $_h == 0) {
+			$_w = $w;
+			$_h = $h;
+		}
+		if ($_w == 0) {
+			$_w = $_h * $w / $h;
+		}
+		if ($_h == 0) {
+			$_h = $_w * $h / $w;
+		}
+		return ["w" => $_w, "h" => $_h];
+	}
+
 
 	function Thumbnail($file, $npr = 3, $spacing = 10)
 	{
@@ -26976,13 +27142,13 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 			$y = $this->y;
 		}
 
-		$pagecount = $this->setSourceFile($file);
+		$pagecount = $this->SetSourceFile($file);
 
 		for ($n = 1; $n <= $pagecount; $n++) {
-			$tplidx = $this->importPage($n);
-			$size = $this->useTemplate($tplidx, $x, $y, $w);
-			$this->Rect($x, $y, $size['width'], $size['height']);
-			$h = max($h, $size['height']);
+			$tplidx = $this->ImportPage($n);
+			$size = $this->UseTemplate($tplidx, $x, $y, $w);
+			$this->Rect($x, $y, $size['w'], $size['h']);
+			$h = max($h, $size['h']);
 			$maxh = max($h, $maxh);
 
 			if ($n % $npr == 0) {
@@ -27002,9 +27168,161 @@ class Mpdf implements \Psr\Log\LoggerAwareInterface
 		$this->SetLineWidth($oldlinewidth);
 	}
 
+	function SetSourceFile($filename)
+	{
+		$this->current_filename = $filename;
+		$fn = $this->current_filename;
+		if (!isset($this->parsers[$fn])) {
+			try {
+				$this->parsers[$fn] = new fpdi_pdf_parser($fn);
+			} catch (\Exception $e) {
+				throw new \Mpdf\MpdfException($e->getMessage());
+			}
+		}
+
+		$this->current_parser = $this->parsers[$fn];
+		return $this->parsers[$fn]->getPageCount();
+	}
+
+	function ImportPage($pageno = 1, $crop_x = null, $crop_y = null, $crop_w = 0, $crop_h = 0, $boxName = '/CropBox')
+	{
+		$fn     = $this->current_filename;
+		$parser = $this->parsers[$fn];
+		$parser->setPageno($pageno);
+
+		$this->tpl++;
+		$this->tpls[$this->tpl] = [];
+		$tpl = & $this->tpls[$this->tpl];
+		$tpl['parser'] = $parser;
+		$tpl['resources'] = $parser->getPageResources();
+		$tpl['buffer'] = $parser->getContent();
+
+		if (!in_array($boxName, $parser->availableBoxes)) {
+			throw new \Mpdf\MpdfException(sprintf("Unknown box: %s", $boxName));
+		}
+
+		$pageboxes = $parser->getPageBoxes($pageno, Mpdf::SCALE);
+
+		/**
+		 * MediaBox
+		 * CropBox: Default -> MediaBox
+		 * BleedBox: Default -> CropBox
+		 * TrimBox: Default -> CropBox
+		 * ArtBox: Default -> CropBox
+		 */
+		if (!isset($pageboxes[$boxName]) && ($boxName == "/BleedBox" || $boxName == "/TrimBox" || $boxName == "/ArtBox")) {
+			$boxName = "/CropBox";
+		}
+
+		if (!isset($pageboxes[$boxName]) && $boxName == "/CropBox") {
+			$boxName = "/MediaBox";
+		}
+
+		if (!isset($pageboxes[$boxName])) {
+			return false;
+		}
+
+		$box = $pageboxes[$boxName];
+
+		$tpl['box'] = $box;
+		// To build an array that can be used by useTemplate()
+		$this->tpls[$this->tpl] = array_merge($this->tpls[$this->tpl], $box);
+		// An imported page will start at 0,0 everytime. Translation will be set in _putformxobjects()
+		$tpl['x'] = 0;
+		$tpl['y'] = 0;
+		$tpl['w'] = $tpl['box']['w'];
+		$tpl['h'] = $tpl['box']['h'];
+
+		if ($crop_w) {
+			$tpl['box']['w'] = $crop_w;
+		}
+		if ($crop_h) {
+			$tpl['box']['h'] = $crop_h;
+		}
+		if (isset($crop_x)) {
+			$tpl['box']['x'] = $crop_x;
+		}
+		if (isset($crop_y)) {
+			$tpl['box']['y'] = $tpl['h'] - $crop_y - $crop_h;
+		}
+
+		// fix for rotated pages
+		$rotation = $parser->getPageRotation($pageno);
+
+		if (isset($rotation[1]) && ($angle = $rotation[1] % 360) != 0 && $tpl['box']['w'] == $tpl['w']) {
+			$steps = $angle / 90;
+
+			$_w = $tpl['w'];
+			$_h = $tpl['h'];
+			$tpl['w'] = $steps % 2 == 0 ? $_w : $_h;
+			$tpl['h'] = $steps % 2 == 0 ? $_h : $_w;
+			if ($steps % 2 != 0) {
+				$x = $y = ($steps == 1 || $steps == -3) ? $tpl['h'] : $tpl['w'];
+			} else {
+				$x = $tpl['w'];
+				$y = $tpl['h'];
+			}
+			$cx = ($x / 2 + $tpl['box']['x']) * Mpdf::SCALE;
+			$cy = ($y / 2 + $tpl['box']['y']) * Mpdf::SCALE;
+			$angle*=-1;
+			$angle*=M_PI / 180;
+			$c = cos($angle);
+			$s = sin($angle);
+			$tpl['box']['w'] = $tpl['w'];
+			$tpl['box']['h'] = $tpl['h'];
+			$tpl['buffer'] = sprintf('q %.5F %.5F %.5F %.5F %.2F %.2F cm 1 0 0 1 %.2F %.2F cm %s Q', $c, $s, -$s, $c, $cx, $cy, -$cx, -$cy, $tpl['buffer']);
+		}
+
+		return $this->tpl;
+	}
+
+	function UseTemplate($tplidx, $_x = null, $_y = null, $_w = 0, $_h = 0)
+	{
+		if (!isset($this->tpls[$tplidx])) {
+			throw new \Mpdf\MpdfException("Template does not exist!");
+		}
+
+		if ($this->state == 0) {
+			$this->AddPage();
+		}
+
+		$out = 'q 0 J 1 w 0 j 0 G' . "\n"; // reset standard values
+		$x = $this->tpls[$tplidx]['x'];
+		$y = $this->tpls[$tplidx]['y'];
+		$w = $this->tpls[$tplidx]['w'];
+		$h = $this->tpls[$tplidx]['h'];
+
+		if ($_x == null) {
+			$_x = $x;
+		}
+
+		if ($_y == null) {
+			$_y = $y;
+		}
+
+		if ($_x === -1) {
+			$_x = $this->x;
+		}
+
+		if ($_y === -1) {
+			$_y = $this->y;
+		}
+
+		$wh = $this->GetTemplateSize($tplidx, $_w, $_h);
+		$_w = $wh['w'];
+		$_h = $wh['h'];
+		$out .= sprintf("q %.4F 0 0 %.4F %.2F %.2F cm", ($_w / $this->tpls[$tplidx]['box']['w']), ($_h / $this->tpls[$tplidx]['box']['h']), $_x * Mpdf::SCALE, ($this->h - ($_y + $_h)) * Mpdf::SCALE) . "\n";
+		$out .= $this->tplprefix . $tplidx . " Do Q\n";
+
+		$s = ["w" => $_w, "h" => $_h];
+		$out .= "Q\n";
+		$this->pages[$this->page] = $out . $this->pages[$this->page];
+		return $s;
+	}
+
 	function SetPageTemplate($tplidx = '')
 	{
-		if (!isset($this->importedPages[$tplidx])) {
+		if (!isset($this->tpls[$tplidx])) {
 			$this->pageTemplate = '';
 			return false;
 		}

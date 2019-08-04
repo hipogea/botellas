@@ -11,7 +11,9 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
 class FileHelper extends FileHelperOriginal {
     
-    
+    public static function extImages(){
+        return ['jpg','bmp','png','jpeg','gif','svg','ico'];
+    }
     
     public static function getModels($withExt=False){
         //$archivos=self::findFiles(yii::getAlias('@common/models')); 
@@ -95,5 +97,16 @@ class FileHelper extends FileHelperOriginal {
         if(!is_file($directorio.'anonimus.png'))
        throw new \yii\base\Exception(Yii::t('base.errors', 'The  \''.$directorio.'anonimus.png\' Picture doesn\'t exists '));
         return \yii\helpers\Url::base().'/img/anonimus.png';
+   }
+   
+   /*
+    * Arroja la imagen anonima
+    */
+   public static function UrlEmptyImage(){
+       $alias=yii::getAlias('@frontend/web/img/nophoto.png');
+       if(!is_file($alias))
+       throw new \yii\base\Exception(Yii::t('base.errors', 'The  file {archivo} doesn\'t exists ',['archivo'=>$alias])); 
+       return self::normalizePath(\yii\helpers\Url::base().'/img/nophoto.png',DIRECTORY_SEPARATOR);
+       
    }
 }

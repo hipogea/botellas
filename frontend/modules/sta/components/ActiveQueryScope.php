@@ -1,5 +1,6 @@
 <?php
 namespace frontend\modules\sta\components;
+use frontend\modules\sta\staModule;
 use common\helpers\h;
 /* 
  * Esta clase es la que efectua los filtros por facultad segun 
@@ -13,10 +14,8 @@ class ActiveQueryScope extends \yii\db\ActiveQuery
    public function init(){
        parent::init();
        
-       $this->andWhere(
-               h::user()->
-               profile->
-               interlocutor->
+      return  $this->andWhere(
+               staModule::getInterlocutor()->
                getWhereFacultad()
                );
    }

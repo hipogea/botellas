@@ -54,8 +54,8 @@ class Detdocbotellas extends modelBase implements Transport
      public function scenarios()
     {
         $scenarios = parent::scenarios();
-        $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo','coditem'];
-        $scenarios[self::SCENARIO_UPDATE_TABULAR] = ['codigo','coditem'];
+        $scenarios[self::SCENARIO_CREACION_TABULAR] = ['codigo','coditem','tarifa'];
+        $scenarios[self::SCENARIO_UPDATE_TABULAR] = ['codigo','coditem','tarifa'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }

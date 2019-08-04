@@ -154,9 +154,8 @@ class ModalAjax extends Modal
      */
     protected function registerSingleModal($id, $view)
     {
-       //vaR_dump($this->url);
         $url = is_array($this->url) ? Url::to($this->url) : $this->url;
-       //vaR_dump($this->url);
+
         $view->registerJs("
             jQuery('#$id').kbModalAjax({
                 url: '$url',
@@ -184,6 +183,7 @@ class ModalAjax extends Modal
                 if (!title) title = ' ';
                 
                 jQuery('#$id').find('.modal-header span').html(title);
+                
                 jQuery('#$id').kbModalAjax({
                     selector: $(this),
                     url: bs_url,

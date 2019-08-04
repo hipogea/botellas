@@ -1,6 +1,6 @@
 <?php
 namespace frontend\modules\report\behaviors;
-use nemmo\attachments\behaviors\FileBehavior as Fileb;
+use common\behaviors\FileBehavior as Fileb;
 
 class FileBehavior extends  Fileb
 {

@@ -93,13 +93,6 @@ class FontVariables
 			 */
 
 			'fontdata' => [
-                            
-                            "courier" => [
-					'R' => "courier.ttf",
-					'B' => "FreeMonoBold.ttf",
-					'I' => "FreeMonoOblique.ttf",
-					'BI' => "FreeMonoBoldOblique.ttf",
-				],
 				"dejavusanscondensed" => [
 					'R' => "DejaVuSansCondensed.ttf",
 					'B' => "DejaVuSansCondensed-Bold.ttf",

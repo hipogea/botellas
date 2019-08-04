@@ -309,15 +309,6 @@ return array (
       '@kartik/widgets' => $vendorDir . '/kartik-v/yii2-widgets/src',
     ),
   ),
-  'loveorigami/yii2-modal-ajax' => 
-  array (
-    'name' => 'loveorigami/yii2-modal-ajax',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@lo/widgets/modal' => $vendorDir . '/loveorigami/yii2-modal-ajax/src',
-    ),
-  ),
   'kartik-v/yii2-popover-x' => 
   array (
     'name' => 'kartik-v/yii2-popover-x',
@@ -325,15 +316,6 @@ return array (
     'alias' => 
     array (
       '@kartik/popover' => $vendorDir . '/kartik-v/yii2-popover-x',
-    ),
-  ),
-  'yii2mod/yii2-behaviors' => 
-  array (
-    'name' => 'yii2mod/yii2-behaviors',
-    'version' => '1.2.0.0',
-    'alias' => 
-    array (
-      '@yii2mod/behaviors' => $vendorDir . '/yii2mod/yii2-behaviors',
     ),
   ),
   'yiisoft/yii2-jui' => 
@@ -372,15 +354,6 @@ return array (
       '@kartik/editable' => $vendorDir . '/kartik-v/yii2-editable/src',
     ),
   ),
-  'kartik-v/yii2-grid' => 
-  array (
-    'name' => 'kartik-v/yii2-grid',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
-    ),
-  ),
   'kartik-v/yii2-tabs-x' => 
   array (
     'name' => 'kartik-v/yii2-tabs-x',
@@ -388,15 +361,6 @@ return array (
     'alias' => 
     array (
       '@kartik/tabs' => $vendorDir . '/kartik-v/yii2-tabs-x/src',
-    ),
-  ),
-  'kartik-v/yii2-widget-activeform' => 
-  array (
-    'name' => 'kartik-v/yii2-widget-activeform',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
     ),
   ),
   'kartik-v/yii2-widget-typeahead' => 
@@ -483,15 +447,6 @@ return array (
       '@unclead/multipleinput/tests' => $vendorDir . '/unclead/yii2-multiple-input/tests',
     ),
   ),
-  'kartik-v/yii2-mpdf' => 
-  array (
-    'name' => 'kartik-v/yii2-mpdf',
-    'version' => '9999999-dev',
-    'alias' => 
-    array (
-      '@kartik/mpdf' => $vendorDir . '/kartik-v/yii2-mpdf/src',
-    ),
-  ),
   'kartik-v/yii2-helpers' => 
   array (
     'name' => 'kartik-v/yii2-helpers',
@@ -526,6 +481,60 @@ return array (
     'alias' => 
     array (
       '@ruskid/csvimporter' => $vendorDir . '/ruskid/yii2-csv-importer',
+    ),
+  ),
+  'yii2mod/yii2-behaviors' => 
+  array (
+    'name' => 'yii2mod/yii2-behaviors',
+    'version' => '2.0.0.0',
+    'alias' => 
+    array (
+      '@yii2mod/behaviors' => $vendorDir . '/yii2mod/yii2-behaviors',
+    ),
+  ),
+  'kartik-v/yii2-mpdf' => 
+  array (
+    'name' => 'kartik-v/yii2-mpdf',
+    'version' => '1.0.5.0',
+    'alias' => 
+    array (
+      '@kartik/mpdf' => $vendorDir . '/kartik-v/yii2-mpdf/src',
+    ),
+  ),
+  'kartik-v/yii2-grid' => 
+  array (
+    'name' => 'kartik-v/yii2-grid',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/grid' => $vendorDir . '/kartik-v/yii2-grid/src',
+    ),
+  ),
+  'kartik-v/yii2-widget-activeform' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-activeform',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
+    ),
+  ),
+  'loveorigami/yii2-modal-ajax' => 
+  array (
+    'name' => 'loveorigami/yii2-modal-ajax',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@lo/widgets/modal' => $vendorDir . '/loveorigami/yii2-modal-ajax/src',
+    ),
+  ),
+  'kv4nt/yii2-owl-carousel2' => 
+  array (
+    'name' => 'kv4nt/yii2-owl-carousel2',
+    'version' => '1.0.1.0',
+    'alias' => 
+    array (
+      '@kv4nt/owlcarousel' => $vendorDir . '/kv4nt/yii2-owl-carousel2',
     ),
   ),
 );

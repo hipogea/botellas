@@ -18,6 +18,12 @@ use common\helpers\h;
     'enableAjaxValidation'=> true,'id'=>'tabular-botellas'
   
 ]); ?>
+    
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
+    </div>
+    
+    
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
   <?= $form->field($model, 'numero')->textInput(['disabled' => 'true']) ?>
 
@@ -183,9 +189,7 @@ use common\helpers\h;
     
     ?> 
 
-<div class="form-group">
-        <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+
    <?php \yii\bootstrap\ActiveForm::end(); ?>  
  
 </div>

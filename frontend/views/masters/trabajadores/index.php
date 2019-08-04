@@ -7,24 +7,46 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\masters\TrabajadoresSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('control.errors', 'Trabajadores');
+$this->title = Yii::t('base.actions', 'Trabajadores');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php
+if (Yii::$app->session->hasFlash('info')): ?>
+    <div class="alert alert-warning">
+         
+         <?= Yii::$app->session->getFlash('info') ?>
+    </div>
+<?php endif; ?>
+<?php if (Yii::$app->session->hasFlash('error')): ?>
+    <div class="alert alert-danger">
+         
+         <?= Yii::$app->session->getFlash('error') ?>
+    </div>
+<?php endif; ?>
+<?php if (Yii::$app->session->hasFlash('success')): ?>
+    <div class="alert alert-success">
+         
+         <?= Yii::$app->session->getFlash('success') ?>
+    </div>
+<?php endif; ?>
+
+
 <div class="trabajadores-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h4><?= Html::encode($this->title) ?></h4>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('control.errors', 'Create Trabajadores'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('base.actions', 'Create Worker'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+         'summary' => '',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+           
 
             'codigotra',
             'ap',

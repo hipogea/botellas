@@ -22,3 +22,21 @@ display: table-row;
 display: table-cell;
 
 }
+
+div.absolute {
+    position: absolute;
+    border-radius: 15px;
+    top: 18%;
+    left: 14%;
+    padding: 1px;
+    right: 0;
+    width: 30px;
+    height: 30px;
+    background-color: #af5898;
+    color: white;
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: center;
+    line-height: 28px;
+    opacity: 0.4;
+}

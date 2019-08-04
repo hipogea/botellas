@@ -89,30 +89,7 @@ use common\widgets\prueba\pruebaWidget;
 <script>
     jQuery('#wtabularbotellas').on('beforeDeleteRow',
     function(e, row, currentIndex) {
-        var v_identificacion=$('#detdocbotellas-'+currentIndex.toString()+'-id').val();
-      // alert('#detdocbotellas-'+currentIndex.toString()+'-id');
-       alert(Object.keys(row));
-        if( v_identificacion == '' || v_identificacion == 'undefined' || v_identificacion == null ) {
-            return ;
-        };
-     $.ajax({
-        url: '/yii-application/frontend/web/bigitems/bottles/ajax-borrar-botella', 
-        type:'GET', 
-        dataType: 'json', 
-        data:{identidad:v_identificacion},
-        success: function(json) {
-            
-                            var n = Noty('id');
-                             $.noty.setText(n.options.id, json['success']);
-                             $.noty.setType(n.options.id, 'success'); 
-                   
-                        },
-           error:  function(xhr, textStatus, error){               
-                            var n = Noty('id');                      
-                              $.noty.setText(n.options.id, error);
-                              $.noty.setType(n.options.id, 'error');       
-                                }, 
-                    
-    });
-});
+           alert(currentIndex);
+   
+        });
 </script>

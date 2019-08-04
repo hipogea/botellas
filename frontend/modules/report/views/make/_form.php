@@ -26,6 +26,12 @@ $papeles =['A3'=>'A3','A4'=>'A4','A5-L'=>'A5-L','A5'=>'A5','Letter'=>'Letter','A
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'ygeneral')->textInput() ?>
  </div>
+    
+   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model]); ?>
+   </div>
+    
+    
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'xlogo')->textInput() ?>
  </div>
@@ -75,32 +81,7 @@ $papeles =['A3'=>'A3','A4'=>'A4','A5-L'=>'A5-L','A5'=>'A5','Letter'=>'Letter','A
        
     </div>
     
-     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-         <?= $form->field($model, 'imagen')->textInput(['disabled'=>'disabled']) ?>
-    <?= \nemmo\attachments\components\AttachmentsInput::widget([
-	'id' => 'file-input', // Optional
-	'model' => $model,         
-	'options' => [ // Options of the Kartik's FileInput widget
-		'multiple' => false, // If you want to allow multiple upload, default to false
-	//'overwriteInitial'=>false,
-            ],
-	'pluginOptions' => [ // Plugin options of the Kartik's FileInput widget 
-            
-    'allowedFileExtensions'=>["jpg", "png", "gif"],
-    'maxImageWidth'=>800,
-    'maxImageHeight'=>800,
-    'resizePreference'=>'height',
-    'maxFileCount'=>1,
-    'resizeImage'=>true,
-    'resizeIfSizeMoreThan'=>100,
-            'previewFileType' => 'any',
-		'maxFileCount' => 1 ,// Client max files
-           'overwriteInitial'=>false,
-             //'maxFileSize'=>800,
-            'resizeImages'=>true,
-	]
-]) ?>                      
-     </div>
+   
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'nombrereporte')->textInput(['maxlength' => true]) ?>
  </div>

@@ -1,137 +1,66 @@
 <?php
-namespace common\widgets\cbodepwidget;
+namespace common\widgets\imagewidget;
+use common\helpers\FileHelper;
 use common\models\base\modelBase;
-use yii\base\Widget;
+use kartik\base\TranslationTrait;
+//use nemmo\attachments\components\AttachmentsInput;
+use yii;
 use yii\web\View;
 use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\base\InvalidConfigException;
-class cboDepWidget extends \yii\base\Widget
+class ImageWidget extends \yii\widgets\inputWidget
 {
-    public $id;
-    public $controllerName='finder';
-    public $actionName='combodependiente';
-    //public $actionNameModal='busquedamodal';
-    public $model;//EL modelo
-    public $form; //El active FOrm 
-    public $campo;//el nombre del campo modelo
-    public $idcombodep; //El id del comboa  aactuaklizar
-    public $data=[];// data del combo box a renderizar
+    use TranslationTrait;
+   public $id;
+   public $options;
+   public $ancho=100;
+   public $alto=100;
+   public $pluginOptions;
+   public $controllerName='finder';
+    public $actionName='selectimage';
+     //protected $_msgCat = 'widImage'; //Priedad para hacer cumplir el trait de kartik importado para la internacionalizacion
     
-    /*
-     * Esta 3 prpeidades definen de donde se sacaran los datos
-     * tabla: 
-     * 
-     *                Table:  nameClass
-     * -----------------------------------------------------
-     *|   fieldKeyClass      |    fieldSecondClass    |    
-     * -----------------------------------------------------
-     *|        001           |         VALOR UNO      |
-     *|        002           |         VALOR DOS      |
-     */
-   public $fieldKeyClass;//EL campo clave de la clase (nameClass)
-   public $fieldSecondClass;//EL campo a mostrar  de la clase (nameClass)
-   public $nameClass; //La clase de donde se extreran los datos
-   private $_esdataremota=true; //Se saca data remora
-   /*
-    * 3 preopiedades para sacar los datos
-    */
-   public $source=[];
-  
-    //public $tabular=false; //Cuando se trata de renderizar en una grilla o tabala 
-    //public $multiple=false; //si se puede seleccionar   mas de un valor 
-   // public $foreignskeys=[2,3,4];//Orden de los campos del modelo foraneo 
-    //que s evan a amostrar o renderizar en el forumlario eta propida debe de especficarse al momento de usar el widget 
-    //private $_foreignClass; //nombe de la clase foranea
-   // private $_foreignField; //nombre del campo foranea
-    //private $_secondField=null; //el  nombde del campo oraneo a mosrtar en el comno
-    //private $_varsJs=[];
-    //public $ordenCampo=1; //EL campo a mostrar por el combo 
-   // private $_modelForeign=null; //El obejto modelo foraneo
     
-    public function init()
+   public function run()
     {
-       
-        parent::init();
-        // echo get_class($this->model);die();
-        if(!($this->model instanceof modelBase))
-        throw new InvalidConfigException('The "model" property is not subclass from "modelBase".');
-        if(!($this->form instanceof \yii\widgets\ActiveForm))
-        throw new InvalidConfigException('The "form" property is not subclass from "ActiveForm".'.get_class($this->form));
-  if(empty($this->idcombodep ))
-        throw new InvalidConfigException('The "idcombodep" property is empty.');
-  
-       
-    }
-
-    public function run()
-    {
+       ImageWidgetAsset::register($this->getView());
+       $this->initI18N(__DIR__,'widImage');
+       $mensaje=yii::t('widImage','This record has a Picture.');
         
-       
-         // Register AssetBundle
-        cboDepWidgetAsset::register($this->getView());
-        $this->makeJs();
-         return  $this->render('controls',[
-                'model'=>$this->model,
-                'form'=>$this->form,
-                'campo'=>$this->campo,
-                 //'esnuevo'=>$this->model->isNewRecord,
-              // 'valoresLista'=>$this->getValoresList(),
-               //'multiple'=>$this->multiple,
-              'data'=>$this->data,
-             // 'valores'=>$valores,
-               // 'idcontrolprefix'=>$this->getIdControl(),
-                ]);
-        
-        
-        
+            return $this->render('controls',[
+               'ancho'=> $this->ancho,
+                'alto'=>$this->alto,
+                'urlModal'=>\yii\helpers\Url::toRoute(['/'.$this->controllerName.'/'.$this->actionName,'idModal'=>'imagemodal','modelid'=>$this->model->id,'nombreclase'=> str_replace('\\','_',get_class($this->model))]),
+                'urlImage'=>$this->getPathFileImage(),
+                    'isNew'=>$this->model->isNewRecord,
+                    'numeroImages'=>$this->model->getCountImages(),
+                    'mensaje'=>$mensaje,
+            ]);
         }
+       
     
  private function makeJs(){
-   $this->getView()->registerJs("$(document).ready(function() {
-    $('#".$this->getIdControl()."').on('change',function(){
-  var_filtro=$('#".$this->getIdControl()." option:selected').val();
-     //alert(var_filtro);
-  $.ajax({ 
-   url:'".\yii\helpers\Url::toRoute('/'.$this->controllerName.'/'.$this->actionName)."',
-   type:'post',
-   dataType:'html',
-   data:{isremotesource:'".$this->isSourceFromDb()."' ,filtro:var_filtro,source:".Json::encode($this->source)."},
-   error:  function(xhr, status, error){ 
-                            var n = Noty('id');                      
-                             $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ xhr.responseText);
-                              $.noty.setType(n.options.id, 'error');         
-                                }, 
-success: function (data) {// success callback function
-           $('#".$this->idcombodep."').html(data);
-    }
-       }); //ajax 
-        } //on change
-    );//on change
-     });",\yii\web\View::POS_END);
-                        }     
-        
    
-   
-   
-
-   private function getIdControl(){
-       return strtolower($this->getShortNameModel().'-'.$this->campo);
-   }
-      
-  private function getShortNameModel(){
-       $retazos=explode('\\',get_class($this->model));
-      return $retazos[count($retazos)-1];
-   }
+                        }  
   
-  private function isSourceFromDb(){
-      /*verificando la porpeada soruce */
-      if(count($this->source)==0)
-      return false;
-      return (is_array(array_values($this->source)[0]))?'yes':'not';
-  }
-  
+ private function getPathFileImage(){
+     /*
+      * Intentamos obtener los archivos adjuntos del modelo
+      * Si no tiene el file Atachment behavior oberner una ruta de un archivo sin imagen
+      */
+     try{
+         $files=$this->model->files; //puede arrojar un error porque l modelo no tiene el behavior
+     } catch (\yii\base\Exception $ex) {
+          throw new \yii\base\Exception(Yii::t('base.errors', 'This model doesn\'t have file Attachment behavior '));  
+     }
+   if(count($files)==0){
+       return FileHelper::UrlEmptyImage();
+   }else{
+      return $this->model->getPathFirstImage();
+   }
    
-   
+ }
 }
+  
 ?>

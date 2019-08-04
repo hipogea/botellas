@@ -45,6 +45,18 @@ class FinderController extends  \common\controllers\base\baseController
                         //'property1' => 'value1',
                         //'property2' => 'value2',
                             ]
+          ,
+          'selectimage'=> [
+                        'class' => 'common\actions\ActionSelectImage',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
+                            ]
+           ,
+          'renderparam'=> [
+                        'class' => 'common\actions\ActionRenderParam',
+                        //'property1' => 'value1',
+                        //'property2' => 'value2',
+                            ]
       ];
       
   }

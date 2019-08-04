@@ -62,6 +62,11 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 	private $metadataWriter;
 
 	/**
+	 * @var \Mpdf\Writer\ObjectWriter
+	 */
+	private $objectWriter;
+
+	/**
 	 * @var \Mpdf\Writer\JavaScriptWriter
 	 */
 	private $javaScriptWriter;
@@ -82,6 +87,7 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 		BackgroundWriter $backgroundWriter,
 		BookmarkWriter $bookmarkWriter,
 		MetadataWriter $metadataWriter,
+		ObjectWriter $objectWriter,
 		JavaScriptWriter $javaScriptWriter,
 		LoggerInterface $logger
 	) {
@@ -95,6 +101,7 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 		$this->backgroundWriter = $backgroundWriter;
 		$this->bookmarkWriter = $bookmarkWriter;
 		$this->metadataWriter = $metadataWriter;
+		$this->objectWriter = $objectWriter;
 		$this->javaScriptWriter = $javaScriptWriter;
 		$this->logger = $logger;
 	}
@@ -118,7 +125,10 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 
 		$this->formWriter->writeFormObjects();
 
-		$this->mpdf->writeImportedPagesAndResolvedObjects();
+		if ($this->mpdf->enableImports) {
+			$this->formWriter->writeFormXObjects();
+			$this->objectWriter->writeImportedObjects();
+		}
 
 		$this->backgroundWriter->writeShaders();
 		$this->backgroundWriter->writePatterns();
@@ -164,12 +174,36 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 		}
 
 		/* -- BACKGROUNDS -- */
-		if (($this->mpdf->gradients !== null && (count($this->mpdf->gradients) > 0))) { // mPDF 5.7.3
+		if (($this->mpdf->gradients !== null && (count($this->mpdf->gradients) > 0)) || ($this->mpdf->enableImports && count($this->mpdf->tpls))) { // mPDF 5.7.3
 
 			$this->writer->write('/Shading <<');
 
 			foreach ($this->mpdf->gradients as $id => $grad) {
 				$this->writer->write('/Sh' . $id . ' ' . $grad['id'] . ' 0 R');
+			}
+
+			// mPDF 5.7.3
+			// If a shading dictionary is in an object (tpl) imported from another PDF, it needs to be included
+			// in the document resources, as well as the object resources
+			// Otherwise get an error in some PDF viewers
+			if ($this->mpdf->enableImports && count($this->mpdf->tpls)) {
+
+				foreach ($this->mpdf->tpls as $tplidx => $tpl) {
+
+					if (isset($tpl['resources'])) {
+
+						$this->mpdf->current_parser = $tpl['parser'];
+
+						foreach ($tpl['resources'][1] as $k => $v) {
+							if ($k === '/Shading') {
+								foreach ($v[1] as $k2 => $v2) {
+									$this->writer->write($k2 . ' ', false);
+									$this->mpdf->pdf_write_value($v2);
+								}
+							}
+						}
+					}
+				}
 			}
 
 			$this->writer->write('>>');
@@ -185,7 +219,7 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 		}
 		/* -- END BACKGROUNDS -- */
 
-		if (count($this->mpdf->images) || count($this->mpdf->formobjects) || count($this->mpdf->getImportedPages())) {
+		if (count($this->mpdf->images) || count($this->mpdf->formobjects) || ($this->mpdf->enableImports && count($this->mpdf->tpls))) {
 			$this->writer->write('/XObject <<');
 			foreach ($this->mpdf->images as $image) {
 				$this->writer->write('/I' . $image['i'] . ' ' . $image['n'] . ' 0 R');
@@ -194,8 +228,10 @@ final class ResourceWriter implements \Psr\Log\LoggerAwareInterface
 				$this->writer->write('/FO' . $formobject['i'] . ' ' . $formobject['n'] . ' 0 R');
 			}
 			/* -- IMPORTS -- */
-			foreach ($this->mpdf->getImportedPages() as $pageData) {
-				$this->writer->write('/' . $pageData['id'] . ' ' . $pageData['objectNumber'] . ' 0 R');
+			if ($this->mpdf->enableImports && count($this->mpdf->tpls)) {
+				foreach ($this->mpdf->tpls as $tplidx => $tpl) {
+					$this->writer->write($this->mpdf->tplprefix . $tplidx . ' ' . $tpl['n'] . ' 0 R');
+				}
 			}
 			/* -- END IMPORTS -- */
 			$this->writer->write('>>');

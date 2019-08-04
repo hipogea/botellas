@@ -7,7 +7,7 @@ namespace frontend\modules\sta\models;
  *
  * @see StaInterlocutor
  */
-class StaInterlocutorQuery extends \frontend\modules\sta\components\ActiveQueryScope
+class StaInterlocutorQuery extends \yii\db\ActiveQuery /* \frontend\modules\sta\components\ActiveQueryScope*/
 {
     /*public function active()
     {

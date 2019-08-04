@@ -37,7 +37,9 @@ use kartik\select2\Select2;
         <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
         </div>
      </div>    
-        
+         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model]); ?>
+   </div>
     <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
          <?= $form->field($model, 'marca')->textInput(['maxlength' => true]) ?>
@@ -60,6 +62,7 @@ use kartik\select2\Select2;
         </div>
      </div>   
       
+    
     
 
     <div class="form-group">

@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h4><?= Html::encode($this->title) ?></h4>
 <div class="box box-success">
-    <?= $this->render('_form', [
+    <?= $this->render('_formtabs', [
        'model' => $model,'items'=>$items
     ]) ?>
 

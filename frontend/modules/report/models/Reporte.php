@@ -143,9 +143,11 @@ class Reporte extends \common\models\base\modelBase
     public function putCabecera($id,$idfiltro){        
         /* $hijos= registros que deen pintarse en la cabcera del reporte   */
              $hijosCabecera=$this->getReportedetalle()->where(['and', "esdetalle='0'", ['or', "visiblelabel='1'", "visiblecampo='1'"]])->all();
-		$HTML_cabecera="";
+		//var_dump($hijosCabecera);die();
+             $HTML_cabecera="";
                //var_dump($hijosCabecera);die();
      foreach( $hijosCabecera as $record) {
+          // var_dump($this->modelToRepor($idfiltro));die();
 		 $HTML_cabecera.=$record->putStyleField($record->nombre_campo,$this->modelToRepor($idfiltro)->{$record->nombre_campo}); 
                }
            unset($modeloToReport);unset($hijosCabecera);unset($clase);

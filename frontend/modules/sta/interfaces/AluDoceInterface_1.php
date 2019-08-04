@@ -1,25 +1,27 @@
 <?php
-namespace frontend\modules\bigitems\interfaces;
-
-interface  PlaceInterface {
+namespace frontend\modules\sta\interfaces;
+use Carbon;
+/*Esta interfaz es base
+ * para los interlocutores Psicologos y trabajadores sociales 
+ * que asisten a clases y tutorias
+ */
+interface  PsicoSocialInterface extends BaseCargosInterface{
     
-    /*  Extrae o saca del lugar un activo
-     *   @asset: Un item activo 
+   
+      /*  Evalua alumno  
      */
-    public function purgeAsset($asset);
+    public function evaluateAlumno($codal);
     
     
-    /*  Ingresa al lugar un activo
-     *   @asset: Un item activo 
+    /*  Prepara el informe alumno
      */
-    public function inputAsset($asset);
+    public function reportAlumno($codalu);
     
-    /*  El lugar cambia de lugar; valga la redundncia
-     *   aplica para locaiones móviles , como embarcaciones 
-     * vehiculos contenedores de activos 
-     *   @newPoint: Un punto o direccion física 
+    
+     /*  Envia informe alumno
      */
-    public function move($newPoint);
+    public function sendReportAlumno($codalu,$destino);
+    
     
     
 }

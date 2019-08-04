@@ -53,6 +53,9 @@ class CliproController extends baseController {
      */
     public function actionIndex() {
         
+             
+       $this->layout="install";
+        
 /* echo h::db()->getSchema()->
                 getTableSchema('{{%maestrocompo}}')->
                 columns['codart']->size; die();
