@@ -193,7 +193,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
        //Si este campo esta dentro de la lista de campos duros  y
        //el presente registro ya tiene hijos, NOS SE DIGA MAS; ESTA BLOQUEADO
        if(in_array(trim($namefield),$this->hardFields) &&
-           $this->hasChilds()){
+           $this->fieldHasChilds($namefield)){
            RETURN true;
        }
         
@@ -241,7 +241,24 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
        return $retorno;
    }
    
-   
+   /*
+    *Verifica si este atributo tiene reistros hijos
+    */
+   public function fieldHasChilds($attribute){
+       $camposLink=$this->fieldsLink(true);
+       $this->fillRelations();
+       $matriz=$this->_obRelations;
+     if(in_array($attribute,$camposLink)){
+         $camposLinkVolteado= array_flip($camposLink);
+         return ($this->{$matriz[$camposLinkVolteado[$attribute]][2]}()
+                 ->count() >0)
+         ?true:false;
+         
+     }else{
+         return false;
+     }
+       
+   }
                             
    
    

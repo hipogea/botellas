@@ -16,6 +16,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
     'id' => 'trabajadores-form',
     'enableAjaxValidation' => true,
+    'fieldClass' => 'common\components\MyActiveField',
     //'options'=>['enctype' => 'multipart/form-data'],'fieldClass' => '\common\components\MyActiveField'
     ]); ?>
        
@@ -24,7 +25,7 @@ use yii\widgets\ActiveForm;
   </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     
-    <?= $form->field($model, 'ap')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'ap')->textInput() ?>
 </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'am')->textInput(['maxlength' => true]) ?>
