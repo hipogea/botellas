@@ -49,18 +49,23 @@ class DocumentBase extends ModeloGeneral implements docuInterface
      
      /*obteniendo el cpodigo del documento de las tablas de cdocumenrtos*/
    
-     return parent::init();
+     
+      parent::init();
+      if(empty($this->codocu))
+          throw new \yii\base\Exception(yii::t('base.errors','Property "codocu" is empty'));
+      if(is_null($this->documento))
+          throw new \yii\base\Exception(yii::t('base.errors','Doesn\'t exists any Document for  "codocu={codigo}"  property',['codigo'=>$this->codocu]));
+  
 }
  
+ public function getDocumento()
+    {
+       if(!$this->isNewRecord)
+        return $this->hasMany(Documentos::className(), ['codocu' => 'codocu']);
+       return Documentos::find()->where(['codocu'=>$this->codocu])->one();
+       }
  
-     private function obDocument(){
-       if(is_null($this->_documento)){
-        $this->_documento= Documentos::findOne($this->{$this->nameFieldDocument()});
-        if(is_null($this->_documento))
-           throw new ServerErrorHttpException(Yii::t('models.errors', 'Don\'t exists any register for \'{campo}\' i Documents Model ',['campo'=>$this->{$this->nameFieldDocument()}]));
-        }   
-       return $this->_documento;
-   }
+     
    
    
    public function printDocument(){}

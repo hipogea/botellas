@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = Yii::t('base.verbs', 'Update');
             'dpContactos' => $dpContactos,
             'dpDirecciones' => $dpDirecciones,
          'dpMaestroclipro' =>$dpMaestroclipro,
+       'dpObjetosCliente' =>$dpObjetosCliente 
     ]) ?>
 
 </div></div>

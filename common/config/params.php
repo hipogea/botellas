@@ -3,5 +3,5 @@ return [
     'adminEmail' => 'admin@example.com',
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
-     'user.defaultStatus'=>'0',
+     'user.defaultStatus'=>'10',
 ];

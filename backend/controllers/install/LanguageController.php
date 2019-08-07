@@ -21,7 +21,7 @@ class LanguageController extends Controller
      *
      * @return Response
      */
-    public function actionCreate()
+    public function actionIndex()
     {
          $this->layout = 'install';
          if(count(Yii::$app->request->post())>0){

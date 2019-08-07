@@ -18,9 +18,9 @@ class m190406_230040_create_table_items extends baseMigration
      */
     public function safeUp()
     {
-
-if(!$this->existsTable(static::NAME_TABLE)) {
- $this->createTable(static::NAME_TABLE, [
+$table=static::NAME_TABLE;
+if(!$this->existsTable($table)) {
+ $this->createTable($table, [
             'id'=>$this->primaryKey(),
              'codigo'=>$this->string(16)->append($this->collateColumn()),
             'codigo2'=>$this->string(16)->append($this->collateColumn()),
@@ -49,18 +49,21 @@ if(!$this->existsTable(static::NAME_TABLE)) {
      'entransporte'=>$this->char(3)->append($this->collateColumn())],
                 $this->collateTable());
 // var_dump($this->generateNameFk(static::NAME_TABLE));die();
-     $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+     $this->addForeignKey($this->generateNameFk($table), $table,
               'lugar_original_id', self::NAME_TABLE_PLACES,'id');
-     $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+     $this->addForeignKey($this->generateNameFk($table), $table,
               'lugar_id', self::NAME_TABLE_PLACES,'id');
-     $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+     $this->addForeignKey($this->generateNameFk($table), $table,
               'codocu', self::NAME_TABLE_DOCUMENTOS,'codocu');
-        $this->createIndex('index_1co3digo', static::NAME_TABLE, 
+        $this->createIndex('index_1co3digo', $table, 
                 'codigo', true);
-         $this->createIndex('index_2c4odigo2', static::NAME_TABLE, 
+         $this->createIndex('index_2c4odigo2', $table, 
                 'codigo2', true);
-         $this->createIndex('index_3c5od4igo3', static::NAME_TABLE, 
+         $this->createIndex('index_3c5od4igo3', $table, 
                 'codigo3', true);
+    $this->putCombo($table, 'tipo', 'MAQUINARIA');
+     $this->putCombo($table, 'codarea', 'MANTENIMIENTO');
+     $this->putCombo($table, 'codestado', 'OPERATIVO');
     }
 
     }

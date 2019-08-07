@@ -33,6 +33,9 @@ if(!$this->existsTable($table)) {
               'doc_id', static::NAME_TABLE_DOCBOTELLAS,'id');
                   $this->addForeignKey($this->generateNameFk($table), $table,
               'codigo', static::NAME_TABLE_ACTIVOS,'codigo');
+  
+         $this->putCombo($table, 'codestado', 'CREADO');
+                  
             }
  }
 

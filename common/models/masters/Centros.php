@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models\masters;
-use common\models\masters\Parametros;
+use common\models\config\Parametros;
 use common\models\base\modelBase;
 use common\models\masters\CentrosParametros;
 use common\models\base\modelBaseTrait;
@@ -87,7 +87,7 @@ class Centros extends modelBase
     }
     
    private function loadParametros(){
-      $params=Parametros::find()->where(['activo' => '1', 'flag' => 'C'])->all();
+      $params=Parametros::find()->where(['activo' => '1', 'flag' => '1'])->all();
       $centro=$this->codcen;
       //var_dump($centro);die();
       

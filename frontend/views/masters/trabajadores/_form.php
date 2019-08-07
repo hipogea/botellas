@@ -16,7 +16,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
     'id' => 'trabajadores-form',
     'enableAjaxValidation' => true,
-    'options'=>['enctype' => 'multipart/form-data'],'fieldClass' => '\common\components\MyActiveField']); ?>
+    //'options'=>['enctype' => 'multipart/form-data'],'fieldClass' => '\common\components\MyActiveField'
+    ]); ?>
        
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'codigotra')->textInput(['disabled'=>'disabled','maxlength' => true]) ?>
@@ -41,13 +42,14 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'pasaporte')->textInput(['maxlength' => true]) ?>
 </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'codpuesto')->
-            dropDownList(ComboHelper::getTablesValues('puestotrabajo') ,
+     <?= 
+            $form->field($model, 'codpuesto')->
+            dropDownList($model->comboDataField('codpuesto') ,
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                       //'disabled'=>($model->isBlockedField('codpuesto'))?'disabled':null,
                         ]
-                    ) ?>
+                    )  ?>
 </div>
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?php  //h::settings()->invalidateCache();  ?>
@@ -56,7 +58,7 @@ use yii\widgets\ActiveForm;
                            // 'readonly'=>true,
                           // 'inline'=>true,
                            'pluginOptions'=>[
-                                     'format' => 'dd.mm.yyyy', 
+                                     'format' => h::gsetting('timeUser', 'date')  , 
                                   'changeMonth'=>true,
                                   'changeYear'=>true,
                                  'yearRange'=>"-99:+0",
@@ -71,7 +73,7 @@ use yii\widgets\ActiveForm;
                        <?= $form->field($model, 'fecingreso')->widget(DatePicker::class, [
                             'language' => h::app()->language,
                            'pluginOptions'=>[
-                                       'format' => 'dd.mm.yyyy',
+                                     'format' => h::gsetting('timeUser', 'date')  , 
                                    'changeMonth'=>true,
                                   'changeYear'=>true,
                                  'yearRange'=>'1980:'.date('Y'),

@@ -4,6 +4,7 @@ namespace frontend\modules\bigitems\models;
 
 use common\models\masters\Direcciones;
 use common\helpers\h;
+use yii\helpers\Url;
 use Yii;
 
 /**
@@ -116,8 +117,9 @@ class Lugares extends \common\models\base\modelBase {
 
         if (is_null(Direcciones::find()->one())){
              $message = Yii::t('base.errors', 'Before to use BigItems Module,  first You should fill Adresses table ');
-            h::session()->setFlash('danger', $message);
-             return h::response()->redirect('masters/direcciones/create');
+           yii::$app->session->setFlash('success', $message);
+           // return h::response()->redirect(Url::toRoute('/settings'));
+             return h::response()->redirect(Url::toRoute('/masters/direcciones/create'));
         }
            
         //throw new \yii\base\Exception(Yii::t('base.errors', 'You should fill Adresses table '));

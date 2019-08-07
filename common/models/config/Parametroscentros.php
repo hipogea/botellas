@@ -98,7 +98,7 @@ class Parametroscentros extends modelBase {
         if ($this->_typedata == 'N') { //NUMNERICO
             return (is_null($this->valor) or ! is_numeric($this->valor)) ? 0 : $this->valor + 0;
         }
-        if ($modelparam->tipodato == 'B') {//BOOLEANO{
+        if ($this->_typedata == 'B') {//BOOLEANO{
             return (is_null($this->valor) or $this->valor == '0' or empty($this->valor)) ? false : true;
         }
     }

@@ -51,6 +51,16 @@ echo TabsX::widget([
             'options' => ['id' => 'myveryownID3'],
             'active' => false
         ],
+        
+        [
+            'label' => yii::t('base.names','Objects'),
+            'content' => $this->render('_tab_objetos',['dpObjetosCliente' =>$dpObjetosCliente ,'model'=>$model]),
+            'headerOptions' => ['style'=>'font-weight:bold'],
+            'options' => ['id' => 'myveryowdfgnID3'],
+            'active' => false
+        ],
+        
+         
     ],
 ]);    
     

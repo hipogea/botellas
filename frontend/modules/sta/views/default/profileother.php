@@ -69,7 +69,7 @@ $this->title = 'Profile';
             
               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                <?= $form->field($profile, 'tipo')->
-            dropDownList(comboHelper::getCboValores('sta.tipoprofile'),
+            dropDownList(comboHelper::getCboValores($profile->RawTableName().'.tipo'),
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                      //'class'=>'probandoSelect2',
                         ]

@@ -250,7 +250,7 @@ return [
     ],
         'user' => [
          'class' => 'common\components\User',
-        'identityClass' => 'mdm\admin\models\User',
+        //'identityClass' => 'mdm\admin\models\User',
             'identityClass' => 'common\models\User',
         //'loginUrl' => ['admin/user/login'],
          'loginUrl' => ['site/login'],  

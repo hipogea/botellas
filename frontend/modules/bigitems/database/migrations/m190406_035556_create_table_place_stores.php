@@ -14,8 +14,9 @@ class m190406_035556_create_table_place_stores extends baseMigration
      const NAME_TABLE_DIRECCIONES='{{%direcciones}}';
     public function safeUp()
     {
-   if(!$this->existsTable(static::NAME_TABLE)) {
-        $this->createTable(static::NAME_TABLE, [
+        $table=static::NAME_TABLE;
+   if(!$this->existsTable($table)) {
+        $this->createTable($table, [
             'id'=>$this->primaryKey(),
             'direcciones_id'=>$this->integer(11),
             'nombre'=>$this->string(40)->append($this->collateColumn()),  
@@ -24,9 +25,9 @@ class m190406_035556_create_table_place_stores extends baseMigration
            ],
                 $this->collateTable());
         
-         $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+         $this->addForeignKey($this->generateNameFk($table), static::NAME_TABLE,
               'direcciones_id', self::NAME_TABLE_DIRECCIONES,'id');
-       
+       $this->putCombo($table, 'tipo', 'NO MOVIL');
         
     }
     }

@@ -36,12 +36,17 @@ class ParametersController extends baseController
         ];
     }
 
+    
+    
+    
     /**
      * Lists all Centrosparametros models.
      * @return mixed
      */
     public function actionIndex()
     {
+     
+        
      
 //var_dump(yii::$app->paramsGen->getP('10004','1203','104'));die();@
         //echo Parametros::findOne('10000')->getGeneralFormat('y.myyy.d','date',false);die();
@@ -96,9 +101,11 @@ class ParametersController extends baseController
      */
     public function actionUpdate($id)
     {
+     
         $model = $this->findModel($id);
         //var_dump($model->hasChilds());die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -164,11 +171,10 @@ class ParametersController extends baseController
     public function actionCreatemaster(){
         $model = new Parametros();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if(!$model->save()){               
-                print_r($model->getErrors());die();
-            }
+            
              return $this->redirect(['indexmaster']);
            }else{
+              
               }
         return $this->render('createmaster', [
             'model' => $model,
@@ -183,7 +189,7 @@ class ParametersController extends baseController
        if ($model->load(Yii::$app->request->post()) && $model->save()) {
           // $model->validate();
            // print_r($model->getErrors());die();
-                      
+                   // print_r($model->attributes);die();    
                return $this->redirect(['indexmaster']);
             
              

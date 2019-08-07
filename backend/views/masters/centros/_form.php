@@ -16,11 +16,11 @@ use yii\widgets\ActiveForm;
 'enableAjaxValidation' => true,
 ]); ?>
 
-    <?= $form->field($model, 'codcen')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'codcen')->textInput([ 'enableAjaxValidation' => true,'maxlength' => true]) ?>
 
     <?= $form->field($model, 'nomcen')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'codsoc')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'codsoc')->textInput(['enableAjaxValidation' => true,'maxlength' => true]) ?>
 
     <?= $form->field($model, 'descricen')->textarea(['rows' => 6]) ?>
 

@@ -3,6 +3,7 @@
 namespace common\models\masters;
 use common\models\masters\Clipro;
 USE frontend\modules\bigitems\models\Lugares;
+use  common\models\masters\Ubigeos;
 use common\helpers\h;
 use Yii;
 
@@ -65,7 +66,7 @@ class Direcciones extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codpro','direc','departamento','provincia','distrito',], 'required'],
+            [['codpro','direc','coddepa','coddist','codprov'], 'required'],
              [['coddepa','codprov','coddist'], 'safe'],
             [['direc'], 'string', 'max' => 80],
             [['nomlug'], 'string', 'max' => 20],
@@ -140,5 +141,21 @@ class Direcciones extends \common\models\base\modelBase
         
     }
     
+   
     
+    public function getDepartamento(){
+        $reg=Ubigeos::find()->where(['coddepa'=>$this->coddepa])->one();
+        return (is_null($reg))?'':$reg->departamento;
+        
+    }
+    public function getProvincia(){
+        $reg=Ubigeos::find()->where(['codprov'=>$this->codprov])->one();
+        return (is_null($reg))?'':$reg->provincia;
+        
+    }
+    public function getDistrito(){
+        $reg=Ubigeos::find()->where(['coddist'=>$this->coddist])->one();
+        return (is_null($reg))?'':$reg->distrito;
+        
+    }
 }

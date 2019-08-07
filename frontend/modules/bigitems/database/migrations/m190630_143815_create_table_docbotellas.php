@@ -58,7 +58,9 @@ if(!$this->existsTable($table)) {
                     $this->fillEnvios();
                     $this->fillEstados();
             }
-         
+         $this->putCombo($table, 'codenvio', 'ALQUILER');
+         $this->putCombo($table, 'essalida', 'INGRESO');
+         $this->putCombo($table, 'codestado', 'CREADO');
  }
 
 public function safeDown()

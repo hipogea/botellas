@@ -1,6 +1,7 @@
 <?php
 namespace backend\components;
-
+use common\helpers\FileHelper;
+use common\models\masters\Combovalores;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -41,14 +42,59 @@ class Installer
  * que deben aprecer en el widget del menu
  * som funciones basicas que debe de tenr cualquier usuario
  */
-    private static $acciones=[
-        '/admin/user/login',
-        '/admin/user/logout',
-        '/admin/user/signup',
-        '/admin/user/request-password-reset',
-        '/admin/user/reset-password','/admin/user/change-password'
-    ];
+
     
+     public static function getRutas() {
+         return [
+             'rbac'=>[
+        '/admin/permission/index'=>Yii::t('base.names', 'Permissions'),
+        '/admin/permission/create'=>Yii::t('base.actions', 'Create Permission'),
+         '/admin/role/index'=>Yii::t('base.names', 'Roles'),
+        '/admin/role/create'=>Yii::t('base.actions', 'Create Role'),
+         '/admin/rule/index'=>Yii::t('base.names', 'Rules'),
+        '/admin/rule/create'=>Yii::t('base.actions', 'Create Rule'),
+           ],
+             'user'=>[
+                        '/admin/user/logout'=>Yii::t('base.actions', 'Logout'),
+                        '/admin/user/signup'=>Yii::t('base.actions', 'Signup'),
+                        '/admin/user/request-password-reset'=>Yii::t('base.actions', 'Request reset Pwd'),
+                        '/admin/user/reset-password'=>Yii::t('base.actions', 'Reset Pwd'),
+                        '/admin/user/change-password'=>Yii::t('base.actions', 'Change Pwd'),
+                  ],
+             
+             'menu'=>[
+                        '/admin/menu/create'=>Yii::t('base.actions', 'Create Menu'),
+                        '/admin/menu/index'=>Yii::t('base.names', 'Menu'),
+                        '/admin/route/index'=>Yii::t('base.names', 'Routes'),
+                        '/admin/route/create'=>Yii::t('base.actions', 'Create Routes'),
+                       
+                  ],
+             
+             'masters'=>[
+                        '/masters/centros/index'=>Yii::t('base.names', 'Centers'),
+                        '/masters/combovalores/index'=>Yii::t('base.names', 'Tables'),
+                        '/masters/combovalores/create'=>Yii::t('base.actions', 'Create Tables'),
+                        '/masters/documents/index'=>Yii::t('base.names', 'Documents'), 
+                  ],
+             'parameters'=>[
+                        '/parameteres/createmaster'=>Yii::t('base.actions', 'Create Parameters'),
+                        '/parameters/createparamdocu'=>Yii::t('base.actions', 'Create Paramaeters Documents'),
+                        '/parameters/index'=>Yii::t('base.names', 'Parameters Center'),
+                        '/parameters/indexmaster'=>Yii::t('base.names', 'Parameters'),
+                        '/parameters/indexparamdocu'=>Yii::t('base.names', 'Parameters Documents'), 
+                  ],
+             
+             ];
+        }
+    public static function getPurerutas(){
+        $rutas=[];
+        foreach(static::getRutas() as $clave=>$matriz){
+            $rutas=array_merge($rutas,array_keys($matriz));
+        }
+        return $rutas;
+    }  
+        
+        
     public static function isFileEnv(){
         return is_file(__DIR__ . '/../web/.env');
     }
@@ -61,17 +107,13 @@ class Installer
      * Inmportante 
      */
     public static function alreadyInstalled(){
-        //var_dump(Installer::readEnv('APP_INSTALLED'));die();
         if(trim(Installer::readEnv('APP_INSTALLED'))=='false')
         return false;
         return true;  
     }
     
     public static function redirectInstall(){
-       /*echo \yii\helpers\Url::to('install/requirements/show'); die();*/
-        // return $this->redirect(['view', 'id' => $model->id]);
-       //echo Yii::$app->controller->id; die();
-     return  Yii::$app->controller->redirect(['install/requirements/show']);
+      return  Yii::$app->controller->redirect(['install/requirements/show']);
     }
     
     
@@ -81,19 +123,10 @@ class Installer
      * 
      */
     public static function  ManageInstall(){
-        //var_dump(Yii::$app->controller->redirect(['install/requirements/show']));die();
-          //return  Yii::$app->controller->redirect(['install/requirements/show']);
-        if(static::isFileEnv()){
-            
-            if(static::alreadyInstalled()){
-                //echo "salñio";die();
-                return;
-            }else{
-               // echo "papz"; die();
-                //echo "sewe ewewalñio";die();
-               //redirigir al instalador 
-               return  Yii::$app->controller->redirect(['install/language']);
-            }
+       if(static::isFileEnv()){            
+            if(!static::alreadyInstalled()){
+                return  Yii::$app->controller->redirect(['install/language'])->send();
+             }
         }else{
            
             if(static::isFileEnvExample()){
@@ -211,33 +244,14 @@ class Installer
         if (!static::isDbValid($host, $port, $database, $username, $password)) {
             return false;
         }
-
-        set_time_limit(300); // 5 minutes   
-        
-        
-        
-        //Command::execute('migrate/fresh', ['interactive' => false]);
-       //Command::execute('migrate/down', ['interactive' => false]);
-     
+        set_time_limit(300); // 5 minutes 
       Command::execute('migrate/up', ['interactive' => false]);
        Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
         Command::execute('migrate', ['migrationPath'=>'@yii2mod/settings/migrations', 'interactive' => false]);  
-      
       Command::execute('migrate', ['migrationPath'=>'@mdm/admin/migrations', 'interactive' => false]);  
      Command::execute('migrate', ['migrationPath'=>'@nemmo/attachments/migrations', 'interactive' => false]);  
-     
-        // Set database details
+             // Set database details
         static::saveDbVariables($host, $port, $database, $username, $password);
-
-        
-        // Try to increase the maximum execution time
-        
-            
-        // Create tables
-        //Artisan::call('migrate', ['--force' => true]);
-
-        // Create Roles
-        //Artisan::call('db:seed', ['--class' => 'Database\Seeds\Roles', '--force' => true]);
 
         return true;
     }
@@ -257,50 +271,25 @@ class Installer
      */
     public static function isDbValid($host, $port, $database, $username, $password)
     {
-       /* $config['components']['db']['class']    = 'yii\db\Connection';
-        $config['components']['db']['dsn']      = $host;
-        $config['components']['db']['username'] = $username;
-        $config['components']['db']['password'] = $password;
-        $config['components']['db']['charset']  = static::readEnv('DB_CHARSET');
-        */
-        /*falta averiguar coo esxcribie rel archivo config para que queden estos cabios";*/
-        
-        
-      /*  Config::set('database.connections.install_test', [
-            'host'      => $host,
-            'port'      => $port,
-            'database'  => $database,
-            'username'  => $username,
-            'password'  => $password,
-            'driver'    => env('DB_CONNECTION', 'mysql'),
-            'charset'   => env('DB_CHARSET', 'utf8mb4'),
-        ]);*/
-
+       
         $dsn=static::readEnv('DB_CONNECTION','mysql').':host='.$host.'; port='.$port.';dbname='.$database;
         $charset=trim(static::readEnv('DB_CHARSET', 'utf8mb4'));
         $filePathConfig=static::CONFIG_COMMON_LOCAL;
-        $routeArray='components\db\\';
-        
+        $routeArray='components\db\\';        
         $db = new \yii\db\Connection([
                 'dsn' => $dsn,
                 'username' => $username,
                 'password' => $password,
                 'charset' => trim(static::readEnv('DB_CHARSET', 'utf8mb4')),
                 ]); 
-   try{
-      
-       
-      $db->open();
-       
-       
+   try{       
+      $db->open();  
    } catch (\yii\db\Exception $exception) {
        echo $exception->getMessage(); 
        return false;
    } finally{
        unset($db);
-   }
-   
-   
+   }   
    //cadena dsn
    static::setConfigYii($routeArray.'dsn',$dsn,$filePathConfig);
      //username
@@ -315,13 +304,8 @@ class Installer
     static::setConfigYii($routeArray.'tablePrefix',
            static::generateRandomString(5).'_', 
           $filePathConfig);
-  return true;       
-       
-        
+  return true; 
     }
-
-    
-    
     
     
     
@@ -339,67 +323,10 @@ class Installer
             //'DB_PREFIX'     =>  $prefix,
         ]);
 
-       //static::psetting('database','dsn',static::readEnv('DB_CONNECTION','mysql').':host='.$host.'; port='.$port.';dbname='.$database);//'mail.neotegnia.com'
-       //static::psetting('database','username',$username);//
-       //static::psetting('database','password',$password);//
-      // static::psetting('database','portservermail',$port);// '25',
-        // static::psetting('database','tableprefix',$prefix);// '25',
-       
-       
-       
-        
-        
-        /*$con = env('DB_CONNECTION', 'mysql');
-
-        // Change current connection
-        $db = Config::get('database.connections.' . $con);
-
-        $db['host'] = $host;
-        $db['database'] = $database;
-        $db['username'] = $username;
-        $db['password'] = $password;
-        $db['prefix'] = $prefix;
-
-        Config::set('database.connections.' . $con, $db);
-
-        DB::purge($con);
-        DB::reconnect($con);*/
     }
 
-  /*  public static function createCompany($name, $email, $locale)
-    {
-        // Create company
-        $company = Company::create([
-            'domain' => '',
-        ]);
 
-        // Set settings
-        setting()->setExtraColumns(['company_id' => $company->id]);
-        setting()->set([
-            'general.company_name'          => $name,
-            'general.company_email'         => $email,
-            'general.default_currency'      => 'USD',
-            'general.default_locale'        => $locale,
-        ]);
-        setting()->save();
-    }
-*/
-    public static function createUser($email, $password, $locale)
-    {
-        // Create the user
-        $user = User::create([
-            'name' => '',
-            'email' => $email,
-            'password' => $password,
-            'locale' => $locale,
-        ]);
 
-        // Attach admin role
-        $user->roles()->attach('1');
-
-        // Attach company
-        $user->companies()->attach('1');
-    }
 
     public static function finalTouches()
     {
@@ -426,14 +353,7 @@ class Installer
                  h::db()->getSchema()->
                 getTableSchema('{{%maestrocompo}}')->
                 columns['codart']->size
-                );		
-		
-        
-      /*  static::editConfig(self::CONFIG_FRONTEND_MAIN, ['language'], $session->get('locale'));
-        static::editConfig(self::CONFIG_COMMON_LOCAL, ['components','db','dsn'], $session->get('s_dsn'));
-        static::editConfig(self::CONFIG_COMMON_LOCAL, ['components','db','username'], $session->get('s_username'));
-        static::editConfig(self::CONFIG_COMMON_LOCAL, ['components','db','charset'], $session->get('s_charset'));
-        */
+                );
     }
 
     public static function updateEnv($data)
@@ -509,138 +429,9 @@ class Installer
     return $randomString;
 } 
 
-public static function errorSettings(
-                $companyName, 
-                $emailCompany, 
-                $rucCompany, 
-                //$userName,
-                $moneda
-                //$emailUser
-                ){
-    $errores=[];
-    $error="";
-    $valida= new \yii\validators\EmailValidator();    
-    if(!$valida->validate($emailCompany,$error))
-     $errores['emailcompany']=$error;$error="";
-    /*if(!$valida->validate($emailUser,$error))
-     $errores['emailuser']=$error;$error="";*/
-    $valida= new \yii\validators\RegularExpressionValidator(['pattern'=>'/[0-9]{11}/']);
-    $valida->pattern='/[0-9]{11}/';
-    if(!$valida->validate($rucCompany,$error))
-     $errores['ruccompany']=$error;$error="";
-     
-     /*$valida->pattern='/[a-zA-Z0-9]{3,60}/';
-    if(!$valida->validate($userName,$error))
-     $errores['username']=$error;$error="";*/
-     
-      $valida->pattern='/[a-zA-Z0-9]{5,70}/';
-    if(!$valida->validate($companyName,$error))
-     $errores['companyname']=$error;$error="";
-     
-     $valida->pattern='/[A-Z]{3}/';
-    if(!$valida->validate($moneda,$error))
-     $errores['companyname']=$error;$error="";
-   
-     return $errores;
-}
-
-
-public static function errorSettingsMail(
-                $serverMail,
-            $userMail,
-             $passwordMail,
-              $portMail
-                ){
-    $errores=[];
-    $error="";
-    $valida= new \yii\validators\RegularExpressionValidator(['isEmpty'=>false,'pattern'=>'/[a-zA-Z0-9.]{6,60}/']);  
-    if(!$valida->validate($serverMail,$error))
-     $errores['servermail']=$error;$error="";
-     
-     $valida= new \yii\validators\EmailValidator(['isEmpty'=>false]);    
-    if(!$valida->validate($userMail,$error))
-     $errores['usermail']=$error;$error="";
-     
-     $valida= new \yii\validators\RegularExpressionValidator(['isEmpty'=>false,'pattern'=>'/[a-zA-Z0-9._]{4,60}/']);  
-    if(!$valida->validate($passwordMail,$error))
-     $errores['passwordmail']=$error;$error="";
-     
-      $valida= new \yii\validators\RegularExpressionValidator(['isEmpty'=>false,'pattern'=>'/[0-9]{0,3}/']);
-    if(!$valida->validate($portMail,$error))
-     $errores['portmail']=$error;$error="";
-   
-     return $errores;
-}
-
-
-
-
- /*
-  * Abre y lee el archivo config , detecta si existe una variable 
-  * @file: Ruta al archivo config a leer
-  * @parameters: Array de prametros de configuracion ['components','settings','i8n' ...]
-  * cada valor indica un nivel de profundidad en el array de configuracion
-  * pej: ['components','settings','i8n' ...] equivale $config['components']['settings']['i8n']
-  *   */
-public static function detectParamInConfig($file,$parameters){
-     //rename(__DIR__.'/../web/.env.example', __DIR__.'/../web/.env');
-      $retorno=false;
-   $configuracion= require $file;
-   foreach ($parameters as $clave=>$valor){
-       if(isset($configuracion[$valor])){
-           $configuracion=$configuracion[$valor];
-           $retorno=true;
-       }else{
-           break; $retorno=false;
-       }
-   }
-   
-   return $retorno;
-    
-}
-
-public static function editConfig($file,$parameters,$value){
-     //rename(__DIR__.'/../web/.env.example', __DIR__.'/../web/.env');
-     // $retorno=false;
-   if(self::detectParamInConfig($file, $parameters)){
-  $actual = file_get_contents($file);
-  $original=file_get_contents($file);
-  $marcador=0;
-  $marcadorabs=0;
-  foreach($parameters as $clave=>$valor){
-      $marcador=strpos($actual,$valor);
-     $actual=substr($actual,$marcador); 
-     $marcadorabs+=$marcador;
-     //echo $valor."<br>";
-     //echo $marcador."<br>";
-     // echo $marcadorabs."<br>";     
-     //echo substr($actual,$marcador,)
-     // echo substr($original,$marcadorabs)."<br>";
-     //echo $actual."<br><br><br><br><br>";
-  }
-  $marcadorfinal=$marcadorabs+strpos($actual,']');
-  //$marcadorfinal=$marcador+$marcadorfinal;
-  $retazo= substr($original,$marcadorabs,min(strpos($actual,','),strpos($actual,']')));
-  $comienzo=$marcadorabs+strpos($retazo,"=>")+2;
-   //echo substr($original,0,$comienzo)."<br>";
-   //echo substr($original,$marcadorfinal)."<br>";
-  file_put_contents($file, substr($original,0,$comienzo)."'".$value."'".substr($original,$marcadorfinal));
-   return true;
-   }else{
-       return false;
-   }
-   
-}
 
 public static function testMail($serverMail,$userMail,$passwordMail,$portMail){
-  /* \Yii::$app->mailer->compose()
-    ->setFrom(['hipogea@hotmail.com'=>'Jorge Paredes'])
-    ->setTo('jramirez@neotegnia.com')
-    ->setSubject('This is a test mail ' )
-    ->send();
-    */
-    
-  
+ 
     $transport = new \Swift_SmtpTransport();
     //echo get_class($transport);die();
           $transport->setHost($serverMail)
@@ -676,68 +467,61 @@ public static function testMail($serverMail,$userMail,$passwordMail,$portMail){
     
 }
 
-public static function createSettingsTable(){
-    Command::execute('migrate --migrationPath=@vendor/yii2mod/yii2-settings/migrations', ['interactive' => false]);
-}
-
 private static function createRoutes(){
     
         $model = new \mdm\admin\models\Route();
-        $model->addNew(self::$acciones);
+        $model->addNew(static::getPureRutas());
         unset($model);
+    
     
 }
 
 public static function createBasicRole(){
     if(yii::$app->hasModule('admin')){
-        static::createRoutes();    
+        static::createRoutes(); 
         
-        $model = new \mdm\admin\models\AuthItem(null);
-        $model->setAttributes(['name'=>'r_base',
-                                'type'=>1,
-                                'description'=>'Rol base usuario',
-                                ]);
-       /*creando el rol  y luego asignadole 
-        * las rutas
-        */
-        if($model->save()){ 
-            $model->addChildren(self::$acciones);                
-        }
-        /*
-         * 
-         */
-    
-        /*Asignando el rol al unico usuario recien creado */
-        $idUser=yii::$app->session->get('newUser');
+         $idUser=yii::$app->session->get('newUser');
         if(is_null($idUser))
          $idUser= \mdm\admin\models\User::findOne()->id;
-         $modelo = new \mdm\admin\models\Assignment($idUser);
-        $success = $modelo->assign(['r_base']);
-        /**/ 
-        unset($model);
         
-        /*
+        foreach(static::getRutas() as $clave=>$arreglo){
+                $model = new \mdm\admin\models\AuthItem(null);
+                $model->setAttributes(['name'=>'r_base'.$clave,
+                                'type'=>1,
+                                'description'=>'Rol base '.$clave,
+                                ]);        
+                    if($model->save()){ 
+                                $model->addChildren(array_keys($arreglo));                
+                            }
+                $modelo = new \mdm\admin\models\Assignment($idUser);
+                $success = $modelo->assign(['r_base'.$clave]);
+                
+                
+                 /*
          * Creando el Menu Basico
          */
         
         $modelMenu=new \mdm\admin\models\Menu();
-        $modelMenu->setAttributes(['name'=>'User','route'=>'','parent'=>'','orden'=>'','data'=>'']);
-        $modelMenu->save();
+        $modelMenu->setAttributes(['name'=>$clave,'route'=>'','parent'=>'','orden'=>'','data'=>'']);
+        $modelMenu->save();$modelMenu->refresh();
         $idmMenu=$modelMenu->id;
         unset($modelMenu);
         
-        foreach(static::$acciones as $clave=>$accion){
+        foreach($arreglo as $ruta=>$nombre){
              $modelMenu=new \mdm\admin\models\Menu();
-             $modelMenu->setAttributes(['name'=> str_replace('/admin/user/','',$accion),'route'=>$accion,'parent'=>$idmMenu,'orden'=>'','data'=>'']);
+             $modelMenu->setAttributes([
+                 'name'=> $nombre/*FileHelper::getShortName($accion) /*  str_replace('/admin/user/','',$accion)*/,
+                 'route'=>$ruta,
+                 'parent'=>$idmMenu,'orden'=>'',
+                 'data'=>'']
+                     );
            $modelMenu->save();
             //$idmMenu=$modelMenu->id;
              unset($modelMenu);
-        }
-        
-        
-        
+        }               
+       }
     }
-}
+  }
 
 /*
  * Crea los parametros Settings BAsicos 
@@ -789,6 +573,8 @@ private static function ConfigToString($configuracion){
     $cad.="];  ?>";
     return $cad;
 }
+
+
 private static function recursiveArrayToString($arr){
     $cad="";
     foreach($arr as $key=>$value){

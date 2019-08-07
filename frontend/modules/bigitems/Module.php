@@ -39,7 +39,7 @@ class Module extends \yii\base\Module
            }else{
                //echo "aqui";die();
             //  echo "mano"; die();
-          $this->resolvePlaces(); 
+          //$this->resolvePlaces(); 
        }
        
        //si no existe este parametro crearlo 
@@ -60,6 +60,16 @@ class Module extends \yii\base\Module
        // var_dump(yii::$app->settings->has('bigitems', 'withPlaces'));die();
         return (h::settings()->get(static::getId(), static::SE_USA_LUGARES)=='N')?false:true;
     }
+    
+    public function behaviors(){
+        return[
+           /* [
+            'class' => FilterLugares::className(), 
+              'except' => ['default/complete'],
+            ],*/
+        ];
+    }
+    
     
     
     /*varifica si la tbla lugares esta vacia */

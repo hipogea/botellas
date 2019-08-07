@@ -20,6 +20,7 @@ use common\helpers\ComboHelper;
     <?= $form->field($model, 'desparam')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'activo')->checkbox([]) ?>
+    <?= $form->field($model, 'flag')->checkbox([]) ?>
      <?= $form->field($model,'tipodato')->
             dropDownList(
                     ['C'=>yii::t('base.forms','Character'),

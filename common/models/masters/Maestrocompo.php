@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models\masters;
-
+use common\behaviors\FileBehavior;
 use Yii;
 use common\helpers\h;
 /**
@@ -27,7 +27,17 @@ class Maestrocompo extends \common\models\base\modelBase
     {
         return '{{%maestrocompo}}';
     }
-
+ public function behaviors()
+{
+	return [
+		
+		'fileBehavior' => [
+			'class' => FileBehavior::className()
+		],
+               
+		
+	];
+}
     /**
      * {@inheritdoc}
      */

@@ -26,6 +26,7 @@ class Trabajadores extends modelBase
 {
    
    public $nombrecompleto;
+   public $persona;
     
      
     public function behaviors()
@@ -101,9 +102,11 @@ class Trabajadores extends modelBase
     
     public function validateFechas($attribute, $params)
     {
-       $this->toCarbon('fecingreso');
-       $this->toCarbon('cumple');
-       self::CarbonNow();
+      // $this->toCarbon('fecingreso');
+       //$this->toCarbon('cumple');
+       //self::CarbonNow();
+       //var_dump(self::CarbonNow());
+        
        if($this->toCarbon('fecingreso')->greaterThan(self::CarbonNow())){
             $this->addError('fecingreso', yii::t('base.errors','The field {campo} is greater than current day',
                     ['campo'=>$this->getAttributeLabel('fecingreso')]));

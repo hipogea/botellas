@@ -40,11 +40,11 @@ class SiteController extends Controller
      */
     public function actions()
     {
-        return [
+        /*return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
-        ];
+        ];*/
     }
 
     /**
@@ -54,18 +54,29 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        //Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
-       // Command::execute('migrate/down', ['interactive' => false]);die();
-       //Installer::setConfigYii('name', 'Pichin',Installer::CONFIG_COMMON_MAIN);die();
-   
-        Installer::ManageInstall();        
+       if(Installer::isFileEnv()){            
+            if(!Installer::alreadyInstalled()){
+                return  Yii::$app->controller->redirect(['install/language'])->send();
+             }
+        }else{
+           
+            if(static::isFileEnvExample()){
+                //copiar al archivio .env
+                 Installer::createDefaultEnvFile();
+                 //redirigr al instalador
+                Installer::redirectInstall();
+            }else{
+                //lanzar el error 
+                throw new \yii\base\Exception(
+                   yii::t('install.errors','The  \'.env.example\' file  don\'t exists, please check for it')
+                   ); 
+            }
+            
+        }
+           
         if(!Yii::$app->user->isGuest)        
           return $this->render('index');     
           $this->redirect('site/login');
-     
-        
-       
-       
        
     }
 

@@ -17,8 +17,9 @@ class m190108_041235_create_table_trabajadores extends baseMigration
     public function safeUp()
     {
 
-if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
-        $this->createTable(static::NAME_TABLE, [
+$table=static::NAME_TABLE;
+if(!$this->existsTable($table)){
+        $this->createTable($table, [
              'id'=>$this->primaryKey(),
             'codigotra' => $this->string(6)->notNull()->append($this->collateColumn()),
             'ap' => $this->string(40)->notNull()->append($this->collateColumn()), 
@@ -42,7 +43,12 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
         $this->createIndex(uniqid('k_am'), static::NAME_TABLE, 'am');
         $this->createIndex(uniqid('k_nombres'), static::NAME_TABLE, 'nombres');
           $this->createIndex(uniqid('k_nombrescompletos'), static::NAME_TABLE, ['nombres','ap','am']);
-    }
+    
+    $this->putCombo($table, 'codpuesto', 'SUPERVISOR');      
+  }
+    
+    
+    
     }
 	
 

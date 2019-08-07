@@ -14,8 +14,8 @@ use common\models\masters\Direcciones;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-   <h6><?= Html::encode($this->title) ?></h6>
-    <?php Pjax::begin(); ?>
+
+     <?php Pjax::begin(['id'=>'grilla-direcciones']); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
      <?php
@@ -26,6 +26,7 @@ use common\models\masters\Direcciones;
             'pageSummary' => 'Total',
             'vAlign' => 'middle',
             'width' => '210px',
+            'readonly' => false,
            //'data'=>['modelo'=>'mimodelo']
             
          ],
@@ -37,11 +38,15 @@ use common\models\masters\Direcciones;
             'width' => '210px',
             
          ],
+       'provincia',
+       'departamento',
+       'distrito'
    ];
    echo grid::widget([
     'dataProvider'=> $dpDirecciones,
    // 'filterModel' => $searchModel,
     'columns' => $gridColumns,
+       'summary'=>'',
     'responsive'=>true,
     'hover'=>true
        ]);
@@ -53,3 +58,10 @@ use common\models\masters\Direcciones;
 
    
     <?php Pjax::end(); ?>
+
+  <?php $url=Url::toRoute(['masters/clipro/createaddresses','id'=>$model->codpro]);   ?>
+   <?php  echo  Html::button(yii::t('base.verbs','Create'), ['href' => $url, 'title' => 'Nueva direccion de '.$model->despro,'id'=>'btn_addresses', 'class' => 'botonAbre btn btn-success']); ?>
+      <?php /*$this->registerJs("var vjs_url=".json_encode($ruta).";"
+            . "var vjs_random=".json_encode(rand()).";",View::POS_HEAD); */ ?>
+     
+   

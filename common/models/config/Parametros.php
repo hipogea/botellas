@@ -24,7 +24,7 @@ use Yii;
 class Parametros extends \common\models\base\modelBase
 {
     
-    public $booleanFields=['activo'];
+    public $booleanFields=['activo','flag'];
     
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ class Parametros extends \common\models\base\modelBase
     public function rules()
     {
       $reglas= [
-           [['codparam'], 'safe'],
+           [['codparam','flag','activo'], 'safe'],
            [['codparam'], 'match','pattern'=>'/[1-9]{1}[0-9]{4}/'],
             [['desparam', 'tipodato', 'activo','longitud'], 'required'],
             [['explicacion'], 'string'],
@@ -64,6 +64,7 @@ class Parametros extends \common\models\base\modelBase
         return [
             'codparam' => Yii::t('base.names', 'Code'),
             'desparam' => Yii::t('base.names', 'Description'),
+            'flag' => Yii::t('base.names', 'Include Centers'),
             'explicacion' => Yii::t('base.names', 'Details'),
             'tipodato' => Yii::t('base.names', 'Date type'),
             'longitud' => Yii::t('base.names', 'Lenght'),
@@ -90,13 +91,28 @@ class Parametros extends \common\models\base\modelBase
     }
     
      public function beforeSave($insert){
-        if($insert)
-        /// echo "holis";die();
+        if($insert){
+           // echo "holis";die();
             $this->codparam=$this->correlativo('codparam');
-       // }
-       
-        return parent::beforeSave($insert);
-    }
+            
+       // } 
+        }else{
+            if($this->hasChanged('flag') && $this->flag=='1'){
+                foreach($this->centros as $fila){
+                    $fila->firstOrCreate([
+                        
+                    ]);
+                }
+            }
+           
+    
+        }
+        
+       return parent::beforeSave($insert); 
+        
     
     
+}
+
+
 }

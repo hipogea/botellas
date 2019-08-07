@@ -76,7 +76,7 @@ class h {
         return yii::$app->settings;
     }
     
-    public static function gsetting($seccion,$llave,$valorsino){
+    public static function gsetting($seccion,$llave,$valorsino=null){
         if(yii::$app->settings->has($seccion,$llave))
         return yii::$app->settings->get($seccion,$llave);
         return $valorsino;

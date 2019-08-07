@@ -42,29 +42,8 @@ use common\models\masters\Direcciones;
         ],
     ]); ?>
     <?php Pjax::end(); ?> 
-<?= Html::button(yii::t('base.verbs','New Contact'), ['value' => Url::to(['masters/clipro/createcontact','id'=>$model->codpro]), 'title' => yii::t('base.verbs','New Contact'), 'id'=>'btn_contactos',/*'class' => 'showModalButton btn btn-success'*/]); ?>
-  <?php $ruta=Url::toRoute(['masters/clipro/createcontact','id'=>$model->codpro]);   ?>
+ <?php $ruta=Url::toRoute(['masters/clipro/createcontact','id'=>$model->codpro]);   ?>
     <?php /*$this->registerJs("var vjs_url=".json_encode($ruta).";"
             . "var vjs_random=".json_encode(rand()).";",View::POS_HEAD); */ ?>
-     <?php $this->registerJs("var vjs_url=".json_encode($ruta).";",View::POS_HEAD); ?>
-      
+     
    
-   
-   
-<?php
-use lo\widgets\modal\ModalAjax;
-
-echo ModalAjax::widget([
-    'id' => 'createCompany',
-    'header' => 'Create Company',
-    'toggleButton' => [
-        'label' => 'New Company',
-        'class' => 'btn btn-primary pull-right'
-    ],
-    'url' => Url::to(['/masters/clipro/createcontact','id'=>$model->codpro]), // Ajax view with form to load
-    'ajaxSubmit' => true, // Submit the contained form as ajax, true by default
-    //para que no se esconda la ventana cuando presionas una tecla fuera del marco
-    'clientOptions' => ['tabindex'=>'',/*'backdrop' => 'static', 'keyboard' => FALSE*/]
-    // ... any other yii2 bootstrap modal option you need
-]);
- ?>  

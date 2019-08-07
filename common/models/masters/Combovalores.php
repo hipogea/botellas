@@ -34,7 +34,7 @@ class Combovalores extends \common\models\base\modelBase
     {
         return [
             [['nombretabla','codigo','valor'], 'required'],
-            [['codigo'], 'match', 'pattern' => '/[1-9A-Z]{1}[0-9A-Z]{1,2}/'],
+            [['codigo'], 'match', 'pattern' => '/[1-9A-Z]{1}[0-9A-Z]{0,2}/'],
             [['codcen'], 'string', 'max' => 5],
             [['nombretabla', 'codigo'], 'unique', 'targetAttribute' => ['nombretabla', 'codigo']],
             [['codigo', 'valor1', 'valor2'], 'string', 'max' => 3],
@@ -74,5 +74,15 @@ class Combovalores extends \common\models\base\modelBase
     public static function find()
     {
         return new CombovaloresQuery(get_called_class());
+    }
+    
+    /*Dvuel ve un valor dado una calve */
+    public static function getValue($key,$codcentro=null){
+       if(!is_null($codcentro))
+      $value= static::find()->where(['nombretabla'=>$key,'codcen'=>$codcentro])->scalar();
+       $value= static::find()->where(['nombretabla'=>$key])->scalar();
+       return ($value===false)?null:$value;
+       
+        
     }
 }

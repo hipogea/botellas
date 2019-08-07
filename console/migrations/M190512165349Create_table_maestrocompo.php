@@ -17,7 +17,8 @@ class M190512165349Create_table_maestrocompo extends baseMigration
      */
     public function safeUp()
     {
-if(!$this->existsTable(static::NAME_TABLE)) {
+        $table=static::NAME_TABLE;
+if(!$this->existsTable($table)) {
         $this->createTable(static::NAME_TABLE, [
             'id'=>$this->primaryKey(),
             'codart'=>$this->string(14)->unique()->notNull()->append($this->collateColumn()),
@@ -41,6 +42,7 @@ if(!$this->existsTable(static::NAME_TABLE)) {
                 $this->collateTable());
         $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
               'codum',static::NAME_TABLE_UM,'codum');
+        $this->putCombo($table, 'codtipo', 'MAQUINARIA');
         
     }
     }

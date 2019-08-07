@@ -22,7 +22,9 @@ if($this->existsTable($table)) {
      $columns = $tableSchema->getColumnNames();
      if (!in_array('tipo', $columns)) {
        $this->addColumn($table, 'tipo', $this->char(2)->append($this->collateColumn()));
-            } 
+            }
+         $this->putCombo($table, 'tipo', 'ALUMNO EN RIESGO');   
+            
      }
    
 }

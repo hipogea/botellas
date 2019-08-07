@@ -1,13 +1,11 @@
 <?php
-
 namespace console\migrations;
 
-use yii\db\Migration;
 
 /**
  * Class M190512163556Create_table_config
  */
-class M190512163556Create_table_config extends  baseMigration
+class m130524_201499Create_table_config extends  baseMigration
 {
     /**
      * {@inheritdoc}

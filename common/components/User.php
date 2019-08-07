@@ -6,10 +6,18 @@ use common\models\Profile;
 use yii\helpers\Html;
 use yii;
 use yii\web\User as UserOriginal;
+
+
 class User extends UserOriginal{
     
+    
+    //public $class_profile='common\models\Profile';
+    private $persona; //objeto persona 
     const LOGIN_DURATION=1800;//30 MINUTOS
     public function init(){
+        
+        
+        
         
          parent::init();
         // $this->authTimeout=10;
@@ -23,6 +31,9 @@ class User extends UserOriginal{
           
           // $this->absoluteAuthTimeout=20;
     }
+    
+
+     
     
     /*
      * 0verrido este metodo para agregar 

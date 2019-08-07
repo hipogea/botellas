@@ -2,6 +2,7 @@
 
 namespace common\models\base;
 use Carbon\Carbon;
+
 use Yii;
 use DateTime;
 use common\helpers\FileHelper;
@@ -563,6 +564,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                        //print_r($model->attributes);die();
                        
                  IF(!$model->insert()){
+                      print_r($model->getErrors());
                      return false;
                  }
                    // print_r($model->getErrors());die();
@@ -608,11 +610,11 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    
     public  function maxValue($field,$campocriterio=null){
         if(is_null($campocriterio))
-            return self::instance()->find()->max($field);
-            return self::instance()->find()->where([$campocriterio=>$this->{$campocriterio}])->max($field);
+            return self::find()->max($field);
+            return self::find()->where([$campocriterio=>$this->{$campocriterio}])->max($field);
     }  
     
-    private function getFieldSize($field){
+    public function getFieldSize($field){
         /*var_dump($this->getDb()->
                 schema->getTableSchema($this->tableName())->
                 getColumn($field)->size);die();*/
@@ -641,11 +643,18 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          * Si el prefijo es <> null se sigue achicando el tamano
          */
            if(!is_null($this->prefijo)){
-                            $tamano=$tamano-strlen(trim($this->prefijo));
+                            $diferenciatamano=$tamano-strlen(trim($this->prefijo));
+                          if($diferenciatamano < 4){
+                              //si es menor que 4 o es negativa, dejar el taaño com es y no aplicar el prefijo
+                         $this->prefijo="1";
+                         $tamano=$tamano-1;
+                              }else{
+                              $tamano=$diferenciatamano;
+                          }
               }else{
                           $this->prefijo="";
              }
-                  
+            //var_dum($tamano);die();      
                                 
         $maximus=self::maxValue($field,$campocriterio);
         if(is_null($maximus) or empty($maximus)){           
@@ -943,11 +952,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
     * un NOMBRE DE UN campo del objeto
      */
     public function toCarbon($attribute){
+        
          if (!in_array($attribute, 
                  array_keys($this->dateorTimeFields))){
             throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['campo'=>$attribute])); 
          }
-         yii::$app->settings->invalidateCache();
+         //yii::$app->settings->invalidateCache();
           if($this->dateorTimeFields[$attribute]==static::_FDATE)
               return Carbon::createFromFormat(
                       $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FDATE),static::_FDATE,true),
@@ -965,7 +975,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
            }
            
       public static function CarbonNow(){
-          return Carbon::create();
+          return Carbon::now();
       }
               
            
@@ -1094,9 +1104,15 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       return $arrayCampos;
   }
   
-  
-  
+  /*
+   * Devuelve el nombre de la tabla de la base de dartos pero sine l prefijo
+   * Es una lastima  que el framework no lo tenga como funcion nativa en el SchemaBuilder
+   */
+  public static function RawTableName(){
+     return $name=str_replace('}}','', str_replace('{{%','',self::tableName()));
   }
+  
+  
   
   /*public function  addDay($fieldDate){
       return $this->toCarbon($fieldDate)->addDay();
@@ -1106,7 +1122,26 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
   }
   */
   
-
+  
+  /*
+   * Devuelve unalista de valores de la tablacombo vlaores , registrada 
+   * para este  campo, si nel campo no esta registrado co una lista de valores ,
+   *  devuelve un array vacio 
+   */
+        public static function comboDataField($attribute,$codcentro=null){
+           return \common\helpers\ComboHelper::getTablesValues(static::RawTableName().'.'.$attribute,$codcentro=null);
+           
+        }
+        
+    /*
+   * Devuelve 
+     * el valor denominacion del camo relacionado conl a tala combos 
+   */
+        public static function comboValueField($attribute,$codcentro=null){
+            
+           return \common\models\masters\Combovalores::getValue(static::RawTableName().'.'.$attribute,$codcentro=null);
+           
+        }
               
-   
+}   
 

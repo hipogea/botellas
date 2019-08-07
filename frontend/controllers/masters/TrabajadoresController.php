@@ -40,7 +40,9 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     { 
-        $this->layout="install";
+        
+        /*$limon=new \common\models\Profile;
+        echo $limon->persona::className();die();*/
 
 //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();
        // var_dump(Trabajadores::find()->where(['codigotra'=>'70w03'])->one());die();

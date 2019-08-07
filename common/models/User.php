@@ -232,8 +232,8 @@ class User extends ActiveRecord implements IdentityInterface
 }
 
 public static function dataComboStatus(){
-    return [static::STATUS_DELETED => yii::t('base.names','Active'),
-            static::STATUS_ACTIVE => yii::t('base.names','Disabled')];
+    return [static::STATUS_DELETED => yii::t('base.names','Disabled'),
+            static::STATUS_ACTIVE => yii::t('base.names','Active')];
     
 }
  /* public function afterFind() {

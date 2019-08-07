@@ -10,7 +10,9 @@ use yii\helpers\Html;
 </div>
    <div class=" cuaderecho">
      <?php if(!$isNew) {  ?>
-       <div class="absolute"><?=$numeroImages?></div>
+        <?php if($numeroImages >0) {  ?>
+         <div class="absolute"><?=$numeroImages?></div>
+        <?php }  ?>
      <?php 
         $url=$urlModal;
  

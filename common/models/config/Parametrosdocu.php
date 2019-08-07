@@ -82,10 +82,11 @@ class Parametrosdocu extends \common\models\base\modelBase
     
      public function afterSave($insert, $changedAttributes) {
         if($insert){
+            
             $this->fillDocusParams();
             
         }
-        parent::afterSave($insert, $changedAttributes);
+      return  parent::afterSave($insert, $changedAttributes);
     }
     
     /*Esta funcin actuyaliza aguas abajo l
@@ -106,7 +107,7 @@ class Parametrosdocu extends \common\models\base\modelBase
           }
              
            
-           unset($modelo);
+           
         }
     }
 }

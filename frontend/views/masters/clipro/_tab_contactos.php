@@ -56,7 +56,7 @@ use common\models\masters\Direcciones;
 <?php
 $url= Url::to(['/masters/clipro/createcontact','id'=>$model->codpro,'gridName'=>'grilla-contactos','idModal'=>'buscarvalor']);
  
-  echo  Html::button('Search', ['href' => $url, 'title' => 'Creating New Company', 'class' => 'botonAbre btn btn-success']); 
+  echo  Html::button(yii::t('base.verbs','Create'), ['href' => $url, 'title' => 'Nuevo Contacto de '.$model->despro,'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
 
   
  /* use lo\widgets\modal\ModalAjax;

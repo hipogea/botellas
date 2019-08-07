@@ -9,6 +9,9 @@ use common\models\masters\Direcciones;
 use common\models\masters\DireccionesSearch;
 use common\models\masters\ContactosSearch;
 use common\models\masters\MaestrocliproSearch;
+use common\models\masters\ObjetosCliente;
+use common\models\masters\ObjetosClienteQuery;
+use common\models\masters\ObjetosClienteSearch;
 use common\models\masters\CliproSearch;
 use common\models\masters\Contactos;
 use common\helpers\h;
@@ -47,14 +50,23 @@ class CliproController extends baseController {
         ];
     }
 
+  
+
+    
     /**
      * Lists all Clipro models.
      * @return mixed
      */
     public function actionIndex() {
         
+     
+        
+        
+        
+       /*$fecha= \Carbon\Carbon::createFromFormat('d.m.Y', '22.08.2019', null);
+       var_dump($fecha); die();*/
              
-       $this->layout="install";
+      // $this->layout="install";
         
 /* echo h::db()->getSchema()->
                 getTableSchema('{{%maestrocompo}}')->
@@ -198,11 +210,18 @@ class CliproController extends baseController {
         $dpContactos = $searchModel->searchByCodpro($model->codpro);
         $searchModel = new MaestrocliproSearch();
         $dpMaestroclipro = $searchModel->searchByCodpro($model->codpro);
+        
+        
+        $searchModel = new ObjetosClienteSearch();
+        $dpObjetosCliente = $searchModel->searchByCodpro($model->codpro);
+        
+        
         return $this->render('update', [
                     'model' => $model,
                     'dpDirecciones' => $dpDirecciones,
                     'dpContactos' => $dpContactos,
                     'dpMaestroclipro' => $dpMaestroclipro,
+                    'dpObjetosCliente' =>$dpObjetosCliente  
         ]);
     }
 
@@ -225,15 +244,6 @@ class CliproController extends baseController {
         $this->layout = "install";
         $modelclipro = $this->findModel($id);
         $model = new Contactos();
-          
-        
-         
-        
-        
-        
-        
-        
-        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
             $this->closeModal('buscarvalor', 'grilla-contactos');
@@ -277,6 +287,56 @@ class CliproController extends baseController {
          */
     }
 
+    public function actionCreateaddresses($id) {
+
+        //$vendorsForCombo=ArrayHelper::map(Clipro::find()->all(),'codpro','despro');
+        $this->layout = "install";
+        $modelclipro = $this->findModel($id);
+        $model = new Direcciones();
+        $model->codpro=$modelclipro->codpro;
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
+            $this->closeModal('buscarvalor', 'grilla-direcciones');
+        } elseif (Yii::$app->request->isAjax) {
+            return $this->renderAjax('/masters/direcciones/create', [
+                        'model' => $model,
+                        'id' => $id,
+                            //'vendorsForCombo'=>  $vendorsForCombo,
+                            //'aditionalParams'=>$aditionalParams
+            ]);
+        } else {
+            $vendorsForCombo = h::getCboClipros();
+            return $this->render('/masters/direcciones/create', [
+                        'model' => $model,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+        }
+
+        /* $type = $request['type'];
+          $category_selector = false;
+          if (request()->has('category_selector')) {
+          $category_selector = request()->get('category_selector');
+          }
+          $rand = rand(); */
+
+
+
+        /* $modelclipro=$this->findModel($id);
+          $model = new Contactos();
+          $html = $this->render('modal_contactos',
+          ['model'=>$model,
+          'aleatorio'=>rand(),
+          'titulo'=>'hola amigos']);
+          return json_encode([
+          'success' => true,
+          'error' => false,
+          'message' => 'null',
+          'html' => $html,
+          ]);
+          }
+         */
+    }
+    
     /**
      * Finds the Clipro model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -411,5 +471,41 @@ class CliproController extends baseController {
                         'searchModel' => $searchModel,
                         'dataProvider' => $dataProvider,
             ]);
+    }
+    
+    public function actionCreateObject($id){       
+
+        $this->layout = "install";
+        $modelclipro = $this->findModel($id);
+        $model = new ObjetosCliente;
+        //echo $model::className();die();
+        //$model->save();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+          // echo "salieeo"; die();  
+            //$model->$modelclipro->codpro;
+            //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
+            $this->closeModal('buscarvalor', 'grilla-objetos');
+        } elseif (Yii::$app->request->isAjax) {
+            
+            //var_dump($model->attributes,$model->getErrors());die();
+            //print_r(Yii::$app->request->post());die();
+            return $this->renderAjax('objetos', [
+                        'model' => $model,
+                        'model' => $model,
+                        'modelclipro' => $modelclipro,
+                        //'id' => $id,
+                            //'vendorsForCombo'=>  $vendorsForCombo,
+                            //'aditionalParams'=>$aditionalParams
+            ]);
+        } else {
+           echo "salio"; die();
+            return $this->render('objetos', [
+                        'model' => $model,
+                        'modelclipro' => $modelclipro,
+                        //'vendorsForCombo' => $vendorsForCombo,
+            ]);
+        }
+
+        
     }
 }

@@ -7,11 +7,11 @@ use yii\db\Migration;
 /**
  * Class M190513032529Create_table_combovalues
  */
-class M190513032529Create_table_combovalues extends baseMigration
+class m130524_201500Create_table_combovalues extends baseMigration
 {
 
  const NAME_TABLE='{{%combovalores}}';
- const NAME_TABLE_CENTROS='{{%centros}}';
+ //const NAME_TABLE_CENTROS='{{%centros}}';
     public function safeUp()
     {
        

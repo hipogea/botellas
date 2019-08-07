@@ -74,7 +74,7 @@ class SiteController extends Controller
      */
     public function actionIndex()    {       
         // $this->layout="install";       
-       
+      
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
         if(yii::$app->user->isGuest){            
             if(\backend\components\Installer::readEnv('APP_INSTALLED')=='false'){

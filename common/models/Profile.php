@@ -17,13 +17,14 @@ use Yii;
  *
  * @property User $user
  */
-class Profile extends \common\models\base\modelBase
+class Profile extends \common\models\base\modelBase implements \common\interfaces\PersonInterface
 {
    const SCENARIO_INTERLOCUTOR='tipo';
     public $interlocutor='';
     /**
      * {@inheritdoc}
      */
+   
     public static function tableName()
     {
         return '{{%profile}}';
@@ -114,7 +115,7 @@ class Profile extends \common\models\base\modelBase
     
    public function afterFind() {
        if(!empty($this->tipo))
-       $this->interlocutor= comboHelper::getCboValores('sta.tipoprofile')[$this->tipo];
+       //$this->interlocutor= comboHelper::getCboValores('sta.tipoprofile')[$this->tipo];
      // echo "murio"; die();
        parent::afterFind();
       /* if(h::app()->hasModule('sta')){
@@ -154,6 +155,13 @@ class Profile extends \common\models\base\modelBase
        }
    }
    
-   
+   public function name(){
+       return $this->names;
+   }
+  
+    public function apellido(){
+        return $this->names;
+    }
+    
   
              }

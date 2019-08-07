@@ -14,9 +14,10 @@ class M190517171116Create_table_profilex extends baseMigration
   const NAME_TABLE_USER='{{%user}}';
   // const NAME_TABLE_MAESTRO='{{%maestrocompo}}';
     public function safeUp()
-    {       
-if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
-        $this->createTable(static::NAME_TABLE, [
+    {     
+        $table=self::TABLE_NAME;
+if ($this->existsTable($table)) {
+        $this->createTable($table, [
              'id'=>$this->primaryKey(),
             'user_id'=>$this->integer(11),
             'duration'=>$this->integer(11),
@@ -26,7 +27,7 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
             'detalle'=>$this->text()->append($this->collateColumn()),
             
              ],$this->collateTable());
-         $this->addForeignKey($this->generateNameFk(static::NAME_TABLE), static::NAME_TABLE,
+         $this->addForeignKey($this->generateNameFk($table), $table,
               'user_id', static::NAME_TABLE_USER,'id');
         
       

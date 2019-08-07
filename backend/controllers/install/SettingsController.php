@@ -85,6 +85,13 @@ class SettingsController extends Controller
         if ($model->load(Yii::$app->getRequest()->post())) {
             if ($user = $model->signup()) {
                   yii::$app->session['newUser']=$user->id;
+                  
+                  /*N s aseguramos que ea un ausuario activo; 
+                   * porque puede ser que en los parametros de confuracion de archivo lo hayan colocado como inactio
+                   * por default= inactive
+                   */
+                 $user->status=\mdm\admin\models\User::STATUS_ACTIVE;
+                 $user->save();
                 /*
                  * ACA PONEMOS LOS TOQUES FINALES Y TERMINAMOS 
                  * CON LA CONFIGURACION EN CALIENTE 
