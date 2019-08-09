@@ -23,13 +23,13 @@ $this->title = 'Profile';
              
             
             
-              <?php 
+              <?php  
               $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
-                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-              <?=Html::img($model->getUrlImage(), ['border'=>2,'width'=>120,'height'=>120])
-             
-              ?>
-       </div>
+                  
+               <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model]); ?>
+   </div>
+    
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                <?= Html::label(yii::t('base.forms','User id'),'45545ret',['class' => 'control-label']) ?>
                 <?=  Html::input('text', 'username', h::userName(),['disabled'=>'disabled','class' => 'form-control']) ?>
@@ -61,10 +61,7 @@ $this->title = 'Profile';
                 <?= $form->field($model, 'durationabsolute')->textInput(['autofocus' => true]) ?>
                     </diV>
        
-                <div class="row">
-                    <div class="col-lg-12">
-                    <?= $this->render('widgetUpload',['model'=>$model]) ?>
-                </div>
+                
                    </div>
                 <div class="col-md-4">
                     <?= Html::submitButton(yii::t('base.verbs','Save'), ['class' => 'btn btn-success', 'name' => 'login-button']) ?>

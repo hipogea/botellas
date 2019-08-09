@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii;
 use common\helpers\h;
 use common\models\User;
+use frontend\modules\sta\models\UserFacultades;
+use frontend\modules\sta\models\Facultades;
 use mdm\admin\models\searchs\User as UserSearch;
 /**
  * Default controller for the `sta` module
@@ -22,6 +24,7 @@ class DefaultController extends Controller
     }
     
     public function actionProfile(){
+        UserFacultades::refreshTableByUser();
         $model =Yii::$app->user->getProfile() ;
        // var_dump($model);die();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -41,6 +44,7 @@ class DefaultController extends Controller
      * Visualiza otros perfiles 
      */
      public function actionViewProfile($iduser){
+         UserFacultades::refreshTableByUser();
          $newIdentity=h::user()->identity->findOne($iduser);
       if(is_null($newIdentity))
           throw new BadRequestHttpException(yii::t('base.errors','User not found with id '.$iduser));  
@@ -59,9 +63,10 @@ class DefaultController extends Controller
             //var_dump(h::request()->post());die();
         }
         //echo $model->id;die();
-        return $this->render('profileother', [
+        return $this->render('_formtabs', [
             'profile' => $profile,
             'model'=>$newIdentity,
+            'userfacultades'=> UserFacultades::providerFacus()->getModels(),
         ]);
     }
     
@@ -78,4 +83,7 @@ class DefaultController extends Controller
     public function actionComplete(){
        return $this->render('completar');
     }
+    
+    
+    
 }

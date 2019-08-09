@@ -3,7 +3,9 @@
 namespace common\models;
 use common\helpers\h;
 use common\helpers\FileHelper;
+use common\behaviors\FileBehavior;
 use frontend\modules\sta\helpers\comboHelper;
+use yii\data\ActiveDataProvider;
 use Yii;
 
 /**
@@ -36,7 +38,7 @@ class Profile extends \common\models\base\modelBase implements \common\interface
 	return [
 		
 		'fileBehavior' => [
-			'class' => \nemmo\attachments\behaviors\FileBehavior::className()
+			'class' => FileBehavior::className()
 		]
 		
 	];
@@ -148,8 +150,11 @@ class Profile extends \common\models\base\modelBase implements \common\interface
     * Esi no encuentra deveulve el defaulr 
     */
    private function sourceExternalImage(){
-       if(h::app()->hasModule('sta') && $this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO){
-          return \frontend\modules\sta\staModule::getPathImage($this->user->username); 
+       $link=\frontend\modules\sta\staModule::getPathImage($this->user->username);
+       if(h::app()->hasModule('sta') && 
+               $this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO && 
+               $link ){
+           return $link; 
        }else{
           return  FileHelper::getUrlImageUserGuest();  
        }
@@ -162,6 +167,19 @@ class Profile extends \common\models\base\modelBase implements \common\interface
     public function apellido(){
         return $this->names;
     }
+    
+    
+    /*Devuelve un data provider del log de logueoos user por usuario 
+    *
+    */
+   public static function providerLogAudit(){
+            return new ActiveDataProvider([
+                'query' => Useraudit::find()->where(['user_id'=>h::userId()]),
+                'pagination' => [
+                    'pageSize' => 20,
+                            ],
+                                    ]);
+        } 
     
   
              }

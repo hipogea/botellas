@@ -13,11 +13,7 @@ use yii\bootstrap\ActiveForm;
 $this->title = 'Profile';
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-login">
-    <h6><?= Html::encode($this->title) ?></h6>
 
-    
-<div class="box box-success">
     <br>
     <div class="row">
         <div class="col-lg-5">
@@ -27,7 +23,16 @@ $this->title = 'Profile';
               <?php 
               $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-              <?=Html::img($profile->getUrlImage(), ['class'=>"img-thumbnail"])
+              <?php
+               if($profile->hasAtachment()){ ?>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+              <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$profile]); ?>
+     </div>
+             <?php  }else{
+                 //echo $profile->getUrlImage();die();
+                 echo Html::img($profile->getUrlImage(), ['class'=>"img-thumbnail"]);
+               }
+              
                
               ?>
                     </div>
@@ -100,6 +105,5 @@ $this->title = 'Profile';
             
         </div>
     </div>
-</div>
-    </div>
+
 

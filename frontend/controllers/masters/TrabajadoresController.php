@@ -40,7 +40,7 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     { 
-        
+        echo h::user()->identity->tableName();die();
         /*$limon=new \common\models\Profile;
         echo $limon->persona::className();die();*/
 

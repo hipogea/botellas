@@ -83,6 +83,24 @@ class h {
     }
     
     
+    public static function getIfNotPutSetting($seccion,$llave,$valorsino,
+            $type=\yii2mod\settings\models\enumerables\SettingType::STRING_TYPE ){
+        if(yii::$app->settings->has($seccion,$llave)){
+            return yii::$app->settings->get($seccion,$llave);        
+        }else{
+            if(is_null($valorsino)){
+               throw new \yii\base\Exception(Yii::t('sta.labels', 'Debe especificar un tercer parametro al usar esta funcion'));
+         
+            }else{
+               yii::$app->settings->set($seccion,$llave,$valorsino); 
+               return $valorsino;
+            }
+        }
+                
+       
+    }
+    
+    
     public static function UserLongName(){
         return yii::$app->user->getProfile()->names;
     }

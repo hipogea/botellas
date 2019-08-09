@@ -10,7 +10,8 @@ use yii\helpers\FileHelper as FileHelperOriginal;
 use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
 class FileHelper extends FileHelperOriginal {
-    
+   
+    const NOT_FOUND_MESSAGE='HTTP/1.1 404 Not Found';
     public static function extImages(){
         return ['jpg','bmp','png','jpeg','gif','svg','ico'];
     }
@@ -109,4 +110,20 @@ class FileHelper extends FileHelperOriginal {
        return self::normalizePath(\yii\helpers\Url::base().'/img/nophoto.png',DIRECTORY_SEPARATOR);
        
    }
+   /*
+    * Checka si una uirl a un archivo funciona o esta roto el link
+    */
+   public static function checkUrlFound($urlAbsolute){
+       $file = $urlAbsolute;
+        $file_headers = @get_headers($file);
+        //var_dump($file_headers);die();
+            if(!$file_headers || $file_headers[0] == static::NOT_FOUND_MESSAGE) {
+                $exists = false;
+                }
+                    else {
+                $exists = true;
+            }
+         return $exists;
+   }
+           
 }

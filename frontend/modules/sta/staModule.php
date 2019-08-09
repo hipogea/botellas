@@ -7,6 +7,7 @@ use frontend\modules\sta\models\StaInterlocutor;
 use common\helpers\FileHelper;
 use frontend\modules\sta\filters\FilterComplete;
 use linslin\yii2\curl;
+USE \yii2mod\settings\models\enumerables\SettingType;
 /**
  * sta module definition class
  */
@@ -36,7 +37,7 @@ class staModule extends \yii\base\Module
     public function init()
     {
         parent::init();
-        
+        static::putSettingsModule();
         /*if(is_null(static::getInterlocutor())){
              //var_dump(\yii::$app->controller)  ;die();
         }
@@ -85,16 +86,28 @@ class staModule extends \yii\base\Module
         
     }
     
+    private static function putSettingsModule(){
+        h::getIfNotPutSetting('sta','extensionimagesalu','.jpg', SettingType::STRING_TYPE);
+         h::getIfNotPutSetting('sta','urlimagesalu','http:://www.orce.uni.edu.pe/alumnos/', SettingType::STRING_TYPE);
+         h::getIfNotPutSetting('sta','prefiximagesalu','0060', SettingType::STRING_TYPE);
+    }
+    
    private static function  externalUrlImage($codalu){
       $extension=h::settings()->get('sta','extensionimagesalu');
         if(!(substr($extension,0,1)=='.'))
          $extension='.'.$extension;
         
-      return FileHelper::normalizePath(
+      $urlExt= FileHelper::normalizePath(
              h::settings()->get('sta','urlimagesalu').DIRECTORY_SEPARATOR
             .h::settings()->get('sta','prefiximagesalu') 
             .$codalu
-            .$extension,'/');    
+            .$extension,'/');   
+     // VAR_DUMP($urlExt,'https://www.orce.uni.edu.pe/fotosuni/006019930117K.jpg');DIE();
+      if(FileHelper::checkUrlFound($urlExt)){
+          return $urlExt;
+      }else{
+        return false; 
+      }
    }
    
    private static function  localUrlImage(){
