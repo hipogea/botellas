@@ -76,7 +76,7 @@ class SiteController extends Controller
            
         if(!Yii::$app->user->isGuest)        
           return $this->render('index');     
-          $this->redirect('site/login');
+          $this->redirect('login');
        
     }
 
