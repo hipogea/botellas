@@ -20,6 +20,8 @@ use frontend\modules\import\models\ImportCargamasivaUser;
 use frontend\modules\import\models\ImportCargamasivaUserSearch;
 //use frontend\modules\import\models\ImportLogcargamasivaSearch;
 use common\controllers\base\baseController;
+use common\helpers\timeHelper;
+use common\helpers\h;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\helpers\h;
@@ -32,6 +34,9 @@ class ImportacionController extends baseController
     /**
      * {@inheritdoc}
      */
+    
+    public $vTime;
+
     public function behaviors()
     {
         return [
@@ -156,35 +161,95 @@ class ImportacionController extends baseController
     
     public function actionImportar($id){
         ///$namemodule=$this->module->id;
-      $cargamasiva=$his->findModel($id);
-      $cargamasiva->verifyChilds();
-      $carga=$cargamasiva->activeRecordLoad();
-      
-      $datos=$carga->dataToImport(); 
-      /*Verifica si las columnas coindicen */
-       $carga->verifyFirstRow($datos[1]); //datos[1] porsiacaso datos[0] sea la cabecera y no una fila de dartos 
+        $verdadero=(h::request()->get('verdadero')=='1')?true:false; //Verdadero=true , ya no es una simulacion
         
-       $model=$cargamasiva->modelAsocc();
-        $carga->flushLogCarga();
-        $filashijas=$cargamasiva->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
-   $linea=1;
-    foreach ($datos as $fila){
-      $model->setAttributes($cargamasiva->prepareAttributesToModel($fila,$filashijas));
-      $model->validate();
-      if($model->hasErrors()){
-          $cargamasiva->logCargaByLine($linea);
-      }
-      $linea++;      
-   }
-   if($carga->nerrores()==0)
-    return $this->redirect (\yii\helpers\Url::to(['importar-true','id'=>$id]));
-   
-    $searchModel = new ImportLogCargamasivaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-   return $this->render('info',['dataprovider'=>$dataprovider]);
+        $interrumpido=false;
+        $this->vTime=microtime(true);
+      $cargamasiva=$his->findModel($id);//carga ell modelo cabecera
+      $cargamasiva->verifyChilds();//Verificando las filas hijas de metadatos
+      $carga=$cargamasiva->activeRecordLoad();   
+      /*
+       * AQUI VERIFICAMOS EL STATUS DEL REGISTRO A CARGAR
+       * DEPENDIENDO DE SI ES MODON PRUEBA SIMUALCRO() O MODO CARGA
+       * 
+       */
+      $this->validateStatus($carga->status, $verdadero);
       
+      $datos=$carga->dataToImport(); //todo el array de datos para procesar, siempre empezara desde current_linea para adelante 
+       $carga->verifyFirstRow(); //Verifica la primera fila valida del archivo csv, esto quiere decir que no neesarimente sera la primer linea 
+        
+       $model=$cargamasiva->modelAsocc();//Devuelve el modelo asociado a la importacion
+        $carga->flushLogCarga();//Borra cualquier huella anterior en el log de carga
+        $filashijas=$cargamasiva->ChildsAsArray();
+   $linea=1;
+    foreach ($datos as $fila){      
+        
+      $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
+      $model->validate();  
+      
+      $carga->setAttributes([
+                  'current_linea'=>$linea,
+                   //'total_linea'=>$this->count($datos),
+                   'status'=>$carga::STATUS_ABIERTO,
+                  ]);
+      if($verdadero)$model->save();
+      if($model->hasErrors()){
+          $carga->logCargaByLine($linea,$model->getErrors());
+      }
+      
+      if(timeHelper::excedioDuracion(microtime(true)-$this->vTime)){
+             // $carga->status=$carga::STATUS_ABIERTO;
+              $carga->save();
+              $interrumpido=!$interrumpido;
+             break;
+       }  
+      $linea++;   
+          
+    }    
+         $searchModel = new ImportLogCargamasivaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    //se interrumpio por falta de tiempo, se grabo el registro con status abierto porque falta 
+    if($interrumpido){
+        return $this->render('break',['model'=>$carga,'dataprovider'=>$dataprovider]);
+    }else{
+        ///SI  HAY ERRORES MANTENER EL STATUS ABIERTO PORQUE NO ESTA PROBADO OK
+        if($carga->nerrores()>0){
+            
+        }else{ //Si no hay errores  CAMBIAR STATUS adecuado 
+          $carga->status=($verdadero)?$carga::STATUS_CARGADO:$carga::STATUS_PROBADO; 
+        }        
+        $carga->save();
+      //Mostar errores o nada  
+   return $this->render('info',['dataprovider'=>$dataprovider]); 
     }
+    
+    
+    }
+    /*
+     *Solo pasa si se cumplen verdadero(carga)- probado  y  falso(prueba) - abierto
+     */
+     private function validateStatus($status,$verdadero){
+         $mensaje='';
+            
+         if(ImportCargamasivaUser::STATUS_ABIERTO && $verdadero){
+              $mensaje='No se puede efectuar la carga; el registro se encuentra abierto, pruebe primero para verificar errores';
+         }
+         if((ImportCargamasivaUser::STATUS_CARGADO && $verdadero)  or (ImportCargamasivaUser::STATUS_CARGADO && !$verdadero)){
+             $mensaje='El registro de carga ya se ejecutó';
+         }
+         if(ImportCargamasivaUser::STATUS_PROBADO && !$verdadero){
+              $mensaje='El registro de carga ya está probado y listo para cargarse';
+         }
+        if(strlen($mensaje)>0) $this->error ($mensaje);
+         
+    }
+    
+    private function error($mensaje){
+        throw new \yii\base\Exception(Yii::t('import.errors',$mensaje));
+    }
+  
+      
+    
     
   public function actionImportarTrue($id){
       ///$namemodule=$this->module->id;

@@ -23,7 +23,8 @@ use Yii;
  */
 class ImportCargamasiva extends \common\models\base\modelBase
 {
-    const EXTENSION_CSV='csv';
+  
+     const EXTENSION_CSV='csv';
     public $booleanFields=['insercion','tienecabecera'];
     
     /**
@@ -248,7 +249,12 @@ class ImportCargamasiva extends \common\models\base\modelBase
    
   
    
-  
+  public function Childs(){
+      $this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+  }
+  public function ChildsAsArray(){
+      $this->childQuery()->orderBy(['orden'=>SORT_ASC])->all();
+  }
   
   
  /*
@@ -258,14 +264,14 @@ class ImportCargamasiva extends \common\models\base\modelBase
   * @row: Una fila del archivo csv (es una array de valores devuelto por la funcion fgetcsv())
    * @filashijas : array de registros hijos del objeto de carga
   */
- public function prepareAttributesToModel($row,$filashijas){
+ public function AttributesForModel($row,$filashijas){
       //$filashijas=$this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
      //$modelo=$cargamasiva->modelAsocc();
      $attributes=[];
       foreach($row as $orden=>$valor){          
                $attributes[$filashijas[$orden]['nombrecampo']]=$valor;
            }
-     return $model;  
+     return $attributes;  
  }
  
  private function isTypeChar($tipo){
@@ -308,7 +314,12 @@ class ImportCargamasiva extends \common\models\base\modelBase
   * solo registro activo, estre registro es el que 
   * gestionara la carga    */
  public function activeRecordLoad(){
-    $registro=$this->childQueryLoads()->where(['activo'=>'1'])->one();
+    $registro= ImportCargamasivaUser::childQueryLoads()->where(['activo'=>'1'])->andFilterWhere(['not',['status'=>static::STATUS_CARGADO]])->one();
+    if(is_null($registro)){
+        throw new \yii\base\Exception(Yii::t('import.errors', 'Verifique que exista un registro de carga pendiente, todos están terminados o no existe ninguno abierto'));
+    }else{
+        return $registro;
+    }
  } 
  
  

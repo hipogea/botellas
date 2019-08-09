@@ -47,18 +47,12 @@ class CSVReader  extends MyReader{
      * @return $array csv filtered data 
      */
     public function readFile() {
-        if (!file_exists($this->filename)) {
-            throw new Exception(__CLASS__ . ' couldn\'t find the CSV file.');
-        }
-        //Prepare fgetcsv parameters
-        $length = isset($this->fgetcsvOptions['length']) ? $this->fgetcsvOptions['length'] : 0;
-        $delimiter = isset($this->fgetcsvOptions['delimiter']) ? $this->fgetcsvOptions['delimiter'] : ',';
-        $enclosure = isset($this->fgetcsvOptions['enclosure']) ? $this->fgetcsvOptions['enclosure'] : '"';
-        $escape = isset($this->fgetcsvOptions['escape']) ? $this->fgetcsvOptions['escape'] : "\\";
+        $this->verifiyFile();
+       
 
         $lines = []; //Clear and set rows
         if (($fp = fopen($this->filename, 'r')) !== FALSE) {
-            while (($line = fgetcsv($fp, $length, $delimiter, $enclosure, $escape)) !== FALSE) {
+            while (($line =$this->ReadLineCsv($fp) ) !== FALSE) {
                 array_push($lines, $line);
             }
         }
@@ -70,6 +64,37 @@ class CSVReader  extends MyReader{
     }
     
     
-        
-        
+   public function getFirstRow(){
+       $this->verifiyFile();
+       $inicial=1;
+       $linea=null;
+       if (($fp = fopen($this->filename, 'r')) !== FALSE) {
+            while (($line =$this->ReadLineCsv($fp) ) !== FALSE) {
+                if($this->startFromLine==$inicial){
+                     $linea=$line; break;
+                }
+                
+                $inicial++;
+            }
+        }
+      return $linea;
+       
+   } 
+   
+   private function verifiyFile(){
+       if (!file_exists($this->filename)) {
+            throw new Exception(__CLASS__ . ' couldn\'t find the CSV file.');
+        }
+   }
+     
+   private function ReadLineCsv($fp){
+        //Prepare fgetcsv parameters
+        $length = isset($this->fgetcsvOptions['length']) ? $this->fgetcsvOptions['length'] : 0;
+        $delimiter = isset($this->fgetcsvOptions['delimiter']) ? $this->fgetcsvOptions['delimiter'] : ',';
+        $enclosure = isset($this->fgetcsvOptions['enclosure']) ? $this->fgetcsvOptions['enclosure'] : '"';
+        $escape = isset($this->fgetcsvOptions['escape']) ? $this->fgetcsvOptions['escape'] : "\\";
+        return fgetcsv($fp, $length, $delimiter, $enclosure, $escape);
+   }
+   
+   
 }
