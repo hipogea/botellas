@@ -71,4 +71,9 @@ class FileBehavior extends  Fileb
  }
  
  
+ public function deleteFile($id){
+     $this->getModule()->detachFile($id);
+ }
+ 
+ 
 }

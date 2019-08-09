@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\modules\import\models;
+use frontend\modules\import\models\ImportCargamasiva;
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\behaviors\FileBehavior;
 use Yii;
@@ -22,11 +23,20 @@ use Yii;
  */
 class ImportCargamasivaUser extends \common\models\base\modelBase
 {
-   const EXTENSION_CSV='csv';
+    const STATUS_ABIERTO='10';
+    const STATUS_PROBADO='20';
+    const STATUS_CARGADO='30';
+   public $csv=null;  //OBJETO CSVREADER
     /**
      * {@inheritdoc}
      */
     public $booleanFields=['tienecabecera','activo'];
+    
+    
+    public function init(){
+        $this->current_linea=0;
+        $this->total_linea=0;
+    }
     public static function tableName()
     {
         return '{{%import_carga_user}}';
@@ -94,17 +104,11 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
         return new ImportCargamasivaUserQuery(get_called_class());
     }
     
-    
-    /*
-     * Obtiene el array de datos a cargar, lee 
-     * el archivo csv de disco 
-     * USa la libreria MyCSVrEADER , que no es nada del otro mundo
-     * solo para ahora trabajo de leer un formato csv 
-     */
-    public function dataToImport(){
-       $csv= New MyCSVReader( [
+    public function getCsv(){
+      if(is_null($this->csv)){
+          $this->csv= New MyCSVReader( [
                  'filename' => $this->pathFileCsv(),
-                 'fgetcsvOptions' => [ 'startFromLine' =>($this->tienecabecera)?1:0,
+                 'fgetcsvOptions' => [ 'startFromLine' =>$this->firstLineTobegin(),
                                      'delimiter' => h::settings()->
                                             get(
                                              Yii::$app->controller->module->id,
@@ -112,7 +116,30 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                                              ),
                                        ] 
                                 ]);
-      return $csv->readFile();
+      }else{
+       return $this->csv;   
+      }
+    }
+    
+    private function firstLineTobegin(){
+        if($this->current_linea==0 && $this->tienecabecera)
+            return 1;
+         if($this->current_linea==0 && !$this->tienecabecera)
+            return 0;
+         return $this->current_linea + 1 ;
+        
+    }
+    
+    /*
+     * Obtiene el array de datos a cargar, lee 
+     * el archivo csv de disco 
+     * USa la libreria MyCSVrEADER , que no es nada del otro mundo
+     * solo para ahora trabajo de leer un formato csv 
+     */
+    public function dataToImport(){       
+      $datos= $this->csv->readFile();
+      $this->total_linea=count($datos);
+      return $datos;
   } 
     
    /*Retorna la ruta a un archivo csv adjunto (El primero) 
@@ -121,11 +148,12 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     * archivos adjuntos filtrados por la extension  */
      
       public function pathFileCsv(){
-    $registros=$this->getFilesByExtension(static::EXTENSION_CSV);
+    $registros=$this->getFilesByExtension(ImportCargamasiva::EXTENSION_CSV);
     if(count($registros)>0){
         return $registros[0]->getPath();
     }else{
-        return null;
+         throw new \yii\base\Exception(Yii::t('import.errors', 'No hay ningún archivo csv adjunto'));
+     
     } 
        
    }
@@ -138,11 +166,13 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
    * @row: Una fila del archivo csv (es una array de valores devuelto por la funcion fgetcsv())
    * normalmente es la primera fila
    */
- public function verifyFirstRow($row){
-      if($this->cargamasiva->countChilds() <> count($row))
+ public function verifyFirstRow(){
+     $row=$this->csv->getFirstRow();
+     $carga=$this->cargamasiva;
+      if($carga->countChilds() <> count($row))
        throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row[0]),'ncolsload'=>$this->countChilds()]));
       /*  las Filas hijas*/
-      $filashijas=$this->cargamasiva->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+      $filashijas=$carga->ChildsAsArray();
      // $countFieldsInPrimaryKey=count($this->modelAsocc()->primaryKey(true));
       $validacion=true;
       foreach($row as $index=>$valor){
@@ -151,10 +181,10 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
           $nombrecampo=$filashijas[$index]['nombrecampo'];
           
           /*Detectando inconsistencias*/
-          if(($this->cargamasiva->isTypeChar($tipo)&&($longitud <> strlen($valor))) or
-           ($this->cargamasiva->isTypeVarChar($tipo) &&($longitud < strlen($valor))) or                
-           ($this->cargamasiva->isNumeric($tipo)&& (!is_numeric($valor)) ) or                   
-         ( $this->cargamasiva->isDateorTime($tipo,$nombrecampo)&& (
+          if(($carga->isTypeChar($tipo)&&($longitud <> strlen($valor))) or
+           ($carga->isTypeVarChar($tipo) &&($longitud < strlen($valor))) or                
+           ($carga->isNumeric($tipo)&& (!is_numeric($valor)) ) or                   
+         ( $carga->isDateorTime($tipo,$nombrecampo)&& (
                             (strpos($valor,"-")===false) &&
                             (strpos($valor,"/")===false) &&
                              (strpos($valor,".")===false)
@@ -177,8 +207,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     
    }
  
-    public function logCargaByLine($line){
-     $errores=$this->getErrors();
+    public function logCargaByLine($line,$errores){
+    // $errores=$this->getErrors();
      foreach($errores as $campo=>$detalle){
          foreach($detalle as $cla=>$mensaje){
              $this->insertLogCarga($line, $campo, $mensaje, '0');
@@ -226,11 +256,22 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
    * de los registros hijos de carga
    *  
      */
-    private function childQueryLoads(){
-        return ImportCargamasivaUser::find()->
+    public function childQueryLoads(){
+        return static::find()->
        where(['cargamasiva_id' =>$this->id])->orderBy(['cargamasiva_id'=>SORT_DESC]);
     }
     
+    public function isComplete(){
+        return ($this->current_linea >= $this->total_linea);
+    }
+   
     
+    public function afterSave($insert, $changedAttributes) {
+        if(!$insert && $this->status==self::STATUS_CARGADO )
+        $this->deleteFile($this->id); //BORRAR EL ARCHIVO DE CARGA ADJUNTO
+        return parent::afterSave($insert, $changedAttributes);
+    }
+    
+   
     
 }
