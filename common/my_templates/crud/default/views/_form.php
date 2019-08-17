@@ -27,18 +27,27 @@ use yii\widgets\ActiveForm;
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
     <br>
     <?= "<?php " ?>$form = ActiveForm::begin(); ?>
+      <div class="box-header">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                
+        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
+            
 
+            </div>
+        </div>
+    </div>
+      <div class="box-body">
+    
 <?php foreach ($generator->getColumnNames() as $attribute) {
-   echo " <div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\"> ";
+   echo " <div class=\"col-lg-3 col-md-4 col-sm-6 col-xs-12\">\n ";
     if (in_array($attribute, $safeAttributes)) {
         echo "    <?= " . $generator->generateActiveField($attribute) . " ?>\n\n";
     }
-    echo " </div> ";
+    echo " </div>\n ";
 } ?>
-    <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
-    </div>
-
+    
     <?= "<?php " ?>ActiveForm::end(); ?>
 
 </div>
+    </div>

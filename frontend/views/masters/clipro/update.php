@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->codpro, 'url' => ['view', '
 $this->params['breadcrumbs'][] = Yii::t('base.verbs', 'Update');
 ?>
 <div class="clipro-update">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_formfirme', [
@@ -24,4 +24,4 @@ $this->params['breadcrumbs'][] = Yii::t('base.verbs', 'Update');
        'dpObjetosCliente' =>$dpObjetosCliente 
     ]) ?>
 
-</div></div>
+</div>

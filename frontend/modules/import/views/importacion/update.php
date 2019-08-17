@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = Yii::t('import.labels', 'Update');
 ?>
 <div class="import-cargamasiva-update">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
@@ -21,5 +21,5 @@ $this->params['breadcrumbs'][] = Yii::t('import.labels', 'Update');
             'itemsLoads'=> $itemsLoads,
     ]) ?>
 
-</div>
+
 </div>

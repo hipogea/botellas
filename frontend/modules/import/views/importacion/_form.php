@@ -13,9 +13,17 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 ?>
 
 <div class="import-cargamasiva-form">
-
+<div class="box box-success">
     <?php $form = ActiveForm::begin(); ?>
-
+    
+  <div class="box-footer">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+        <?= Html::submitButton(Yii::t('import.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+    </div>
+     </div>
+    </div>
+    <div class="box-body">
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
       <?= $form->field($model, 'descripcion')->textInput() ?>
 
@@ -47,7 +55,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
   <?= $form->field($model, 'format')->textInput(['maxlength' => true]) ?>
 
  </div>
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+ <div class="col-md-12"> 
   
     
     <?= ComboDep::widget([
@@ -84,24 +92,19 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
         )  ?>
  </div>  
     
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-.
-   </div>
-    <div class="form-group-lg">
-        <?= Html::submitButton(Yii::t('import.labels', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
+    
+  
 
 
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-
-   </div>
+    
     <?php ActiveForm::end(); ?>
 
-</div>
+
 
 
  <?php  
- //var_dump($this->context);die();
+ if(!$model->isNewRecord){
+    //var_dump($this->context);die();
  echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
     'align' => TabsX::ALIGN_LEFT,
@@ -123,11 +126,13 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
        
     ],
 ]);  
+ }
+  
     
     ?> 
-
-
-
+</div>
+</div>
+</div>
     
     
 

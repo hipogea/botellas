@@ -14,7 +14,33 @@ use yii\widgets\Pjax;
             'sizecampo',
             'tipo',
             'orden',
-            'requerida',
+         [
+    'attribute' => 'requerida',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('activa[]', $model->requerida, [ 'disabled' => true]);
+
+             },
+
+          ],
+                     [
+    'attribute' => 'esforeign',
+    'format' => 'raw',
+    'value' => function ($model) {
+             
+        return ($model->esforeign)?$model->cargamasiva->modelAsocc()->obtenerForeignClass($model->nombrecampo):'';
+             },
+
+          ],
+         [
+    'attribute' => 'esforeign',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('esforeing[]', $model->esforeign, [ 'disabled' => true]);
+
+             },
+
+          ],
             //'descripcion',
             //'format',
             //'modelo',

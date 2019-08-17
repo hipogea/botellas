@@ -18,11 +18,17 @@ use common\helpers\h;
     'enableAjaxValidation'=> true,'id'=>'tabular-botellas'
   
 ]); ?>
-    
-    <div class="form-group">
+    <div class="box-footer">
+        
+    <div class="col-md-12">
+      <div class="form-group no-margin">
         <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-    
+          <?= Html::submitButton(Yii::t('bigitems.errors', 'Save'), ['class' => 'btn btn-success']) ?>
+      </div>         
+      
+
+      </div>
+    </div>  
     
 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
   <?= $form->field($model, 'numero')->textInput(['disabled' => 'true']) ?>

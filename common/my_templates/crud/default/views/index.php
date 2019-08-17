@@ -24,8 +24,10 @@ $this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::ca
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index">
-<div class="box box-success">
+
     <h4><?= "<?= " ?>Html::encode($this->title) ?></h4>
+    <div class="box box-success">
+     <div class="box-body">
 <?= $generator->enablePjax ? "    <?php Pjax::begin(); ?>\n" : '' ?>
 <?php if(!empty($generator->searchModelClass)): ?>
 <?= "    <?php " . ($generator->indexWidgetType === 'grid' ? "// " : "") ?>echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -112,3 +114,5 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 </div>
     </div>
 </div>
+    </div>
+       

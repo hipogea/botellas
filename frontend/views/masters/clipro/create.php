@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clipros'), 'url' => 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clipro-create">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
 
     <?= $this->render('_form', [
@@ -18,6 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
            // 'modelDetails' => $modelDetails
     ]) ?>
 
-</div>
+
 
 </div>

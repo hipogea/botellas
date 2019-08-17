@@ -134,7 +134,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
     
     
     private function insertChilds(){
-        
+       
             $modeloatratar=$this->modelAsocc();
              $columnas=$modeloatratar->getTableSchema()->columns;
                 $i=1;
@@ -143,13 +143,14 @@ class ImportCargamasiva extends \common\models\base\modelBase
                 	if($modeloatratar->isAttributeSafe($nameField) &&
                           !$this->existsChildField($nameField) 
                      ){
-                         if(in_array($nameField ,array_keys($modeloatratar->primaryKey(true)))){
-                             $esclave=true;
-                             $orden=array_search($nameField,array_keys($modeloatratar->primaryKey(true)))+1;
-                         } else{
-                             $esclave=false;
-                             $orden=$i+count($modeloatratar->primaryKey(true));
-                         } 
+                            //var_dump($modeloatratar->primaryKey(true),$modeloatratar->getTableSchema()->foreignKeys);die();
+                        // if(in_array($nameField ,array_values($modeloatratar->primaryKey(true)))){
+                             //$esclave=true;
+                            // $orden=array_search($nameField,array_values($modeloatratar->primaryKey(true)))+1;
+                         //} else{
+                            // $esclave=false;
+                             //$orden=$i+count($modeloatratar->primaryKey(true));
+                        // } 
                         /* $modeli=New ImportCargamasivadet;
                          $modeli->setAttributes([
                                            'cargamasiva_id'=>$this->id,
@@ -169,7 +170,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
                              print_r($modeli->getErrors());die();
                          }*/
                             //echo "ahi va ".$nameField."<br>";
-                         ImportCargamasivadet::firstOrCreateStatic(
+                        if(ImportCargamasivadet::firstOrCreateStatic(
                                         [
                                            'cargamasiva_id'=>$this->id,
                                              'nombrecampo'=>$nameField,
@@ -178,12 +179,12 @@ class ImportCargamasiva extends \common\models\base\modelBase
                                             'activa'=>true,
                                             'requerida'=>$modeloatratar->isAttributeRequired($nameField),
                                             'tipo'=>$oBCol->dbType,
-                                            'orden'=>$orden,
-                                            'esclave'=>$esclave,
-                                            'esforeign'=>in_array($nameField,array_keys($modeloatratar->getTableSchema()->foreignKeys)),
+                                            'orden'=>$this->ordenCampos()[$nameField]+1,
+                                            'esclave'=>in_array($nameField,$modeloatratar->primaryKey(true))?true:false,
+                                            'esforeign'=>in_array($nameField,array_keys($modeloatratar->fieldsLink(false))),
                                             
-                                        ]);
-                                $i+=1;
+                                        ]))
+                                $i++;
                                  }
               } 
     }
@@ -322,7 +323,20 @@ class ImportCargamasiva extends \common\models\base\modelBase
     }
  } 
  
- 
+public function ordenCampos(){
+    $modelo=$this->modelAsocc();
+   $intersecion= array_intersect($modelo->safeFields,$modelo->primaryKey());
+  // print_r($modelo->safeFields);
+   if(count($intersecion)==0){
+       return array_flip($modelo->safeFields);
+   }elseif(count($intersecion)==count($modelo->primaryKey())){
+     $base=array_diff($modelo->safeFields,$modelo->primaryKey());
+     return array_flip(array_values(array_merge($modelo->primaryKey(),$base)));
+   }else{
+      $base=array_diff($modelo->safeFields, array_intersect($modelo->primaryKey(),$modelo->safeFields)); 
+      return array_flip(array_values(array_merge(array_intersect($modelo->primaryKey(),$modelo->safeFields),$base)));
+   }
+}
  
   
  

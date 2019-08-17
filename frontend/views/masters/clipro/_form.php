@@ -15,12 +15,23 @@ use common\models\masters\Direcciones;
 ?>
 
     
+<div class="box box-success">
 
-<div class="clipro-form">
 
-<div class="receipt-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <div class="box-footer">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                <?= Html::submitButton("<span class=\"fa fa-save\"></span>".($model->isNewRecord) ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+       
+            
+                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+       
+            </div>
+        </div>
+    </div>
+    <div class="box-body">
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'codpro')->textInput(['disabled'=>'disabled','maxlength' => true]) ?>
     </div>
@@ -39,32 +50,9 @@ use common\models\masters\Direcciones;
         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'deslarga')->textarea(['rows' => 6]) ?>
         </div>
-   
-
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-       
-    </div>
-
+   </div>
+    
     <?php ActiveForm::end(); ?>
 
-</div>
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 </div>

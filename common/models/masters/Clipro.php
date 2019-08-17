@@ -22,6 +22,7 @@ class Clipro extends \common\models\base\modelBase
     public $prefijo='37';
     public $withAudit=true;
     public $fecha;
+    //public $booleanFields=[''];
     public static function tableName()
     {
         return '{{%clipro}}';

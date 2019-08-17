@@ -11,8 +11,10 @@ $this->title = Yii::t('bigitems.errors', 'Docbotellas');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="docbotellas-index">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
+    <div class="box box-success">
+       <div class="box box-body"> 
     <?php Pjax::begin(); ?>
     <?= $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -53,3 +55,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 </div>
 </div>
+    </div>

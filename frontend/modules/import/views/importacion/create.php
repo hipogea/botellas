@@ -12,10 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="import-cargamasiva-create">
 
     <h4><?= Html::encode($this->title) ?></h4>
-<div class="box box-success">
+
+    
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
-</div>
+
+    
 </div>

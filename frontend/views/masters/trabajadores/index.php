@@ -34,6 +34,8 @@ if (Yii::$app->session->hasFlash('info')): ?>
 <div class="trabajadores-index">
 
     <h4><?= Html::encode($this->title) ?></h4>
+ <div class="box box-success">
+     <div class="box-body">
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -67,4 +69,6 @@ if (Yii::$app->session->hasFlash('info')): ?>
         ],
     ]); ?>
     <?php Pjax::end(); ?>
+</div>
+     </div>
 </div>

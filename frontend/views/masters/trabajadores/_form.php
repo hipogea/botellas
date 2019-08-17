@@ -19,7 +19,19 @@ use yii\widgets\ActiveForm;
     'fieldClass' => 'common\components\MyActiveField',
     //'options'=>['enctype' => 'multipart/form-data'],'fieldClass' => '\common\components\MyActiveField'
     ]); ?>
-       
+    
+    
+    <div class="box-header">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                <?= Html::submitButton(Yii::t('base.verbs', 'Save'), ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <div class="box-body">
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'codigotra')->textInput(['disabled'=>'disabled','maxlength' => true]) ?>
   </div>
@@ -96,11 +108,8 @@ use yii\widgets\ActiveForm;
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= $form->field($model, 'referencia')->textInput(['maxlength' => true]) ?>
 </div>
+    </div> 
     
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('base.verbs', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-
     
 
     

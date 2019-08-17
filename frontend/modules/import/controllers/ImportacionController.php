@@ -24,7 +24,7 @@ use common\helpers\timeHelper;
 use common\helpers\h;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\helpers\h;
+//use common\helpers\h;
 
 /**
  * ImportController implements the CRUD actions for ImportCargamasiva model.
@@ -87,14 +87,25 @@ class ImportacionController extends baseController
     {
         $model = new ImportCargamasiva();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())  && $model->save()) {
+            //print_r($model->ordenCampos());die();
             return $this->redirect(['view', 'id' => $model->id]);
         }else{
             //print_r($model->getErrors());die();
         }
+        
+         
+        
+        
+        
+        
+        
+        
 
         return $this->render('create', [
             'model' => $model,
+           // 'itemsFields'=>$itemsFields,
+            // 'itemsLoads'=>$itemsLoads,
         ]);
     }
 

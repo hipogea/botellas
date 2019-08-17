@@ -1159,6 +1159,22 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
            return \common\models\masters\Combovalores::getValue(static::RawTableName().'.'.$attribute,$codcentro=null);
            
         }
+        
+      /*Devuelve un array de campos coemnzando por los indices de
+       * la tabla
+       */
+        public function  getSafeFields(){
+            //$safe= array_intersect($this->primaryKey();
+            $safe=[];
+            foreach($this->attributes as $nombre=>$valor){
+                if($this->isAttributeSafe($nombre)){
+                   $safe[]=$nombre; 
+                }
+            }
+           
+         return $safe;   
+         
+        }
               
 }   
 
