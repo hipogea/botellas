@@ -1,5 +1,137 @@
 <?php
-
+/*
+ * Creador : Julian Ramírez Tenorio  jramirez@neotegnia.com
+ * 15/11/2018
+ * Esta clase descendiente de la clase ActiveRecord, es la base
+ * para toda la aplicación, han sido agregadas muchas funciones 
+ * útiles, que facilitan el trabajo de desarrollo; entre ellas:
+ * 
+ * 
+ * Manipulación de fechas :
+ * ========================
+ * 
+ *                  Guardar en formato:  'YYYY-m-d' ó el que configure
+ *                  Mostrar en formato:  'dd/mm/YYYY', 'd.m.Y' ..., o el que configure
+ * No tiene que preocuparse de convetir formatos, todo el trabajo se 
+ * delega al evento afterFind(), y beforeSave() de la clase, ella se 
+ * encargará de convertirlos automáticamente. Sólo tiene que registrar los 
+ * campos que son fechas u horas o dateTimes en la propiedad 'dateOrTimeFields'
+ * que es un array de nombres de campos.
+ * 
+ * Manipule estos campos  fechas con la potencia de la clase 'Carbon', para 
+ * esto sólo tiene que agregar el campo en la función  'toCarbon()'
+ * 
+ * carbonNow()
+ * formatDate()
+ * getGeneralFormat()
+ * openBorder()
+ * prepareTimeFields()
+ * swichtDate()
+ * toCarbon()
+ * 
+ * 
+ * 
+ * 
+ * Manipulación de Relaciones de Modelos
+ * ======================================
+ * 
+ * 
+ * Si bien  Yii posee muchas funciones para relacionar modelos valiéndose
+ * de las relaciones del Motor de Base de Datos;Siempre hacen falta ir un poco
+ * más allá; por ejemplo la clase ActiveRecord no tiene ninguna funcion que
+ * devuelva en una matriz todas las relaciones del modelo, las llamadas a estas
+ * relaciones se hacen explícitamente (Osea tienes que colocar el nombre del
+ * modelo relacionado).
+ * 
+ * childModels()
+ * parentModels()
+ * fieldHasChilds()
+ * fieldLinks()
+ * fillRelations()
+ * hasChilds()
+ * isSimpleRelation()
+ * is_relatedField()
+ * obtenerForeignClass()
+ * obtenerForeignField()
+ * 
+ *  
+ * 
+ * 
+ * Atajos para creación de registros 
+ * ==================================
+ * 
+ *  Si quieres crear un registro y  verificar si existen estos valores; normalmente escribes 2 o más
+ *  líneas de código:  Primero verificar si el registro exioste y  si no insertarlo
+ * 
+ * Tienes la función estática
+ * firstOrCreateStatic($campos) 
+ * 
+ * La cual creará el registro siempre y cuando no exista en la tabla, para ello solo tienes
+ * que pasarle los valores ['campo1'=>valor1, 'campo2'=>valor2, ...] para verificarlos 
+ * 
+ * 
+ * 
+ * Campos Booleanos
+ * =================
+ * 
+ * Para aquellos campos que en al base de datos tengan valores como 
+ * convenciones   char(1)   '1' Y '0'  como true  y false , lo cual tiene 
+ * muchas ventajas de portabilidad entre diversos motores de datos; siempre
+ * lidiamos con tener que verificar  esto :
+ *     if($mimodelo->activa=='1')  , para evitar esto , y hacerlo de la
+ *   siguiente manera  if($mimodelo->activa), sólo registre en la 
+ * propiedad  'booleanFields' estos campos a ser tratados como Boooleanos
+ * y la clase se encargará del resto
+ * 
+ * 
+ * Generacion de Correlativos 
+ * ===========================
+ * 
+ * Cuando creas un nuevo registro en especial de datos maestros 
+ * inserta en el evento beforeSave() la función 'correlativo'  y se generará
+ * un correlativo con la serie  pejemplo :   0001, 0002, 0003, 
+ * detecta automáticamente el tamaño del campo en la base de datos 
+ * y lo rellena con ceros, opciones de colocar un prefijo o limitar la longitud
+ * de la cadena
+ * 
+ * 
+ * Detectar cambios en el registro actual y en cada campo
+ * =======================================================
+ * Detecta si el usuario a modificado el registro o si ha editado algún campo
+ * del modelo  funcion hasChanged()
+ * 
+ * 
+ * 
+ * Funciones Helpers
+ * ===================
+ * RawTableName(): Devuelve el nombre de la tabla de la base de datos sin el prefijo
+ * possibleSearchables(): Devuelve los nombres de los campos que no son campos maestros y son cadenas de texto 
+ *                      por ejemplo nombres, apellidos, descripcion, direcciones, ..etc
+ * comboValueField(): Devuelve un array de valores almacenados en la tabla general combo Valores
+ * firstSafedAttribute(): El primer campo establecido en modo Safe
+ * getFirstError() : Devuelve una cadena con el primer error
+ * getSafeFields(): Array con los nombres de los campos safe en el escenario actual
+ * 
+ * 
+ * 
+ * 
+ * 
+ * Bloqueo de Campos
+ * =================
+ * 
+ * En lugar de verificar en cada formulario si este campo puede ser editado o no
+ * esta clase te dice cuando un campo no puede ser modificado por integridad referencial
+ * 
+ * blockedFields()
+ * fieldHasChilds()
+ * isBlockedField()
+ * ruleBlockedField()
+ * validateBlockedField()
+ * 
+ * 
+ * 
+ * 
+ */
 namespace common\models\base;
 use Carbon\Carbon;
 
@@ -15,12 +147,10 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
 
 {
    use modelBaseTrait;
-    public $otherModels=[];
+    
     const PREFIX_ADVANCED = '@';
     const PREFIX_BASIC = '/';
-    const NAME_FIELD_CENTER='codcen';
-    //use modelBaseTrait;
-    
+   
     /*tipos de formatos de fechas a asignar a un campo en 
      * la propiedad $dateorTimeFields (mire los comentarios de esta propiedad, vea el ejemplo) 
      */
@@ -88,9 +218,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
     //uan vez que se graba el registro y tiene hijos YA NO SE PUEDE MODIFICAR,
     //ASI NO SEA UN CAMPO LINKEADO  
     
-   // public $blockedFields=[]; //array de campos que no pueden ser editados 
-    //debido a que son campos link 
-    
+  
     public $dateorTimeFields=array();
     //especificar en este array cuales son los campos 
     // array('campo1'=>'date',
