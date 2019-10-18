@@ -1,3 +1,21 @@
+.log
+.sql
+.bmp
+.data
+.ser
+.bin
+.ico
+.txt
+.ico
+.yml
+.gif
+.jpeg
+.yml
+.html
+.md
+
+
+
 # directorios a ignorar
 backend/web/assets/*
 frontend/web/assets/*
