@@ -154,5 +154,11 @@ class ComboHelper  {
                 'codum','desum');
     }
    
-   
+   public static function getCboSex(){
+         return [
+                'M'=>yii::t('base.names','MASCULINO'),
+                'F'=>yii::t('base.names','FEMENINO'),
+             'G'=>yii::t('base.names','GENERAL'),
+                        ];
+    }
 }

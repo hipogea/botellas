@@ -1,13 +1,9 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
-/**
- * This is the ActiveQuery class for [[UserFacultades]].
- *
- * @see UserFacultades
- */
-class UserFacultadesQuery extends \yii\db\ActiveQuery
+use frontend\modules\sta\components\ActiveQueryScope;
+ 
+class UserFacultadesQuery extends ActiveQueryScope/*\yii\db\ActiveQuery*/
 {
     /*public function active()
     {

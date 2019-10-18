@@ -1,7 +1,7 @@
 <?php
 namespace console\migrations;
 use console\migrations\baseMigration;
-use backend\components\Installer;
+
 
 class viewMigration extends baseMigration
 {
@@ -30,6 +30,8 @@ class viewMigration extends baseMigration
        $comando= $this->db->createCommand();         
         $comando->dropView($vista)->execute();
    }
+   
+  
    
 }
 /* 

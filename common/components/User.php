@@ -33,7 +33,17 @@ class User extends UserOriginal{
     }
     
 
-     
+   public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('base.names', 'Id'),
+            'username' => Yii::t('base.names', 'Nombre Usuario'),
+            'status' => Yii::t('base.names', 'Activo'),
+            'created_at' => Yii::t('base.names', 'Creado'),
+            'updated_at' => Yii::t('base.names', 'Modificado'),
+            
+        ];
+    }  
     
     /*
      * 0verrido este metodo para agregar 
@@ -126,8 +136,3 @@ public function isTheFirstLogin(){
 
    
 }
-
-
-?>
-
-

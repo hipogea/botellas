@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
+use frontend\modules\sta\components\ActiveQueryScope;
 /**
  * This is the ActiveQuery class for [[Carreras]].
  *

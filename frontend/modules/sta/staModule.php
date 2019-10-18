@@ -7,6 +7,7 @@ use frontend\modules\sta\models\StaInterlocutor;
 use common\helpers\FileHelper;
 use frontend\modules\sta\filters\FilterComplete;
 use linslin\yii2\curl;
+use frontend\modules\sta\models\UserFacultades;
 USE \yii2mod\settings\models\enumerables\SettingType;
 /**
  * sta module definition class
@@ -78,12 +79,12 @@ class staModule extends \yii\base\Module
      * 
      */
     public static function getPathImage($codalu){
-      
-          
-    
-   
-             return self::externalUrlImage($codalu);
-        
+    $hasExternal=self::externalUrlImage($codalu);
+    /*VAR_DUMP($hasExternal);
+    VAR_DUMP(FileHelper::checkUrlFound($hasExternal));DIE();*/
+     if($hasExternal)
+         return $hasExternal;
+        return  FileHelper::getUrlImageUserGuest();  
     }
     
     private static function putSettingsModule(){

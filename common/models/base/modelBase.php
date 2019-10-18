@@ -21,6 +21,7 @@
  * Manipule estos campos  fechas con la potencia de la clase 'Carbon', para 
  * esto sólo tiene que agregar el campo en la función  'toCarbon()'
  * 
+ * Estas son algunas de las funciones útiles de esta clase
  * carbonNow()
  * formatDate()
  * getGeneralFormat()
@@ -41,7 +42,9 @@
  * más allá; por ejemplo la clase ActiveRecord no tiene ninguna funcion que
  * devuelva en una matriz todas las relaciones del modelo, las llamadas a estas
  * relaciones se hacen explícitamente (Osea tienes que colocar el nombre del
- * modelo relacionado).
+ * modelo relacionado). Pero cuando programas nunca tienes que ser espècífico
+ * tienes que ser general, por eso estas funcines te ayudaran a generar
+ * código sin tener que colocar nombres explicitos, si no mas bien variables 
  * 
  * childModels()
  * parentModels()
@@ -54,7 +57,7 @@
  * obtenerForeignClass()
  * obtenerForeignField()
  * 
- *  
+ *  Inspiración: Relaciones  ACCESS
  * 
  * 
  * Atajos para creación de registros 
@@ -69,7 +72,7 @@
  * La cual creará el registro siempre y cuando no exista en la tabla, para ello solo tienes
  * que pasarle los valores ['campo1'=>valor1, 'campo2'=>valor2, ...] para verificarlos 
  * 
- * 
+ * Inspiración: Clase Eloquent  LARAVEL 
  * 
  * Campos Booleanos
  * =================
@@ -82,6 +85,9 @@
  *   siguiente manera  if($mimodelo->activa), sólo registre en la 
  * propiedad  'booleanFields' estos campos a ser tratados como Boooleanos
  * y la clase se encargará del resto
+ * 
+ * Inspiración: Clase Eloquent  LARAVEL 
+ * 
  * 
  * 
  * Generacion de Correlativos 
@@ -100,7 +106,7 @@
  * Detecta si el usuario a modificado el registro o si ha editado algún campo
  * del modelo  funcion hasChanged()
  * 
- * 
+ * Inspiración: Buffer  VFP 
  * 
  * Funciones Helpers
  * ===================
@@ -121,6 +127,8 @@
  * 
  * En lugar de verificar en cada formulario si este campo puede ser editado o no
  * esta clase te dice cuando un campo no puede ser modificado por integridad referencial
+ * o porque tiene registros hijos y es sensible a modificación. Automáticamente
+ * pinta gris en el input HTML, y no podrá ser editado
  * 
  * blockedFields()
  * fieldHasChilds()
@@ -128,7 +136,7 @@
  * ruleBlockedField()
  * validateBlockedField()
  * 
- * 
+ * Inspiración: SAPGUI -SAP R3 
  * 
  * 
  */
@@ -434,8 +442,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                && (substr(trim(strtolower($object->name)),0,3)==='get' ) //comieniza con get
                && (method_exists(static::class,$object->name)) //si es una fucion no una propiedad
                && is_object($this->{$object->name}()) //si devuelve un objeto
-               && in_array(get_parent_class($this->{$object->name}()),['yii\db\ActiveQuery','yii\db\Query'])  //si el objeto es una clas actiev Query
-                 ){
+               //&& in_array(get_parent_class($this->{$object->name}()),['yii\db\ActiveQuery','yii\db\Query'])  //si el objeto es una clas actiev Query
+               && is_subclass_of($this->{$object->name}(), 'yii\db\ActiveQuery')
+               ){
                              
                    if(array_key_exists($this->{$object->name}()->modelClass, $relaciones)){
                         $relaciones[$this->{$object->name}()->modelClass.'_xxx_'. uniqid()]=[$this->{$object->name}()->link,$this->{$object->name}()->multiple,$object->name]; //carga la propiedad  
@@ -467,7 +476,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    * hasOne()? 
    * Respuesta: Porque para usar etas funciones se deben de hacer explicitamente
    * en cambio esta funcion solo con el nombre del campo busca 
-   * en la propiedad _obRelations la clase modelo que corresponde
+   * en la propiedad _obRelations la clase modelo a la 
+   * que esta relacionado, MAGICAMENTE
    */          
   public function obtenerForeignClass($nombrecampo){
     
@@ -709,7 +719,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                        //print_r($model->attributes);die();
                        
                  IF(!$model->insert()){
-                      print_r($model->getErrors());
+                      //print_r($model->getErrors());
                      return false;
                  }
                    // print_r($model->getErrors());die();
@@ -788,15 +798,20 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          * Si el prefijo es <> null se sigue achicando el tamano
          */
            if(!is_null($this->prefijo)){
+               
                             $diferenciatamano=$tamano-strlen(trim($this->prefijo));
                           if($diferenciatamano < 4){
                               //si es menor que 4 o es negativa, dejar el taaño com es y no aplicar el prefijo
                          $this->prefijo="1";
                          $tamano=$tamano-1;
+                         
                               }else{
+                                  
                               $tamano=$diferenciatamano;
+                             // VAR_DUMP($tamano) ;DIE();
                           }
               }else{
+                  //ECHO "PREFIJO NULL";DIE();
                           $this->prefijo="";
              }
             //var_dum($tamano);die();      
@@ -806,9 +821,11 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             $maximus=1;
              return $this->prefijo.str_pad($maximus,$tamano,'0',STR_PAD_LEFT);
              }else{
+                 
            $maximus=$maximus+1; 
            //aqui sin el prefijo porque ya esta calculado
             return str_pad($maximus,$tamano,'0',STR_PAD_LEFT);
+                 //return $this->addOneValue($maximus, $tamano, $this->prefijo);
         }
         
        
@@ -817,6 +834,12 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
        
     }
     
+    /*private function addOneValue($maximus,$tamano,$prefijo){
+        $valor= substr($maximus, strlen($maximus)-$tamano)+0;
+        $valor=($valor+1).'';
+        return $prefijo.str_pad($valor,$tamano,'0',STR_PAD_LEFT);
+    }
+    */
     public function getFirstError($attribute=null) {
         if(is_null($attribute)){
             if($this->hasErrors()){
@@ -1254,7 +1277,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    * Es una lastima  que el framework no lo tenga como funcion nativa en el SchemaBuilder
    */
   public static function RawTableName(){
-     return $name=str_replace('}}','', str_replace('{{%','',self::tableName()));
+     return str_replace('}}','', str_replace('{{%','',static::tableName()));
   }
   
   
@@ -1303,6 +1326,24 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
          return $safe;   
          
         }
-              
+      /*verifica si el modelo tiene adjuntos
+       * Leyendo la proeidad files;
+       * Recordar que la propiedad files (array), existe
+       * siempre que el modelo tenga el behavior  attachments 
+       * Si ademas lo tuviera files tiene que tener por lo menos
+       * un elemento 
+       */
+        public function hasAttachments(){
+            try{
+                //Intenta leer la propiedad  files 
+                $adjuntos=$this->files;
+                return (count($adjuntos)>0)?true:false;
+                //unset($adjuntos);return true;
+            } catch (\Exception $exception) {
+                
+                return false;
+            }
+            
+        }        
 }   
 

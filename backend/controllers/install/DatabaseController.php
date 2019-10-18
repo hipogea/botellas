@@ -22,6 +22,7 @@ class DatabaseController extends Controller
      */
     public function actionCreate()
     {
+       
         $this->layout="install"; 
         $model=new Database();
        if ($model->load(Yii::$app->request->post()) && $model->validate()) {           

@@ -33,8 +33,9 @@ class Carreras extends \common\models\base\modelBase
     {
         return [
             [['codcar', 'codfac', 'descar'], 'required'],
+             ['codcar', 'unique'],
             [['codcar', 'code1', 'code2'], 'string', 'max' => 2],
-            [['codfac', 'code3'], 'string', 'max' => 3],
+            [['codfac', 'code3'], 'string', 'max' => 8],
             [['descar'], 'string', 'max' => 60],
             [['codcar'], 'unique'],
             [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => Facultades::className(), 'targetAttribute' => ['codfac' => 'codfac']],

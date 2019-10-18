@@ -1,5 +1,4 @@
 <?php
-
 namespace frontend\modules\import\controllers;
 /*Paquete de importacion */
 /*use ruskid\csvimporter\CSVReader;
@@ -23,6 +22,8 @@ use common\controllers\base\baseController;
 use common\helpers\timeHelper;
 use common\helpers\h;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\web\Request;
 use yii\filters\VerbFilter;
 //use common\helpers\h;
 
@@ -170,44 +171,53 @@ class ImportacionController extends baseController
     
     
     
-    public function actionImportar($id){
+    public function actionImportar($id){ //id carga el ID del importimportacionuser
         ///$namemodule=$this->module->id;
         $verdadero=(h::request()->get('verdadero')=='1')?true:false; //Verdadero=true , ya no es una simulacion
         
         $interrumpido=false;
         $this->vTime=microtime(true);
-      $cargamasiva=$his->findModel($id);//carga ell modelo cabecera
+        $carga=$this->findModelCarga($id);
+         $cargamasiva=$carga->cargamasiva;
+      //$cargamasiva=$this->findModel($id);//carga ell modelo cabecera
       $cargamasiva->verifyChilds();//Verificando las filas hijas de metadatos
-      $carga=$cargamasiva->activeRecordLoad();   
+     // $carga=$cargamasiva->activeRecordLoad();   //Sel eccionamos el registro que esta pendieente
       /*
        * AQUI VERIFICAMOS EL STATUS DEL REGISTRO A CARGAR
        * DEPENDIENDO DE SI ES MODON PRUEBA SIMUALCRO() O MODO CARGA
        * 
        */
-      $this->validateStatus($carga->status, $verdadero);
+      $this->validateStatus($carga->activo, $verdadero);
       
       $datos=$carga->dataToImport(); //todo el array de datos para procesar, siempre empezara desde current_linea para adelante 
-       $carga->verifyFirstRow(); //Verifica la primera fila valida del archivo csv, esto quiere decir que no neesarimente sera la primer linea 
-        
-       $model=$cargamasiva->modelAsocc();//Devuelve el modelo asociado a la importacion
+       //var_dump($carga->csv);die();
+     $carga->verifyFirstRow(); //Verifica la primera fila valida del archivo csv, esto quiere decir que no neesarimente sera la primer linea 
+      
         $carga->flushLogCarga();//Borra cualquier huella anterior en el log de carga
         $filashijas=$cargamasiva->ChildsAsArray();
    $linea=1;
-    foreach ($datos as $fila){      
-        
-      $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
-      $model->validate();  
+   
+    foreach ($datos as $fila){   
+         $model=$cargamasiva->modelAsocc();//Devuelve el modelo asociado a la importacion
+      
+       //var_dump($fila,$filashijas); die();
+      //$model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
+       //var_dump($model->attributes);DIE();
+      //var_dump($model->attributes,$model->validate(),$model->getErrors()); die(); 
       
       $carga->setAttributes([
                   'current_linea'=>$linea,
                    //'total_linea'=>$this->count($datos),
                    'status'=>$carga::STATUS_ABIERTO,
                   ]);
-      if($verdadero)$model->save();
+        $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
+      if(/*$verdadero*/true)        
+       $model->save();
       if($model->hasErrors()){
+          // var_dump($model->getErrors()); die(); 
           $carga->logCargaByLine($linea,$model->getErrors());
       }
-      
+     unset($model);  
       if(timeHelper::excedioDuracion(microtime(true)-$this->vTime)){
              // $carga->status=$carga::STATUS_ABIERTO;
               $carga->save();
@@ -217,7 +227,8 @@ class ImportacionController extends baseController
       $linea++;   
           
     }    
-         $searchModel = new ImportLogCargamasivaSearch();
+      
+    $searchModel = new ImportLogCargamasivaSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
     //se interrumpio por falta de tiempo, se grabo el registro con status abierto porque falta 
     if($interrumpido){
@@ -240,15 +251,16 @@ class ImportacionController extends baseController
      *Solo pasa si se cumplen verdadero(carga)- probado  y  falso(prueba) - abierto
      */
      private function validateStatus($status,$verdadero){
+        // var_dump($status);die();
          $mensaje='';
-            
-         if(ImportCargamasivaUser::STATUS_ABIERTO && $verdadero){
+            //var_dump($status==ImportCargamasivaUser::STATUS_PROBADO,ImportCargamasivaUser::STATUS_PROBADO,$status,$verdadero);die();
+         if($status==ImportCargamasivaUser::STATUS_ABIERTO && $verdadero){
               $mensaje='No se puede efectuar la carga; el registro se encuentra abierto, pruebe primero para verificar errores';
          }
-         if((ImportCargamasivaUser::STATUS_CARGADO && $verdadero)  or (ImportCargamasivaUser::STATUS_CARGADO && !$verdadero)){
+         if(($status==ImportCargamasivaUser::STATUS_CARGADO && $verdadero)  or ($status==ImportCargamasivaUser::STATUS_CARGADO && !$verdadero)){
              $mensaje='El registro de carga ya se ejecutó';
          }
-         if(ImportCargamasivaUser::STATUS_PROBADO && !$verdadero){
+         if($status==ImportCargamasivaUser::STATUS_PROBADO && !$verdadero){
               $mensaje='El registro de carga ya está probado y listo para cargarse';
          }
         if(strlen($mensaje)>0) $this->error ($mensaje);
@@ -314,10 +326,105 @@ class ImportacionController extends baseController
      return \yii\helpers\Html::renderSelectOptions(null,array_combine($arr,$arr));
 }
 
+/*agrega una carga */
+public function actionNewCarga(){
+    
+    if(h::request()->isAjax){
+         h::response()->format =Response::FORMAT_JSON;
+        $model=$this->findModel(h::request()->post('identidad'));
+        //$detalle=New ImportCargamasivaUser();
+        $attributes=[
+            'cargamasiva_id'=>$model->id,
+             'descripcion'=>'CARGA MASIVA-'. uniqid(),
+            'activo'=>'10',
+             'tienecabecera'=>'0',
+            ];
+        $errores=[];
+        if(ImportCargamasivaUser::firstOrCreateStatic($attributes,'minimo')){
+            $errores['success']=yii::t('sta.messages','Se creó la carga exitosamente');
+        }else{
+             $errores['error']=yii::t('sta.messages','No se pudo crear la carga');
+        }
+       return $errores;
+     }
+}
+
+public function actionDeleteCarga(){
+    
+}
+
+public function actionLoadCarga($idcarga){
+    $modeloCarga=$this->findModelCarga($idcarga);
+    
+}
 
 
 
-       
+/*MATRIZ DE ACCIONES Y ESTADOS PARA 
+ * VER QUE BOTEONES ESTAN VISIBELS 
+ * O QUE ACCIONES TOMAR EN FUNCION DEL ESTADO
+ * DEL MODELO ImportCargamasivaUser
+ */
+ public function isVisible($buttonName,$status){
+    //$status=$status.'';
+     $access[ ImportCargamasivaUser::STATUS_ABIERTO]=[
+           'deleteCarga',
+          // 'loadCarga',
+           'attachCarga',
+           //'detachCarga',
+           //'tryCarga',
+           'detailCarga',
+                        ];
+         $access[ ImportCargamasivaUser::STATUS_ADJUNTO]=[
+           'deleteCarga',
+          'pushCarga',
+           //'attachCarga',
+           'detachCarga',
+           'tryCarga',
+           'detailCarga',
+                        ];
+        $access[ ImportCargamasivaUser::STATUS_PROBADO]=[
+           'deleteCarga',
+          'pushCarga',
+           //'attachCarga',
+           'detachCarga',
+           'tryCarga',
+           'detailCarga',
+                        ];
+         $access[ ImportCargamasivaUser::STATUS_CARGADO]=[
+           //'deleteCarga',
+          'pushCarga',
+           //'attachCarga',
+           //'detachCarga',
+           'tryCarga',
+           'detailCarga',
+                        ];
+         $access[ ImportCargamasivaUser::STATUS_CARGADO]=[
+           //'deleteCarga',
+          //'pushCarga',
+           //'attachCarga',
+           //'detachCarga',
+          // 'tryCarga',
+           'detailCarga',
+                        ];
+     
+    //VAR_DUMP(ImportCargamasivaUser::STATUS_ABIERTO,$buttonName,$status+0,array_values($access[$status+0]));DIE();
+    // var_dump($buttonName,array_values($access[$status+0]));die();
+        // $arri1=array_values($access[$status.'']);
+         $arri2=array('deleteCarga','pushCarga','detailCarga','tryCarga','detachCarga');
+        // var_dump($access[$status],$buttonName);die();
+         return in_array($buttonName,$access[$status]/*array_values($access[$status+0])*/);
+ } 
+ 
+ public function  findModelCarga($idcarga){
+     if (($model = ImportCargamasivaUser::findOne($idcarga)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('sta.errors', 'El registro no existe'));
+    
+     
+ }
        
 }
       

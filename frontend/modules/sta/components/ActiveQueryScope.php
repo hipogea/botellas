@@ -1,6 +1,6 @@
 <?php
 namespace frontend\modules\sta\components;
-use frontend\modules\sta\staModule;
+use frontend\modules\sta\models\UserFacultades;
 use common\helpers\h;
 /* 
  * Esta clase es la que efectua los filtros por facultad segun 
@@ -11,13 +11,50 @@ use common\helpers\h;
  */
 class ActiveQueryScope extends \yii\db\ActiveQuery 
 {
-   public function init(){
-       parent::init();
-       
-      return  $this->andWhere(
-               staModule::getInterlocutor()->
-               getWhereFacultad()
-               );
+  public function init()
+    {
+      //var_dump(UserFacultades::filterFacultades());die();
+       //$this->andWhere([ 'in', 'codfac',['FIM','FIP'] ]);
+      $this->andWhere(['in',
+              'codfac', UserFacultades::filterFacultades()
+               ]);
+        parent::init();
+    }
+   
+    
+   public function complete(){
+       return  $this->orWhere(['in',
+              'codfac',Facultades::find()->select('codfac')->asArray()->all()
+               ]);
    }
     
+    
+   
+   /*
+    * Cada que se efectue una llamada a un SQL
+    * Siempre filtrará los valores de facultades 
+    * asignados en la tabla 'userfacultades' a cada usuario
+    * sin necesidad de escribir la condicion una y otra vez
+    * Se vale de los valores  devueltos porla funcion 
+    * UserFacultades::filterFacultades()
+    */
+   /* public function all($db = null)
+    {
+        $this->andWhere(
+              ['in',
+              'codfac', UserFacultades::filterFacultades()
+               ]
+               );
+        return parent::all($db);
+    }*/
+    
+    /*public function active()
+        {
+          return $this->andWhere(
+              ['in',
+              'codfac', UserFacultades::filterFacultades()
+               ]
+               );
+        }*/
 }
+

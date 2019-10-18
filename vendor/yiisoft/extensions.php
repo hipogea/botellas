@@ -537,4 +537,22 @@ return array (
       '@kv4nt/owlcarousel' => $vendorDir . '/kv4nt/yii2-owl-carousel2',
     ),
   ),
+  '2amigos/yii2-chartjs-widget' => 
+  array (
+    'name' => '2amigos/yii2-chartjs-widget',
+    'version' => '2.1.3.0',
+    'alias' => 
+    array (
+      '@dosamigos/chartjs' => $vendorDir . '/2amigos/yii2-chartjs-widget/src',
+    ),
+  ),
+  'philippfrenzel/yii2fullcalendar' => 
+  array (
+    'name' => 'philippfrenzel/yii2fullcalendar',
+    'version' => '4.0.2.0',
+    'alias' => 
+    array (
+      '@yii2fullcalendar' => $vendorDir . '/philippfrenzel/yii2fullcalendar',
+    ),
+  ),
 );

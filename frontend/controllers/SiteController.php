@@ -107,7 +107,8 @@ class SiteController extends Controller
  Yii::info(" paracopmrobar   ", __METHOD__);  
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+                 $this->redirect(['sta/default/']);      
+		// $this->redirect(['sta/default/view-profile','iduser'=>h::userId()]);           // return $this->goBack();
         } else {
           
             $model->password = '';

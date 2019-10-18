@@ -1,4 +1,12 @@
 <?php
+/*
+ * Esta clase extiende la clase original
+ * pero adicionalmetne devuelve los data
+ * para los combos  
+ * FACULTADES
+ * CARRERAS
+ * CARRERAS POR FACULTAD
+ */
 namespace frontend\modules\sta\helpers;
 use common\helpers\ComboHelper as Combito;
 use yii\helpers\ArrayHelper;
@@ -8,6 +16,12 @@ class comboHelper extends Combito
         return ArrayHelper::map(
                         \frontend\modules\sta\models\Facultades::find()->all(),
                 'codfac','desfac');
+    }
+    
+    public static function getCboPeriodos(){
+        return ArrayHelper::map(
+                        \frontend\modules\sta\models\Periodos::find()->all(),
+                'codperiodo','periodo');
     }
     
     public static function getCboCarreras(){
@@ -23,9 +37,5 @@ class comboHelper extends Combito
                 'codcar','descar');
     }
 }
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 

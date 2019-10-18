@@ -1,13 +1,13 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
+use frontend\modules\sta\components\ActiveQueryScope;
 /**
  * This is the ActiveQuery class for [[Aulas]].
  *
  * @see Aulas
  */
-class AulasQuery extends \yii\db\ActiveQuery
+class AulasQuery extends ActiveQueryScope
 {
     /*public function active()
     {

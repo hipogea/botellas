@@ -1,6 +1,6 @@
-  <?php use yii\helpers\Html;
+<?php use yii\helpers\Html;
   use yii\widgets\ActiveForm;
-  ?>
+?>
 
 <div class="install-image"></div>
 
@@ -18,15 +18,15 @@
                 <!-- /.box-header -->
 
                 <div id="install-form">
-                    
-                    
+
+
                        <?php $form = ActiveForm::begin(['id' => 'form-database']); ?>
                     <div class="col-md-12">
                         <?= $form->field($model, 'host') ?>
-                    </div>    
+                    </div>
             <div class="col-md-12">
            <?= $form->field($model, 'port') ?>
-                </div> 
+                </div>
                     <div class="col-md-12">
            <?= $form->field($model, 'database') ?>
                     </div>
@@ -40,16 +40,16 @@
                         <div class="form-group">
                             <div class="col-md-4 col-md-offset-8 text-right">
                                  <?= Html::submitButton(Yii::t('install.procedures', 'Next'), ['id' => 'next-button','class' => 'btn btn-success']) ?>
-                                
+
                             </div>
                         </div>
                     </div>
             <?php ActiveForm::end(); ?>
-                    
-             </div>        
-                    
-                    
-                    
+
+             </div>
+
+
+
                 </div>
 
                 <script type="text/javascript">
@@ -62,24 +62,3 @@
                 </script>
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

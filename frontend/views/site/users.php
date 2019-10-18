@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use mdm\admin\components\Helper;
 
@@ -39,9 +40,19 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
-            'template' => '{update}{activate}',
+            'template' => '{view}{activate}',
                 'buttons' => [
-                    'activate' => function($url, $model) {
+                    'view' => function ($url,$model) {
+			    $url = Url::to(['admin/assignment/view', 'id' => $model->id]);
+                            // return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => 'Update']);
+                            $options=[];
+                           return Html::a('<span class="btn btn-warning btn-sm glyphicon glyphicon-search"></span>', $url, $options/*$options*/);
+                        
+                             },
+                                     
+                    
+                    
+                   /* 'activate' => function($url, $model) {
                         if ($model->status == 10) {
                             return '';
                         }
@@ -52,8 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-method' => 'post',
                             'data-pjax' => '0',
                         ];
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, []/*$options*/);
-                    }
+                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, []);
+                    }*/
                     ]
                 ],
             ],

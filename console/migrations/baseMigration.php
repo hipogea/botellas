@@ -27,7 +27,7 @@ class baseMigration extends Migration
 
     
     public function getDbEngine(){ 
-       return trim(Installer::readEnv('DB_ENGINET', 'InnoDB'));
+       return trim(Installer::readEnv('DB_ENGINE', 'InnoDB'));
          }
     
          
@@ -62,6 +62,20 @@ class baseMigration extends Migration
        }
     }
   
+    public function existsColumn($table,$column){
+       
+       if($this->existsTable($table)){ 
+           $table=$this->getTable($table);
+          if(!is_null($table->getColumn($column)))
+              return true;
+           return false;
+       }else{
+           return false;
+       }
+    }
+  
+    
+    
   
     public function dropFks($table)
     {

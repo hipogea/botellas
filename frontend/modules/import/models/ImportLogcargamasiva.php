@@ -34,12 +34,12 @@ class ImportLogcargamasiva extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['id', 'cargamasiva_id', 'nombrecampo', 'mensaje', 'user_id', 'numerolinea'], 'required'],
+            [[ 'cargamasiva_id', 'nombrecampo', 'mensaje', 'user_id', 'numerolinea'], 'required'],
             [['id', 'cargamasiva_id', 'user_id', 'numerolinea'], 'integer'],
             [['nombrecampo'], 'string', 'max' => 60],
             [['mensaje'], 'string', 'max' => 80],
             [['level'], 'string', 'max' => 1],
-            [['fecha'], 'string', 'max' => 18],
+           // [['fecha'], 'string', 'max' => 18],
             [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasiva::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
         ];
     }

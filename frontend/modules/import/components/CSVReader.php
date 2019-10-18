@@ -3,21 +3,21 @@
 /**
  * Extendemos esta clase como un Helper para leer archivos CSV
  */
-
+namespace frontend\modules\import\components;
 USE ruskid\csvimporter\CSVReader AS MyReader;
 
-use Exception;
+use yii\base\Exception;
 
 /**
  * CSV Reader
- * @author Julian Ramírez  <demin@trabeja.com>
+ * @author Julian Ramírez  
  */
 class CSVReader  extends MyReader{
 
     /**
      * @var string the path of the uploaded CSV file on the server.
      */
-    /*public $filename;
+    public $filename;
 
     /**
      * FGETCSV() options: length, delimiter, enclosure, escape.
@@ -32,14 +32,28 @@ class CSVReader  extends MyReader{
      * Start insert from line number. Set 1 if CSV file has header.
      * @var integer
      */
-    public $startFromLine = 1;
+    //public $startFromLine = 1;
 
     /**
      * @throws Exception
      */
+ 
     public function __construct() {
-        parent::__construct();
+        $arguments = func_get_args();
+       
+        if (!empty($arguments)) {
+            foreach ($arguments[0] as $key => $property) {
+                if (property_exists($this, $key)) {
+                    $this->{$key} = $property;
+                }
+            }
+        }
+
+        if ($this->filename === null) {
+            throw new Exception(__CLASS__ . ' filename is required.');
+        }
     }
+    
 
     /**
      * Will read CSV file into array
@@ -67,6 +81,7 @@ class CSVReader  extends MyReader{
    public function getFirstRow(){
        $this->verifiyFile();
        $inicial=1;
+       //var_dump($inicial);die();
        $linea=null;
        if (($fp = fopen($this->filename, 'r')) !== FALSE) {
             while (($line =$this->ReadLineCsv($fp) ) !== FALSE) {

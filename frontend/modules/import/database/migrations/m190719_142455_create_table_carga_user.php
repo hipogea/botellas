@@ -23,11 +23,12 @@ if(!$this->existsTable($table)) {
                 'id'=>$this->primaryKey(),
                 'cargamasiva_id' => $this->integer(11)->notNull(),//
                 'fechacarga'=>$this->string(18)->append($this->collateColumn()),//
-                'user_id' => $this->integer(11)->notNull(),//
+                'user_id' => $this->integer(11),//
                 'descripcion'=>$this->string(40)->notNull()->append($this->collateColumn()),
                 'current_linea'=>$this->integer(11),//
                 'total_linea'=>$this->integer(11),//
-         'activo'=>$this->char(1)->append($this->collateColumn()),
+         'estricto'=>$this->char(1)->append($this->collateColumn()),//Si carga con errores , ignora los erroes solo inserta los que pasan
+         'activo'=>$this->char(2)->append($this->collateColumn()),
                 'tienecabecera'=>$this->char(1)->append($this->collateColumn()),
                 'duracion'=>$this->string(40)->append($this->collateColumn()),
         ],$this->collateTable());

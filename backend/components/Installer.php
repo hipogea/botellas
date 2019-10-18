@@ -550,6 +550,9 @@ public static function createSettings(){
       h::settings()->set('timeBD','date', 'Y-m-d');
       h::settings()->set('timeBD','datetime', 'Y-m-d H:i:s');
       h::settings()->set('timeBD','time', 'H:i:s');
+      
+      ///Valores para el modulo sta
+      h::settings()->set('sta','regexcodalu','/[1-9]{1}[0-9]{3}[0-9]{1}[0-9]{3}[A-Z]{1}/');
      
 }
 

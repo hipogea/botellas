@@ -216,13 +216,13 @@ class ImportCargamasiva extends \common\models\base\modelBase
     /*
      * El active que3ry de los hijos 
      */
-    private function childQuery(){
+    public function childQuery(){
         return ImportCargamasivadet::find()->
        where(['cargamasiva_id' =>$this->id]);
     }
     
     public function countChilds(){
-        $this->childQuery()->/*where(['activa'=>'1'])->*/count();
+       return $this->childQuery()->/*where(['activa'=>'1'])->*/count();
     }
     
    public function verifyChilds(){
@@ -237,11 +237,11 @@ class ImportCargamasiva extends \common\models\base\modelBase
       if(count($sinlongitud)>0)       
         throw new \yii\base\Exception(Yii::t('import.errors', 'The import records has a field {field} with  \'size\' = 0 ',['field'=>$sinlongitud[0]['nombrecampo']]));
    
-      $sinprimercampo=$query->
+     /* $sinprimercampo=$query->
        andFilterWhere(['esclave'=>'1'])->asArray()->all();
-      if(count($sinlongitud)==0)       
+      if(count($sinprimercampo)==0)       
         throw new \yii\base\Exception(Yii::t('import.errors', 'The import records has not a field key'));
-   
+   */
    }
    
    public function hasAttach(){
@@ -251,10 +251,11 @@ class ImportCargamasiva extends \common\models\base\modelBase
   
    
   public function Childs(){
-      $this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
+     
+     return $this->childQuery()->orderBy(['orden'=>SORT_ASC])->all();
   }
   public function ChildsAsArray(){
-      $this->childQuery()->orderBy(['orden'=>SORT_ASC])->all();
+     return   $this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
   }
   
   
@@ -275,19 +276,19 @@ class ImportCargamasiva extends \common\models\base\modelBase
      return $attributes;  
  }
  
- private function isTypeChar($tipo){
+ public function isTypeChar($tipo){
      return (substr(strtoupper($tipo),0,4)=='CHAR');
  }
- private function isTypeVarChar($tipo){
+ public function isTypeVarChar($tipo){
      return (substr(strtoupper($tipo),0,7)=='VARCHAR');
  }
- private function isNumeric($tipo){
+ public function isNumeric($tipo){
      return ((substr(strtoupper($tipo),0,3)=='INT')or
                   (substr(strtoupper($tipo),0,4)=='DOUB')OR
                   (substr(strtoupper($tipo),0,4)=='DECI')
                   ) ;
  }
- private function isDateorTime($tipo,$nombrecampo){
+public function isDateorTime($tipo,$nombrecampo){
      return (((substr(strtoupper($tipo),0,4)=='CHAR')or
                   (substr(strtoupper($tipo),0,5)=='VARCHAR')
                    )&& (in_array($longitud,[10,18])) && 
@@ -315,7 +316,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
   * solo registro activo, estre registro es el que 
   * gestionara la carga    */
  public function activeRecordLoad(){
-    $registro= ImportCargamasivaUser::childQueryLoads()->where(['activo'=>'1'])->andFilterWhere(['not',['status'=>static::STATUS_CARGADO]])->one();
+    $registro= ImportCargamasivaUser::childQueryLoads()->where(['activo'=>'1'])->andFilterWhere(['not',['activo'=>ImportCargamasivaUser::STATUS_CARGADO]])->one();
     if(is_null($registro)){
         throw new \yii\base\Exception(Yii::t('import.errors', 'Verifique que exista un registro de carga pendiente, todos están terminados o no existe ninguno abierto'));
     }else{

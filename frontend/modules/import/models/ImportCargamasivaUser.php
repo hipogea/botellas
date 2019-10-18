@@ -4,7 +4,9 @@ namespace frontend\modules\import\models;
 use frontend\modules\import\models\ImportCargamasiva;
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\behaviors\FileBehavior;
+use common\helpers\h;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "{{%import_carga_user}}".
@@ -25,12 +27,15 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
 {
     const STATUS_ABIERTO='10';
     const STATUS_PROBADO='20';
-    const STATUS_CARGADO='30';
-   public $csv=null;  //OBJETO CSVREADER
+    const STATUS_ADJUNTO='30';
+    const STATUS_CARGADO='40';
+    const STATUS_COMPLETO='50';
+   public $_csv=null;  //OBJETO CSVREADER
+   public $hasFile=false;
     /**
      * {@inheritdoc}
      */
-    public $booleanFields=['tienecabecera','activo'];
+    public $booleanFields=['tienecabecera'];
     
     
     public function init(){
@@ -59,11 +64,11 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['cargamasiva_id', 'user_id', 'descripcion'], 'required'],
+            [['cargamasiva_id', 'descripcion'], 'required'],
             [['cargamasiva_id', 'user_id', 'current_linea', 'total_linea'], 'integer'],
             [['fechacarga'], 'string', 'max' => 18],
             [['descripcion', 'duracion'], 'string', 'max' => 40],
-            [['tienecabecera'], 'string', 'max' => 1],
+           // [['tienecabecera'], 'string', 'max' => 1],
             [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasiva::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
         ];
     }
@@ -83,9 +88,17 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
             'total_linea' => Yii::t('import.labels', 'Total Linea'),
             'tienecabecera' => Yii::t('import.labels', 'Tienecabecera'),
             'duracion' => Yii::t('import.labels', 'Duracion'),
+             'hasFile' => Yii::t('import.labels', 'Adjunto'),
         ];
     }
 
+     public function scenarios()
+    {
+        $scenarios = parent::scenarios(); 
+        $scenarios['minimo'] = ['cargamasiva_id','descripcion','tienecabecera','activo'];
+       // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
+        return $scenarios;
+    }
     
     /**
      * @return \yii\db\ActiveQuery
@@ -105,10 +118,13 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     }
     
     public function getCsv(){
-      if(is_null($this->csv)){
-          $this->csv= New MyCSVReader( [
+     //var_dump($this->firstLineTobegin());die();
+      if(is_null($this->_csv)){
+         
+          $this->_csv= New MyCSVReader( [
                  'filename' => $this->pathFileCsv(),
-                 'fgetcsvOptions' => [ 'startFromLine' =>$this->firstLineTobegin(),
+              'startFromLine' =>$this->firstLineTobegin(),
+                 'fgetcsvOptions' => [ 
                                      'delimiter' => h::settings()->
                                             get(
                                              Yii::$app->controller->module->id,
@@ -116,16 +132,17 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                                              ),
                                        ] 
                                 ]);
+          return $this->_csv;
       }else{
-       return $this->csv;   
+       return $this->_csv;   
       }
     }
     
     private function firstLineTobegin(){
         if($this->current_linea==0 && $this->tienecabecera)
-            return 1;
+            return 2;
          if($this->current_linea==0 && !$this->tienecabecera)
-            return 0;
+            return 1;
          return $this->current_linea + 1 ;
         
     }
@@ -136,7 +153,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      * USa la libreria MyCSVrEADER , que no es nada del otro mundo
      * solo para ahora trabajo de leer un formato csv 
      */
-    public function dataToImport(){       
+    public function dataToImport(){
+       
       $datos= $this->csv->readFile();
       $this->total_linea=count($datos);
       return $datos;
@@ -149,6 +167,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      
       public function pathFileCsv(){
     $registros=$this->getFilesByExtension(ImportCargamasiva::EXTENSION_CSV);
+    
     if(count($registros)>0){
         return $registros[0]->getPath();
     }else{
@@ -170,11 +189,12 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      $row=$this->csv->getFirstRow();
      $carga=$this->cargamasiva;
       if($carga->countChilds() <> count($row))
-       throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row[0]),'ncolsload'=>$this->countChilds()]));
+       throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row),'ncolsload'=>$this->cargamasiva->countChilds()]));
       /*  las Filas hijas*/
       $filashijas=$carga->ChildsAsArray();
      // $countFieldsInPrimaryKey=count($this->modelAsocc()->primaryKey(true));
       $validacion=true;
+     // var_dump($filashijas,$row);die();
       foreach($row as $index=>$valor){
           $tipo=$filashijas[$index]['tipo'];
           $longitud=$filashijas[$index]['sizecampo'];
@@ -199,7 +219,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
       return $validacion;
  }
  
- private function flushLogCarga(){
+ public function flushLogCarga(){
      (new Query)
     ->createCommand()
     ->delete(ImportLogcargamasiva::tableName(), ['user_id' => h::userId()])
@@ -231,8 +251,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      ];
      	$model=new ImportLogcargamasiva();
         $model->setAttributes($attributes);
-        $model->save();
-        unset($model);
+        $retorno= $model->save();
+        //if(!$retorno){print_r($model->getErrors());die();}
+        //unset($model);
         
  }
  
@@ -256,7 +277,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
    * de los registros hijos de carga
    *  
      */
-    public function childQueryLoads(){
+    public function childQueryLoads($idcarga=null){
+        if(is_null($idcarga))
         return static::find()->
        where(['cargamasiva_id' =>$this->id])->orderBy(['cargamasiva_id'=>SORT_DESC]);
     }
@@ -267,7 +289,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
    
     
     public function afterSave($insert, $changedAttributes) {
-        if(!$insert && $this->status==self::STATUS_CARGADO )
+        if(!$insert && $this->activo==self::STATUS_CARGADO )
         $this->deleteFile($this->id); //BORRAR EL ARCHIVO DE CARGA ADJUNTO
         return parent::afterSave($insert, $changedAttributes);
     }

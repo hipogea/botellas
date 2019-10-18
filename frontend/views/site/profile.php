@@ -14,11 +14,20 @@ $this->title = 'Profile';
 ?>
 <div class="site-login">
     <h6><?= Html::encode($this->title) ?></h6>
+ <div class="box box-success">
+    <div class="box-header">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                
+        <?= Html::submitButton(Yii::t('sta.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>
+            
 
-    
-<div class="box box-success">
-    <br>
-    <div class="row">
+            </div>
+        </div>
+    </div>
+      <div class="box-body">
+
+ 
         
              
             
@@ -31,17 +40,17 @@ $this->title = 'Profile';
    </div>
     
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-               <?= Html::label(yii::t('base.forms','User id'),'45545ret',['class' => 'control-label']) ?>
+               <?= Html::label(yii::t('base.names','Usuario'),'45545ret',['class' => 'control-label']) ?>
                 <?=  Html::input('text', 'username', h::userName(),['disabled'=>'disabled','class' => 'form-control']) ?>
              </diV>
             
              <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-               <?= Html::label(yii::t('base.names','Last Login'),'fd5656',['class' => 'control-label']) ?>
+               <?= Html::label(yii::t('base.names','Ultimo acceso'),'fd5656',['class' => 'control-label']) ?>
                 <?=  Html::input('text', 'username', h::user()->lastLoginForHumans(),['disabled'=>'disabled','class' => 'form-control']) ?>
              </diV>
             
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-               <?= Html::label(yii::t('base.names','Created at'),'fdtt5656',['class' => 'control-label']) ?>
+               <?= Html::label(yii::t('base.names','Creado'),'fdtt5656',['class' => 'control-label']) ?>
                 <?=  Html::input('text', 'username', h::user()->getSince(),['disabled'=>'disabled','class' => 'form-control']) ?>
              </diV>
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -62,10 +71,8 @@ $this->title = 'Profile';
                     </diV>
        
                 
-                   </div>
-                <div class="col-md-4">
-                    <?= Html::submitButton(yii::t('base.verbs','Save'), ['class' => 'btn btn-success', 'name' => 'login-button']) ?>
-                </div>
+            
+               
                 
             <?php ActiveForm::end(); ?>
             
@@ -74,5 +81,5 @@ $this->title = 'Profile';
     </div>
     <br>
 </div>
-    </div>
-
+   
+</div>

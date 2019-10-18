@@ -20,8 +20,7 @@ $this->title = 'Profile';
              
             <?php /*h::user()->switchIdentity($identidad);*/ ?>
             
-              <?php 
-              $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
+             
                     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
               <?php
                if($profile->hasAtachment()){ ?>
@@ -50,9 +49,7 @@ $this->title = 'Profile';
                <?= Html::label(yii::t('base.names','Created at'),'fdtt5656',['class' => 'control-label']) ?>
                 <?=  Html::input('text', 'username', $model->getSince(),['disabled'=>'disabled','class' => 'form-control']) ?>
              </diV>
-            <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-               <?= SwitchInput::widget(['name'=>'status_1','disabled'=>false]);?>  
-            </div>
+           
            
             <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                <?= Html::label(yii::t('base.names','E-mail'),'fd56t56',['class' => 'control-label']) ?>
@@ -100,7 +97,7 @@ $this->title = 'Profile';
     </div>
                
                 
-            <?php ActiveForm::end(); ?>
+           
             
             
         </div>

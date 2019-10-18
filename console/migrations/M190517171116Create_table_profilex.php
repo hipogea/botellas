@@ -15,8 +15,8 @@ class M190517171116Create_table_profilex extends baseMigration
   // const NAME_TABLE_MAESTRO='{{%maestrocompo}}';
     public function safeUp()
     {     
-        $table=self::TABLE_NAME;
-if ($this->existsTable($table)) {
+        $table=self::NAME_TABLE;
+if (!$this->existsTable($table)) {
         $this->createTable($table, [
              'id'=>$this->primaryKey(),
             'user_id'=>$this->integer(11),

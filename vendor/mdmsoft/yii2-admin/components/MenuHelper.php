@@ -62,7 +62,8 @@ class MenuHelper
      * @param boolean  $refresh
      * @return array
      */
-    public static function getAssignedMenu($userId, $root = null, $callback = null, $refresh = false)
+    public static function getAssignedMenu($userId, $root = null,
+            $callback = null, $refresh = false)
     {
         $config = Configs::instance();
 
@@ -129,6 +130,7 @@ class MenuHelper
         $key = [__METHOD__, $assigned, $root];
         if ($refresh || $callback !== null || $cache === null || (($result = $cache->get($key)) === false)) {
             $result = static::normalizeMenu($assigned, $menus, $callback, $root);
+            //print_r($result);die();
             if ($cache !== null && $callback === null) {
                 $cache->set($key, $result, $config->cacheDuration, new TagDependency([
                     'tags' => Configs::CACHE_TAG
@@ -194,6 +196,7 @@ class MenuHelper
     {
         $result = [];
         $order = [];
+       // print_r($menus);die();
         foreach ($assigned as $id) {
             $menu = $menus[$id];
             if ($menu['parent'] == $parent) {
@@ -204,6 +207,7 @@ class MenuHelper
                     $item = [
                         'label' => $menu['name'],
                         'url' => static::parseRoute($menu['route']),
+                        'icon'=>$menu['icon'], /*agregado*/
                     ];
                     if ($menu['children'] != []) {
                         $item['items'] = $menu['children'];

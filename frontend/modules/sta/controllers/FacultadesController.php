@@ -5,10 +5,12 @@ namespace frontend\modules\sta\controllers;
 use Yii;
 use frontend\modules\sta\models\Facultades;
 use frontend\modules\sta\models\FacultadesSearch;
-use common\controllers\base\baseController;
+use frontend\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\widgets\ActiveForm;
+use yii\web\Response;
+use common\helpers\h;
 /**
  * FacultadesController implements the CRUD actions for Facultades model.
  */
@@ -67,11 +69,10 @@ class FacultadesController extends baseController
     public function actionCreate()
     {
         $model = new Facultades();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codfac]);
-        }
-
+       if($this->validateAjax($model))return $this->validateAjax($model);
+        $this->trataModelo($model);
+        
+        
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -87,10 +88,9 @@ class FacultadesController extends baseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codfac]);
-        }
+        //var_dump($model->hasAttachments());die();
+        if($this->validateAjax($model))return $this->validateAjax($model);
+        $this->trataModelo($model);
 
         return $this->render('update', [
             'model' => $model,

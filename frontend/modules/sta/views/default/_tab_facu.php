@@ -8,7 +8,7 @@ use kartik\widgets\SwitchInput;
 use yii\helpers\Html;
 use common\helpers\h;
 use frontend\modules\sta\helpers\comboHelper;
-use yii\bootstrap\ActiveForm;
+
 
 $this->title = 'Profile';
 //$this->params['breadcrumbs'][] = $this->title;
@@ -24,13 +24,17 @@ $this->title = 'Profile';
              
             <?php /*h::user()->switchIdentity($identidad);*/ ?>
             
-              <?php 
-              $form = ActiveForm::begin(['id' => 'facultades-form','options' => ['enctype' => 'multipart/form-data']]); ?>
-              <?php foreach($userfacultades as $userfacultad) { 
-                  echo $this->render('checkboxfacultad',['form'=>$form,'userfacultad'=>$userfacultad]);
                
+             
+              <?php 
+              $i=0;
+              foreach($userfacultades as $userfacultad) { 
+                // vr_dump($userfacultad->facultad->desfac);
+                 // echo $userfacultad->facultad->desfac."<br>";
+                  echo $this->render('checkboxfacultad',['i'=>$i,'form'=>$form,'userfacultad'=>$userfacultad]);
+               $i++;
                } ?> 
-              <?php ActiveForm::end(); ?>
+             
             
             
         

@@ -25,7 +25,7 @@ if(!$this->existsTable($table)) {
                'id'=>$this->primaryKey(),
                'user_id'=>$this->integer(4),
          // 'profile_id'=>$this->integer(11)->notNull(),
-              'codfac'=>$this->string(6)->append($this->collateColumn()),
+              'codfac'=>$this->string(8)->append($this->collateColumn()),
              'activa'=>$this->char(1)->append($this->collateColumn()),
        
         ],$this->collateTable());

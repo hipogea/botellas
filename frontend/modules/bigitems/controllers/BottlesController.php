@@ -209,6 +209,8 @@ class BottlesController extends baseController
         if ($model->load($arraycabecera,'') &&       
         Model::loadMultiple($items, $arraydetalle,'')&&
          $model->validate()   ){
+            VAR_DUMP($model->attributes);
+            print_r($model->getSafeFields());
               $model->save();$model->refresh();
                $items=$this->linkeaCampos($model->id, $items);
               if(Model::validateMultiple($items)){

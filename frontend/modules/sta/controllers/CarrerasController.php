@@ -35,6 +35,7 @@ class CarrerasController extends baseController
      */
     public function actionIndex()
     {
+        
         $searchModel = new CarrerasSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -19,7 +19,7 @@ class m190710_141559_create_table_carreras extends baseMigration
 if(!$this->existsTable($table)) {
     $this->createTable($table, [
               'codcar'=>$this->string(6)->append($this->collateColumn()),
-             'codfac'=>$this->string(6)->notNull()->append($this->collateColumn()),
+             'codfac'=>$this->string(8)->notNull()->append($this->collateColumn()),
             'descar' => $this->string(60)->notNull()->append($this->collateColumn()),//id padre
          'code1' => $this->char(2),//id padre
         'code2' => $this->char(2),//id padre

@@ -68,22 +68,28 @@ class UserFacultades extends \common\models\base\modelBase
      */
     public static function find()
     {
-        return new UserFacultadesQuery(get_called_class());
+        
+          return new \yii\db\ActiveQuery(get_called_class());  
+       
+        
     }
+    
+   
     
     /*Refresca los valores de la tabla 
      * segun se hayan agregado faultades 
      * o falte algun registro 
      */
-    public static function refreshTableByUser(){
-     $iduser=h::userId();
+    public static function refreshTableByUser($iduser=null){
+        if(is_null($iduser))
+        $iduser=h::userId();
        $facultades=static::idFacultades();
        //var_dump($facultades);die();
      foreach($facultades as $codigofac){
           static::firstOrCreateStatic([
                     'user_id'=>$iduser,
                      'codfac'=>$codigofac['codfac'],
-                     'activa'=>'0',
+                     //rr'activa'=>'0',
                     ]);
       }
       return $facultades;
@@ -115,12 +121,30 @@ class UserFacultades extends \common\models\base\modelBase
     * Observe que hace reerencia a la clase Parametroscentrosdocu tabla
     *   'parametrosdocucentros'
     */
-   public static function providerFacus(){
+   public static function providerFacus($iduser=null){
             return new ActiveDataProvider([
-                'query' =>static::find()->where(['user_id'=>h::userId()]),
+                'query' =>static::find()->where(['user_id'=>is_null($iduser)?h::userId():$iduser]),
                 'pagination' => [
                     'pageSize' => 20,
                             ],
                                     ]);
         } 
+    
+        
+        public static function providerFacusAll($iduser=null){
+          
+            return new ActiveDataProvider([
+                'query' =>static::find(false)->where(['user_id'=>is_null($iduser)?h::userId():$iduser]),
+                'pagination' => [
+                    'pageSize' => 20,
+                            ],
+                                    ]);
+        } 
+        
+   public static function filterFacultades($iduser=null){
+      return static::find()->
+               select('codfac')->
+               andWhere(['user_id'=>is_null($iduser)?h::userId():$iduser,'activa'=>'1'])->asArray()->column();
+   }     
+        
 }

@@ -26,7 +26,7 @@ if (Yii::$app->session->hasFlash('info')): ?>
  
           <div class="row">
         <!---Income-->
-         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+         <div class="col-lg-5 col-md-5 col-sm-6 col-xs-12">
         <div class="col-md-4">
             <div class="info-box">
                                 <a href="<?=\yii\helpers\Url::to("masters/centros")  ?>"><span class="info-box-icon bg-aqua"><i class="fa fa-building-o"></i></span></a>

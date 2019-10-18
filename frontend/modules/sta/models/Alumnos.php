@@ -2,7 +2,13 @@
 
 namespace frontend\modules\sta\models;
 use frontend\modules\sta\models\Carreras;
+use frontend\modules\sta\staModule;
+use frontend\modules\sta\interfaces\FotografiaInterface;
 use common\models\Profile;
+use common\interfaces\PersonInterface;
+use common\helpers\h;
+use Carbon\Carbon;
+use common\helpers\BaseHelper;
 use Yii;
 
 /**
@@ -26,12 +32,19 @@ use Yii;
  * @property StaCarreras $codcar0
  * @property Profile $profile
  */
-class Alumnos extends \common\models\base\modelBase
+class Alumnos extends \common\models\base\modelBase implements PersonInterface , FotografiaInterface
 {
+    
+     public $dateorTimeFields=[
+        'fecna'=>self::_FDATE,
+       
+        ];
+    
     /**
      * {@inheritdoc}
      */
     const SCENARIO_SOLO='solo';
+    const SCENARIO_BATCH='batch';
     public static function tableName()
     {
         return '{{%sta_alu}}';
@@ -44,25 +57,33 @@ class Alumnos extends \common\models\base\modelBase
     {
         return [
             
-            [['profile_id', 'codcar', 'ap', 'am', 'nombres', 'fecna', 'dni'], 'required','on'=>''],
+            [[ 'codcar', 'ap', 'am', 'nombres', 'dni'], 'required'],
             [['profile_id'], 'integer'],
             [['codcar'], 'string', 'max' => 6],
+             [['codfac'], 'string', 'max' => 8],
             [['ap', 'am', 'nombres'], 'string', 'max' => 40],
             [['fecna'], 'string', 'max' => 10],
             [['codalu'], 'string', 'max' => 14],
-            [['dni'], 'string', 'max' => 12],
+             ['codalu', 'match', 'pattern' => h::gsetting('sta', 'regexcodalu')],
+             ['codalu','unique','message'=>yii::t('base.errors','Este valor ya está registrado')],
+            ['dni','match', 'pattern' => h::gsetting('general', 'formatoDNI')],
+            ['dni','unique','message'=>yii::t('base.errors','Este valor ya está registrado')],
             [['domicilio'], 'string', 'max' => 80],
-            [['codist', 'codprov', 'codep'], 'string', 'max' => 3],
+            [['codist', 'codprov', 'codep'], 'string', 'max' => 9],
             [['sexo'], 'string', 'max' => 1],
+            [['correo'], 'email'],
             [['codcar'], 'exist', 'skipOnError' => true, 'targetClass' => Carreras::className(), 'targetAttribute' => ['codcar' => 'codcar']],
-            [['profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::className(), 'targetAttribute' => ['profile_id' => 'id']],
-        ];
+            //[['profile_id'], 'exist', 'skipOnError' => true, 'targetClass' => Profile::className(), 'targetAttribute' => ['profile_id' => 'id']],
+         /*Escenario para carga masiva*/
+            
+            ];
     }
     
     public function scenarios()
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SOLO] = ['profile_id'];
+        $scenarios[self::SCENARIO_BATCH] = [ 'codcar', 'ap', 'am', 'nombres', 'dni','domicilio','correo','celulares','fijos'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }
@@ -74,18 +95,18 @@ class Alumnos extends \common\models\base\modelBase
     {
         return [
             'id' => Yii::t('sta.labels', 'ID'),
-            'profile_id' => Yii::t('sta.labels', 'Profile ID'),
-            'codcar' => Yii::t('sta.labels', 'Codcar'),
-            'ap' => Yii::t('sta.labels', 'Ap'),
-            'am' => Yii::t('sta.labels', 'Am'),
+            'profile_id' => Yii::t('sta.labels', 'Profile'),
+            'codcar' => Yii::t('sta.labels', 'Cod Esp'),
+            'ap' => Yii::t('sta.labels', 'Ap Paterno'),
+            'am' => Yii::t('sta.labels', 'A Materno'),
             'nombres' => Yii::t('sta.labels', 'Nombres'),
-            'fecna' => Yii::t('sta.labels', 'Fecna'),
-            'codalu' => Yii::t('sta.labels', 'Codalu'),
-            'dni' => Yii::t('sta.labels', 'Dni'),
+            'fecna' => Yii::t('sta.labels', 'F. Nac'),
+            'codalu' => Yii::t('sta.labels', 'Código'),
+            'dni' => Yii::t('sta.labels', 'DNI'),
             'domicilio' => Yii::t('sta.labels', 'Domicilio'),
-            'codist' => Yii::t('sta.labels', 'Codist'),
-            'codprov' => Yii::t('sta.labels', 'Codprov'),
-            'codep' => Yii::t('sta.labels', 'Codep'),
+            'codist' => Yii::t('sta.labels', 'Distrito'),
+            'codprov' => Yii::t('sta.labels', 'Provincia'),
+            'codep' => Yii::t('sta.labels', 'Dpto'),
             'sexo' => Yii::t('sta.labels', 'Sexo'),
         ];
     }
@@ -93,9 +114,14 @@ class Alumnos extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodcar0()
+    public function getCodcar()
     {
         return $this->hasOne(Carreras::className(), ['codcar' => 'codcar']);
+    }
+    
+    public function getFacultad()
+    {
+        return $this->hasOne(Facultades::className(), ['codfac' => 'codfac']);
     }
 
     /**
@@ -112,6 +138,81 @@ class Alumnos extends \common\models\base\modelBase
      */
     public static function find()
     {
+        /*$query= new AlumnosQuery(get_called_class());
+        return $query->andWhere(['in',
+              'codfac', UserFacultades::filterFacultades()
+               ]);*/
         return new AlumnosQuery(get_called_class());
     }
+    
+    /*public static function findByCondition($condition){
+        return parent::findByCondition($condition)->andWhere(
+              ['in',
+              'codfac', UserFacultades::filterFacultades()
+               ]);
+    }*/
+    
+     public function name(){
+          return $this->nombres;
+        }  
+  public function lastName(){
+          return $this->ap;
+        }  
+  public function age(){
+          return $this->toCarbon('fecna')->age; //
+        }  
+  public function docsIdentity(){
+         return [
+             h::AdocId()[BaseHelper::DOC_DNI]=>$this->dni,
+              //h::AdocId()[BaseHelper::DOC_PASAPORTE]=>$this->pasaporte,
+              //h::AdocId()[BaseHelper::DOC_PPT]=>$this->ppt,
+             // h::AdocId()[BaseHelper::DOC_BREVETE]=>$this->ppt,
+             ];
+        }  
+        
+        
+  public function address(){
+          return $this->domicilio;
+        } 
+        
+        
+  public function fenac(){
+ return $this->toCarbon('fenac'); 
+        }  
+        
+        
+     public function IsBirthDay(){
+         //$hoy=Carbon::now();
+ return Carbon::now()->isBirthday($this->toCarbon('fenac')); 
+        }  
+        
+        
+        
+     public function fullName($asc=TRUE,$ucase=true,$delimiter='-'){       
+         $strname=($asc)?$this->nombres.$delimiter.$this->ap.$delimiter.$this->am:$strname= $this->ap.$delimiter.$this->am.$delimiter.$this->nombres;
+         $strname= ($ucase)?\yii\helpers\StringHelper::mb_ucwords($strname):$strname;
+       return str_replace(' ',$delimiter, $strname);
+     }
+    
+    public function beforeSave($insert){
+        if($insert){
+            $this->codfac=Carreras::find()->where(['codcar'=>$this->codcar])->one()->codfac;
+        }
+        return parent::beforeSave($insert);
+    }
+    
+    
+    public function getCarrera()
+    {
+        return $this->hasOne(Carreras::className(), ['codcar' => 'codcar']);
+    }
+
+    public function getUrlImage(){
+       if($this->hasAttachments()){        
+           return $this->files[0]->getUrl();
+       }else{
+           return staModule::getPathImage($this->codalu);        
+       }
+   }
+    
 }

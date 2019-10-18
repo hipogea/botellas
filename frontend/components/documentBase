@@ -11,8 +11,8 @@ class documentBase extends ActiveRecord implements documentBaseInterface {
   
   public function init(){
       parent::init();
-      if(empty($this->codocu))
-          throw new \yii\base\Exception(yii::t('base.errors','Property "codocu" is empty'));
+    /*  if(empty($this->codocu))
+          throw new \yii\base\Exception(yii::t('base.errors','Property "codocu" is empty'));*/
   
   }
   

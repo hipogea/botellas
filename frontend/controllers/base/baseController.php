@@ -4,6 +4,8 @@ use Yii;
 use common\helpers\h;
 use yii\web\Controller;
 use yii\helpers\Html;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 /**
  * CliproController implements the CRUD actions for Clipro model.
  */
@@ -118,5 +120,77 @@ private static function findKeyArrayInPost(){
   
  }
  
+ public function validateAjax($model){
+     if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format =Response::FORMAT_JSON;
+                return ActiveForm::validate($model);
+        }else{
+            return false;
+        }
+ }
+ 
+ public function isPostAndSave($model){
+     return (($model->load(Yii::$app->request->post()) && $model->save()));
+ }
 
+ public function trataModelo($model){
+     
+     if($this->isPostAndSave($model)){
+            return $this->redirect(['view', 'id' => $model->codfac]);
+        }
+ }
+ /*
+  * Esta funcion retorna un JSOn con respuesta de un error 
+  * usarlo siempre que se necesite una accion ajax para borrar
+  * un registro, se apoya en la funcion cruda deletemodel()
+  * id: Clave principal
+  * clase: Nombre de la clase a instnaciar
+  * Retorna un array de errores en formato JSON
+  */
+  public function actionDeletemodelForAjax(){
+        if(h::request()->isAjax){
+           $id= h::request()->post('id');
+           $clase=str_replace('@','\\',h::request()->post('modelito'));
+           //var_dump($clase);die();
+           $datos=$this->deleteModel($id, $clase);
+           h::response()->format = \yii\web\Response::FORMAT_JSON;
+           return $datos;
+        }
+    }
+  /*
+  *Funcion cruda para manejar errores de borrado de registros 
+  */  
+ public function deleteModel($id,$modelClass){
+     $datos=[];
+	//$modelClass=unserialize(h::request()->get(static::NOMBRE_CLASE_PARAMETER));
+       // $id=h::request()->get(static::ID_CLASE_PARAMETER);
+        $model=$modelClass::findOne($id);
+        if($model instanceof modelBase){           
+                if($model->hasChilds()){
+                    $datos['error']=yii::t('base.errors','The record has Childs Records ');  
+                }else{
+                      try{ 
+                             if($model->delete()<> false){
+                                 $datos['success']=yii::t('base.errors','The record was deleted successfully...!');  
+                            }
+                          } catch (Exception $ex) {
+                             $datos['error']=yii::t('base.errors','There are some troubles by deleting this record : {mensaje} ',['mensaje'=>$ex->getMessage()]);  
+                
+                            }
+                }              
+        }else{
+            if(is_null($model)){
+                $datos['error']=yii::t('base.errors','Record not found for delete  for this key: {identidad} ',['identidad'=>$id]);  
+             
+            }else{
+             $datos['error']=yii::t('base.errors','The class : "{clase}" is not Instance of "baseModel" ',['clase'=>$modelClass]);  
+            
+            }    
+        }
+    return $datos;
+ }
+ 
+ 
+
+ 
 }

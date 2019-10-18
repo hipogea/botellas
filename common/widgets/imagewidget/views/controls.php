@@ -16,7 +16,7 @@ use yii\helpers\Html;
      <?php 
         $url=$urlModal;
  
-        echo  Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Edit image', 'class' => 'botonAbre btn btn-success']); 
+        echo  Html::button('<span class="glyphicon glyphicon-pencil"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => 'botonAbre btn btn-success']); 
         ?>
        
        <span class="btn btn-warning btn-gh glyphicon glyphicon-zoom-in"></span>

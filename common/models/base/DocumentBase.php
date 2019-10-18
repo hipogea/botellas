@@ -51,10 +51,10 @@ class DocumentBase extends ModeloGeneral implements docuInterface
    
      
       parent::init();
-      if(empty($this->codocu))
-          throw new \yii\base\Exception(yii::t('base.errors','Property "codocu" is empty'));
-      if(is_null($this->documento))
-          throw new \yii\base\Exception(yii::t('base.errors','Doesn\'t exists any Document for  "codocu={codigo}"  property',['codigo'=>$this->codocu]));
+      //if(empty($this->codocu))
+          //throw new \yii\base\Exception(yii::t('base.errors','Property "codocu" is empty'));
+     // if(is_null($this->documento))
+          //throw new \yii\base\Exception(yii::t('base.errors','Doesn\'t exists any Document for  "codocu={codigo}"  property',['codigo'=>$this->codocu]));
   
 }
  
@@ -431,14 +431,20 @@ class DocumentBase extends ModeloGeneral implements docuInterface
   }
     
    public function beforesave($insert){
-      If($insert) $this->resolveCodocu();
+      If($insert) {
+          //$this->resolveCodocu();
+               
+      }
        return parent::beforeSave($insert);
        
    } 
    
-  private function resolveCodocu(){
-      if(empty($this->{$this->fieldCodocu})){
-          $this->{$this->fieldCodocu}=$this->existsDocuMaster();
+  public function resolveCodocu(){
+      //VAR_DUMP($this->fieldCodocu);DIE();
+      if(empty($this->codocu)){
+          $this->codocu=$this->existsDocuMaster();
+          if(is_null($this->prefijo))
+          $this->prefijo=$this->codocu;
          //$this->{$this->fieldCodocu}=($coddocu)?$coddocu:$this->{$this->fieldCodocu};
            }
    }

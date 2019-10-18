@@ -17,7 +17,7 @@ class m190710_141035_create_table_facultades extends baseMigration
        $table=static::NAME_TABLE;
 if(!$this->existsTable($table)) {
     $this->createTable($table, [
-             'codfac'=>$this->string(6),
+             'codfac'=>$this->string(8),
             'desfac' => $this->string(60)->notNull()->append($this->collateColumn()),//id padre
          'code1' => $this->char(2)->append($this->collateColumn()),//id padre
         'code2' => $this->char(2)->append($this->collateColumn()),//id padre

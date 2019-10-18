@@ -9,16 +9,17 @@
         
         
         <div class="form-group field-clipro-codpro">
-            <a><i class="fa fa-bolt" aria-hidden="true"></i><label class="control-label" for="cboFavorites" ><?=yii::t('base.forms','Direct Access') ?></label></a>
-            <?= \yii\helpers\Html::dropDownList(
+             <?= \yii\helpers\Html::dropDownList(
                     'cboFavorites',null,\common\helpers\h::getCboFavorites(),
-                    ['prompt'=>'--'.yii::t('base.forms','Choose a Favorite').'--','id'=>'cboFavorites','class'=>'form-control btn btn-success ']) ?>
+                    ['prompt'=>'--'.yii::t('base.forms','Ir a ...').'--','id'=>'cboFavorites','class'=>'form-control btn btn-success ']) ?>
         </div>
        
     
 
-           <?php $items=mdm\admin\components\MenuHelper::getAssignedMenu(yii::$app->user->id);?>  
-       
+           <?php $items=mdm\admin\components\MenuHelper::getAssignedMenu(yii::$app->user->id
+                   ,null/*root*/, 
+                    null,false/*refresh*/);?>  
+       <?php  //print_r($items); die();?>
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],

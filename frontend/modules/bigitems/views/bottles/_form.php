@@ -58,6 +58,7 @@ use common\helpers\h;
     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
    <?php 
   // $necesi=new Parametros;
+   
     echo selectWidget::widget([
            // 'id'=>'mipapa',
             'model'=>$model,
@@ -72,7 +73,8 @@ use common\helpers\h;
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     
     <?= $form->field($model, 'codenvio')->
-            dropDownList(ComboHelper::getTablesValues('docbotellas.envio') ,
+            dropDownList(
+                    comboHelper::getCboValores($model->RawTableName().'.codenvio'),                    
                     ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
                     // 'class'=>'probandoSelect2',
                       'disabled'=>($model->isBlockedField('codenvio'))?'disabled':null,
@@ -110,6 +112,8 @@ use common\helpers\h;
 
  </div>  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
     <?php 
+    //$model->fillRelations();
+    //print_r($model->_obRelations);die();
   // $necesi=new Parametros;
     echo selectWidget::widget([
            // 'id'=>'mipapa',

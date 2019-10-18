@@ -9,16 +9,12 @@ use yii\data\ActiveDataProvider;
 use Yii;
 
 /**
- * This is the model class for table "{{%profile}}".
- *
- * @property int $id
- * @property int $user_id
- * @property string $names
- * @property string $photo
- * @property string $detalle
- *
- * @property User $user
- */
+ * Esta clase personaliza y extiende los datos
+ * de usuario, como nombres apuellido, tiempo de xpiracion
+ * de sesión, la fotografia 
+ * 
+ * Extiende la interface PersonInterface  
+ **/
 class Profile extends \common\models\base\modelBase implements \common\interfaces\PersonInterface
 {
    const SCENARIO_INTERLOCUTOR='tipo';
@@ -26,7 +22,32 @@ class Profile extends \common\models\base\modelBase implements \common\interface
     /**
      * {@inheritdoc}
      */
-   
+            CONST PRF_TRABAJADOR='10';
+            CONST PRF_ALUMNO='20';
+            CONST PRF_COORDINADOR='30';
+            CONST PRF_PSICOLOGO='40';
+            CONST PRF_ASSOCIAL='50';
+            CONST PRF_ALUMNORIESGO='60';
+            CONST PRF_ALUMNOTUTOR='70';
+            CONST PRF_DOCENTE='80';
+            CONST PRF_DOCENTE_TUTOR='90';
+            //CONST PRF_ASSOCIAL='50';
+    
+      public $perfiles=[
+           self::PRF_TRABAJADOR=>'common\models\masters\Trabajadores',
+          self::PRF_ALUMNO=>'frontend\modules\sta\models\Alumnos',
+          self::PRF_COORDINADOR=>'frontend\modules\sta\models\Coordinador',
+           self::PRF_PSICOLOGO=>'frontend\modules\sta\models\Psicologo',
+          self::PRF_ASSOCIAL=>'frontend\modules\sta\models\Social',
+          self::PRF_ALUMNORIESGO=>'frontend\modules\sta\models\AlumnoRiesgo',
+           self::PRF_ALUMNOTUTOR=>'frontend\modules\sta\models\AlumnoTutor',
+          self::PRF_DOCENTE=>'frontend\modules\sta\models\Docente',
+          self::PRF_DOCENTE_TUTOR=>'frontend\modules\sta\models\DocenteTutor',
+          
+      ];      
+            
+            
+            
     public static function tableName()
     {
         return '{{%profile}}';
@@ -75,11 +96,13 @@ class Profile extends \common\models\base\modelBase implements \common\interface
     {
         return [
             'id' => Yii::t('base.names', 'ID'),
-            'user_id' => Yii::t('base.names', 'User ID'),
-            'names' => Yii::t('base.names', 'Names'),
-            'photo' => Yii::t('base.names', 'Photo'),
+            'user_id' => Yii::t('base.names', 'Id usuario'),
+            'names' => Yii::t('base.names', 'Nombres'),
+            'photo' => Yii::t('base.names', 'Foto'),
             'detalle' => Yii::t('base.names', 'Detalle'),
             'interlocutor' => Yii::t('base.names', 'Type'),
+            'duration' => Yii::t('base.names', 'Duracion'),
+            'durationabsolute' => Yii::t('base.names', 'Duracion absoluta'),
         ];
     }
 
@@ -100,7 +123,12 @@ class Profile extends \common\models\base\modelBase implements \common\interface
         return new ProfileQuery(get_called_class());
     }
     
-    public function getAlu()
+   /*
+    * Se elimina esta funcion por ser muy especiica,
+    * se imleentara un nuevo metodo
+    * para obetnere un cargo sin especificar 
+    * 
+    *  public function getAlu()
     {
         if(h::app()->hasModule('sta')){
              if($this->tipo== \frontend\modules\sta\staModule::USER_ALUMNO){
@@ -114,7 +142,7 @@ class Profile extends \common\models\base\modelBase implements \common\interface
        
         
     }
-    
+    */
    public function afterFind() {
        if(!empty($this->tipo))
        //$this->interlocutor= comboHelper::getCboValores('sta.tipoprofile')[$this->tipo];
@@ -140,8 +168,10 @@ class Profile extends \common\models\base\modelBase implements \common\interface
    
    public function getUrlImage(){
        if($this->hasAtachment()){
+        
            return $this->files[0]->getUrl();
        }else{
+         
         return $this->sourceExternalImage();
        }
    }
@@ -180,6 +210,43 @@ class Profile extends \common\models\base\modelBase implements \common\interface
                             ],
                                     ]);
         } 
-    
+        
+   
+     
+       
+  public function lastName(){
+          return $this->ap;
+        }  
+  public function age(){
+          return 0; //no hay fecha de nacimiento
+        }  
+  public function docsIdentity(){
+         return [
+             h::AdocId()[BaseHelper::DOC_DNI]=>$this->dni,
+              h::AdocId()[BaseHelper::DOC_PASAPORTE]=>$this->pasaporte,
+              h::AdocId()[BaseHelper::DOC_PPT]=>$this->ppt,
+             // h::AdocId()[BaseHelper::DOC_BREVETE]=>$this->ppt,
+             ];
+        }  
+        
+        
+  public function address(){
+          return $this->domicilio;
+        } 
+        
+  public function fenac(){
+ return $this->toCarbon('cumple'); 
+        }  
+        
+     public function IsBirthDay(){
+         $hoy=Carbon::now();
+ return $hoy->isBirthday($this->toCarbon('cumple')); 
+        }  
+     public function fullName($asc=TRUE,$ucase=true,$delimiter=''){       
+         $strname=($asc)?$this->nombres.' '.$this->ap.' '.$this->am:$strname= $this->ap.' '.$this->am.' '.$this->nombres;
+         $strname= ($ucase)?\yii\helpers\StringHelper::mb_ucwords($strname):$strname;
+       return str_replace(' ',$delimiter, $strname);
+     }
+  
   
              }

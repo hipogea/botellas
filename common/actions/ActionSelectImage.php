@@ -1,6 +1,7 @@
 <?php
 namespace common\actions;
 use common\helpers\h;
+use yii;
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -14,11 +15,13 @@ class ActionSelectImage extends \yii\base\Action
 	{
          
         $clase=str_replace('_','\\',h::request()->get('nombreclase'));
+        $isImage=h::request()->get('isImage');
         $id=h::request()->get('modelid');
+        $ext=h::request()->get('extension');
         if(!is_numeric($id))
           throw new \yii\base\Exception(Yii::t('base.errors', 'Id is invalid'));
         $this->controller->layout = "install";
-        $nombremodal=
+       // $nombremodal=
         $model = $clase::find()->where(['id'=>$id])->one();
         
         if (h::request()->isPost && $model->save()) {
@@ -27,9 +30,18 @@ class ActionSelectImage extends \yii\base\Action
             $this->controller->closeModal('buscarvalor');
         
         } else {
+            if($model->hasErrors()){
+                print_r($model->getErrors());die();
+            }
+          if(!is_null($ext)){
+             $allowedExtensions=[str_replace('.','',$ext)]; 
+          }else{
+            $allowedExtensions=($isImage==1)?['jpg','png','gif','jpeg']:['doc','docx','pdf','xls','xlsx','csv','txt','ppt','pptx'];  
+          }
            
             return $this->controller->render('/comunes/attachFile', [
                         'model' => $model,
+                 'allowedExtensions' => $allowedExtensions,
                         //'vendorsForCombo' => $vendorsForCombo,
             ]);
         }

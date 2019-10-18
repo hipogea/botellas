@@ -44,7 +44,7 @@ class Docbotellas extends DocumentBase implements Transport
 {
    const SCENARIO_CHANGE_STATUS='escenario_estado';
     public $prefijo='79';
-    public $codocu='478';
+   public $codocu='478';
     public $fieldCodocu='codocu';
     public $fectran1; ///ficitica para poder establecer un rango de echas para busqueda
     public $dateorTimeFields=[
@@ -83,6 +83,7 @@ class Docbotellas extends DocumentBase implements Transport
             [['ptopartida_id', 'ptollegada_id'], 'validateDirecciones'],
              [['ptopartida_id', 'ptollegada_id'], 'integer'],
             [['comentario'], 'string'],
+           
             [['codestado', 'codenvio'], 'string', 'max' => 2],
             [['codpro', 'codtra', 'codven'], 'string', 'max' => 6],
             [['numero', 'fecdocu', 'fectran'], 'string', 'max' => 10],
@@ -102,6 +103,7 @@ class Docbotellas extends DocumentBase implements Transport
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_CHANGE_STATUS] = ['codestado'];
+         $scenarios['default'][] = 'codocu';
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }
@@ -196,8 +198,9 @@ class Docbotellas extends DocumentBase implements Transport
     
     public function beforeSave($insert) {
         if($insert){
+            
             $this->resolveCentros();$this->resolveEstados();
-           $this->numero= $this->correlativo('numero',8);
+           $this->numero= $this->correlativo('numero');
         }
         return parent::beforeSave($insert);
     }

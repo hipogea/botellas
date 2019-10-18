@@ -160,7 +160,7 @@ if (Yii::$app->request->isAjax){
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+         
          if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\widgets\ActiveForm::validate($model);

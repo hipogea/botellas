@@ -6,18 +6,18 @@ use yii\base\ActionFilter;
 use yii\helpers\Url;
 /*
  * Este filtro se implementa para 
- * asegurarnos que todo usuario que usa este módulo
- * tenga un perfil Interlocutor asignado;  de otro modo
- * no tendrá acceso a ninguna función
+ * asegurarnos que un usuario no pueda acceder
+ * a una facultad que no le pertenece
+ * ES UNA REGLA COMPLEMENTARIA AL RBAC
+ * el cual no se puede manejar a este enivel
  */
-class FilterComplete extends ActionFilter
+class FilterFacultades extends ActionFilter
 {
     
     public function beforeAction($action)
     {
        // var_dump(yii::$app->controller->module);die();
-      if(!yii::$app->controller->module->hasInterlocutor() )
-      return  yii::$app->controller->redirect(Url::toRoute('default/complete'));
+     
     
         return parent::beforeAction($action);
     }

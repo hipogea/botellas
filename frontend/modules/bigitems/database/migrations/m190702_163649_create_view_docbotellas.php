@@ -19,6 +19,10 @@ class m190702_163649_create_view_docbotellas extends viewMigration
  
     public function safeUp()
     {
+        
+    $table=static::NAME_VIEW;
+        if(!$this->existsTable($table)) {
+        
         $vista=static::NAME_VIEW;
         $this->createView($vista,
                 $this->getFields(),
@@ -26,8 +30,7 @@ class m190702_163649_create_view_docbotellas extends viewMigration
                 $this->getWhere()
                 );
         
- }
-
+ }}
 public function safeDown()
     {
      

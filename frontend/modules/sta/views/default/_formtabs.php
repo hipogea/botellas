@@ -3,7 +3,7 @@ use kartik\tabs\TabsX;
 use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\masters\Clipro */
-/* @var $form yii\widgets\ActiveForm */
+use yii\widgets\ActiveForm 
 ?>
 
 <div class="siteee-login">
@@ -13,19 +13,20 @@ use yii\helpers\Html;
 <div class="box box-success">
 <?php
 
+   $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]);
 echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
     'align' => TabsX::ALIGN_LEFT,
     'items' => [
         [
             'label' => yii::t('sta.labels','Perfil'),
-            'content' => $this->render('profileother',['model'=>$model,'profile'=>$profile]),
+            'content' => $this->render('profileother',['form'=>$form,'model'=>$model,'profile'=>$profile]),
             'active' => true,
              'options' => ['id' => 'myveryryyownID2'],
         ],
         [
             'label' => yii::t('sta.labels','Facultades'),
-         'content' => $this->render('_tab_facu',['userfacultades'=>$userfacultades]),
+         'content' => $this->render('_tab_facu',['form'=>$form,'userfacultades'=>$userfacultades]),
             'headerOptions' => ['style'=>'font-weight:bold'],
             'options' => ['id' => 'myveryownID1'],
             'active' => false
@@ -42,6 +43,6 @@ echo TabsX::widget([
 ]);    
     
     ?>
-
+ <?php ActiveForm::end(); ?>
     </div>
 </div>

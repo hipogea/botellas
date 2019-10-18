@@ -10,7 +10,7 @@
 
 namespace common\components;
 use yii\swiftmailer\Mailer as Correo;
-//use commom\traits\baseTrait;
+use common\helpers\h;
 use yii;
 class Mailer extends Correo
 {
@@ -36,19 +36,12 @@ class Mailer extends Correo
      */
     private $_transport = [];
 
-    
+    const MAIL_PORT_DEFAULT='25';
+    const MAIL_SERVER_DEFAULT='mail.neotegnia.com';
+    const MAIL_USER_SERVER_DEFAULT='25';
     public function init(){
        // yii::$app->settings->set('section', 'key', 1258.5);
-        $this->_transport=[
-            'class' => 'Swift_SmtpTransport',
-                  'host' => $this->gSettingSafe('mail','servermail','mail.neotegnia.com'),//'mail.neotegnia.com'
-                  'username' => $this->gSettingSafe('mail','userservermail','jramirez@neotegnia.com'),//'jramirez@neotegnia.com',
-                  'password' => $this->gSettingSafe('mail','passworduserservermail',''),//'t...1',
-                  'port' =>$this->gSettingSafe('mail','portservermail','25'),// '25',
-                  'encryption' => 'tls',
-              /*Esta line ase agergo apra que funcione en localhost */
-                  'streamOptions'=>['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]],
-        ];
+        $this->_transport=static::arrayConfig();
         
         return parent::init();
     }
@@ -209,5 +202,34 @@ class Mailer extends Correo
         }
 
         return $object;
+    }
+    
+    /*
+     * Lee los parametros de la tabla settings 
+     * si no los encuentra los lee del archivo 
+     * common/config/params-local  y los registra
+     * en la tabla settings (Mediante la funcion 
+     * getIfNotPutSetting())
+     */
+    private static function arrayConfig(){
+        RETURN [
+            'class' => 'Swift_SmtpTransport',
+              'host' => h::getIfNotPutSetting(
+                      'mail','servermail',
+                      Yii::$app->params['servermail']
+                      ),
+               'username' => h::getIfNotPutSetting(
+                       'mail','userservermail',
+                       Yii::$app->params['userservermail']),
+               'password' => h::getIfNotPutSetting(
+                       'mail','passworduserservermail',
+                       Yii::$app->params['passworduserservermail']),
+               'port' =>h::getIfNotPutSetting(
+                       'mail','portservermail',
+                       Yii::$app->params['portservermail']),
+                  'encryption' => 'tls',
+              /*Esta line ase agergo apra que funcione en localhost */
+                  'streamOptions'=>['ssl' =>['allow_self_signed' => true,'verify_peer_name' => false, 'verify_peer' => false]],
+        ];
     }
 }

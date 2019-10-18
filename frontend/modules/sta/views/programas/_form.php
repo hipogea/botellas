@@ -1,0 +1,108 @@
+<?php
+
+use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use frontend\modules\sta\widgets\cbofacultades\cbofacultades;
+use frontend\modules\sta\widgets\cboperiodos\cboperiodos;
+use common\widgets\selectwidget\selectWidget;
+use common\helpers\h;
+ use kartik\date\DatePicker;
+/* @var $this yii\web\View */
+/* @var $model frontend\modules\sta\models\Talleres */
+/* @var $form yii\widgets\ActiveForm */
+?>
+
+<div class="borereuccess">
+    <br>
+    <?php $form = ActiveForm::begin(); ?>
+      <div class="box-header">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                
+        <?= Html::submitButton(Yii::t('sta.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+            
+
+            </div>
+        </div>
+    </div>
+      <div class="box-body">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'numero')->textInput(['disabled' => 'disabled','maxlength' => true]) ?>
+
+  </div>
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+      <?= $form->field($model, 'descripcion')->textInput(['maxlength' => true]) ?>
+
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= cbofacultades::widget(['model'=>$model,'attribute'=>'codfac', 'form'=>$form]) ?>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+     <?php 
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codtra',
+        'ordenCampo'=>2,
+            //'foreignskeys'=>[1,2,3],
+        ]);  ?>
+
+ </div> 
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+     <?php 
+  // $necesi=new Parametros;
+    echo selectWidget::widget([
+           // 'id'=>'mipapa',
+            'model'=>$model,
+            'form'=>$form,
+            'campo'=>'codtra_psico',
+        'ordenCampo'=>2,
+            //'foreignskeys'=>[1,2,3],
+        ]);  ?>
+
+ </div> 
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+      <?= $form->field($model, 'fopen')->widget(DatePicker::class, [
+                            'language' => h::app()->language,
+                           'pluginOptions'=>[
+                                       'format' => h::getFormatShowDate(),
+                                   'changeMonth'=>true,
+                                  'changeYear'=>true,
+                                 'yearRange'=>'2010:'.date('Y'),
+                               ],
+                          
+                            //'dateFormat' => h::getFormatShowDate(),
+                            'options'=>['class'=>'form-control']
+                            ]) ?>
+
+ </div> 
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'fclose')->textInput(['maxlength' => true]) ?>
+
+ </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'codcur')->textInput(['maxlength' => true]) ?>
+
+ </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'activa')->textInput(['maxlength' => true]) ?>
+
+ </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?=cboperiodos::widget(['model'=>$model,'attribute'=>'codperiodo', 'form'=>$form]) ?>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'electivo')->textInput(['maxlength' => true]) ?>
+
+ </div>
+  
+     <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'detalles')->textarea() ?>
+
+ </div>
+    <?php ActiveForm::end(); ?>
+
+</div>
+    </div>

@@ -1,13 +1,14 @@
 <?php
 
 namespace frontend\modules\sta\models;
+use frontend\modules\sta\components\ActiveQueryScope;
 
 /**
  * This is the ActiveQuery class for [[Alumnos]].
  *
  * @see Alumnos
  */
-class AlumnosQuery extends \yii\db\ActiveQuery
+class AlumnosQuery extends ActiveQueryScope
 {
     /*public function active()
     {

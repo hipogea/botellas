@@ -28,10 +28,10 @@ class FileHelper extends FileHelperOriginal {
                 );
         foreach($archivos as $k=>$valor){
             if($withExt){
-               $archivox[]=self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),DIRECTORY_SEPARATOR);
+               $archivox[]=self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),'\\');
          
             }else{
-              $archivox[]=str_replace('.php','',self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),DIRECTORY_SEPARATOR));
+              $archivox[]=str_replace('.php','',self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),'\\'));
           
             }
             }
@@ -110,20 +110,30 @@ class FileHelper extends FileHelperOriginal {
        return self::normalizePath(\yii\helpers\Url::base().'/img/nophoto.png',DIRECTORY_SEPARATOR);
        
    }
+   
+    public static function UrlEmptyFile(){
+       $alias=yii::getAlias('@frontend/web/img/nofile.png');
+       if(!is_file($alias))
+       throw new \yii\base\Exception(Yii::t('base.errors', 'The  file {archivo} doesn\'t exists ',['archivo'=>$alias])); 
+       return self::normalizePath(\yii\helpers\Url::base().'/img/nofile.png',DIRECTORY_SEPARATOR);
+       
+   }
    /*
     * Checka si una uirl a un archivo funciona o esta roto el link
     */
    public static function checkUrlFound($urlAbsolute){
-       $file = $urlAbsolute;
+       $file = $urlAbsolute;     
+       
         $file_headers = @get_headers($file);
-        //var_dump($file_headers);die();
-            if(!$file_headers || $file_headers[0] == static::NOT_FOUND_MESSAGE) {
+        
+        //var_dump($file_headers );
+            if(!$file_headers || strpos($file_headers[0],'200')===false/*$file_headers[0] == static::NOT_FOUND_MESSAGE*/) {
                 $exists = false;
                 }
                     else {
                 $exists = true;
             }
-         return $exists;
+         return true;
    }
            
 }

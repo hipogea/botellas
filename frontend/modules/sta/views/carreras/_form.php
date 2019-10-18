@@ -11,7 +11,18 @@ use frontend\modules\sta\helpers\comboHelper;
 <div class="carreras-form">
     <br>
     <?php $form = ActiveForm::begin(); ?>
+<div class="box-header">
+        <div class="col-md-12">
+            <div class="form-group no-margin">
+                
+        <?= Html::submitButton(Yii::t('sta.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+            
 
+            </div>
+        </div>
+    </div>
+
+ <div class="box-body">
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
    <?= $form->field($model, 'codcar')->textInput(['maxlength' => true]) ?>
 
@@ -30,9 +41,6 @@ use frontend\modules\sta\helpers\comboHelper;
 
  </div>  
  
- <div class="form-group">
-        <?= Html::submitButton(Yii::t('base.names', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
 
     <?php ActiveForm::end(); ?>
 

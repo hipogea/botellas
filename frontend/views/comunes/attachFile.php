@@ -13,7 +13,7 @@ use yii\helpers\Html;
             ],
 	'pluginOptions' => [ // Plugin options of the Kartik's FileInput widget 
             
-    'allowedFileExtensions'=>["jpg", "png", "gif"],
+    'allowedFileExtensions'=>$allowedExtensions,
     'maxImageWidth'=>3800,
     'maxImageHeight'=>3800,
     'resizePreference'=>'height',

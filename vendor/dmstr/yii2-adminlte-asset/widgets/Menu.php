@@ -38,6 +38,7 @@ class Menu extends \yii\widgets\Menu
      */
     public function run()
     {
+        //print_r($this->items);die();
         if ($this->route === null && Yii::$app->controller !== null) {
             $this->route = Yii::$app->controller->getRoute();
         }
@@ -60,7 +61,7 @@ class Menu extends \yii\widgets\Menu
         if (!empty($items)) {
             $options = $this->options;
             $tag = ArrayHelper::remove($options, 'tag', 'ul');
-
+           //print_r($items);die();
             echo Html::tag($tag, $this->renderItems($items), $options);
         }
     }
@@ -70,6 +71,7 @@ class Menu extends \yii\widgets\Menu
      */
     protected function renderItem($item)
     {
+       
         if (isset($item['items'])) {
             $labelTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
             $linkTemplate = '<a href="{url}">{icon} {label} <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>';
@@ -97,6 +99,7 @@ class Menu extends \yii\widgets\Menu
      */
     protected function renderItems($items)
     {
+      
         $n = count($items);
         $lines = [];
         foreach ($items as $i => $item) {

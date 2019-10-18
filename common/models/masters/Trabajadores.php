@@ -2,7 +2,10 @@
 
 namespace common\models\masters;
 use common\models\base\modelBase;
+use common\helpers\h;
+use common\helpers\BaseHelper;
 use Yii;
+use Carbon\Carbon;
 
 /**
  * This is the model class for table "{{%trabajadores}}".
@@ -22,7 +25,7 @@ use Yii;
  * @property string $telmoviles
  * @property string $referencia
  */
-class Trabajadores extends modelBase
+class Trabajadores extends modelBase implements \common\interfaces\PersonInterface
 {
    
    public $nombrecompleto;
@@ -111,7 +114,8 @@ class Trabajadores extends modelBase
             $this->addError('fecingreso', yii::t('base.errors','The field {campo} is greater than current day',
                     ['campo'=>$this->getAttributeLabel('fecingreso')]));
        }
-       if(self::CarbonNow()->diffInYears( $this->toCarbon('cumple')) < 18){
+      // if(self::CarbonNow()->diffInYears( $this->toCarbon('cumple')) < 18){
+       if($this->age() < 18){
             $this->addError('cumple', yii::t('base.errors','This person is very Young to be worker',
                     ['campo'=>$this->getAttributeLabel('cumple')]));
        }
@@ -129,8 +133,64 @@ class Trabajadores extends modelBase
     }
     
     public function afterFind(){
-        $this->nombrecompleto=$this->ap.'-'.$this->am.'-'.$this->nombres;
+        $this->nombrecompleto=$this->fullName();
         parent::afterFind();
     }
 
+      public function name(){
+          return $this->nombres;
+        }  
+  public function lastName(){
+          return $this->ap;
+        }  
+        
+        
+  public function age(){
+          return $this->toCarbon('cumple')->age; //no hay fecha de nacimiento
+        }  
+        
+        
+  public function docsIdentity(){
+         return [
+             h::AdocId()[BaseHelper::DOC_DNI]=>$this->dni,
+              h::AdocId()[BaseHelper::DOC_PASAPORTE]=>$this->pasaporte,
+              h::AdocId()[BaseHelper::DOC_PPT]=>$this->ppt,
+             // h::AdocId()[BaseHelper::DOC_BREVETE]=>$this->ppt,
+             ];
+        }  
+        
+        
+  public function address(){
+          return $this->domicilio;
+        } 
+        
+        
+  public function fenac(){
+ return $this->toCarbon('cumple'); 
+        }  
+        
+        
+     public function IsBirthDay(){
+         $hoy=Carbon::now();
+ return $hoy->isBirthday($this->toCarbon('cumple')); 
+        }  
+        
+        
+        
+     public function fullName($asc=TRUE,$ucase=true,$delimiter=''){       
+         $strname=($asc)?$this->nombres.' '.$this->ap.' '.$this->am:$strname= $this->ap.' '.$this->am.' '.$this->nombres;
+         $strname= ($ucase)?\yii\helpers\StringHelper::mb_ucwords($strname):$strname;
+       return str_replace(' ',$delimiter, $strname);
+     }
+    
+     
+    /**
+     * {@inheritdoc}
+     * @return CliproQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new TrabajadoresQuery(get_called_class());
+    } 
+     
 }

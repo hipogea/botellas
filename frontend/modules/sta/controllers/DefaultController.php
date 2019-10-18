@@ -9,6 +9,7 @@ use common\models\User;
 use frontend\modules\sta\models\UserFacultades;
 use frontend\modules\sta\models\Facultades;
 use mdm\admin\models\searchs\User as UserSearch;
+use yii\helpers\ArrayHelper;
 /**
  * Default controller for the `sta` module
  */
@@ -20,6 +21,8 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+        //$registro= UserFacultades::find()->where(['id'=>27])->one();
+        
         return $this->render('index');
     }
     
@@ -44,7 +47,7 @@ class DefaultController extends Controller
      * Visualiza otros perfiles 
      */
      public function actionViewProfile($iduser){
-         UserFacultades::refreshTableByUser();
+         UserFacultades::refreshTableByUser($iduser);
          $newIdentity=h::user()->identity->findOne($iduser);
       if(is_null($newIdentity))
           throw new BadRequestHttpException(yii::t('base.errors','User not found with id '.$iduser));  
@@ -55,18 +58,21 @@ class DefaultController extends Controller
         $profile->setScenario($profile::SCENARIO_INTERLOCUTOR);
         if(h::request()->isPost){
             $arrpost=h::request()->post();
+              
             $profile->tipo=$arrpost[$profile->getShortNameClass()]['tipo'];
            if ($profile->save()) {
-            yii::$app->session->setFlash('success','Se grabaron los datos ');
+            $this->updateUserFacultades($arrpost[UserFacultades::getShortNameClass()]);
+            yii::$app->session->setFlash('success',yii::t('sta.messages','Se grabaron los datos '));
             return $this->redirect(['view-users']);
            }
             //var_dump(h::request()->post());die();
         }
         //echo $model->id;die();
+       // var_dump(UserFacultades::providerFacus($iduser)->getModels());die();
         return $this->render('_formtabs', [
             'profile' => $profile,
             'model'=>$newIdentity,
-            'userfacultades'=> UserFacultades::providerFacus()->getModels(),
+            'userfacultades'=> UserFacultades::providerFacusAll($iduser)->getModels(),
         ]);
     }
     
@@ -85,5 +91,18 @@ class DefaultController extends Controller
     }
     
     
+    /*
+     * Actualizacion de los valores del aacultades uausuarios 
+     */
+    private function updateUserFacultades($arrpostUserFac){
+        $ar=array_combine(ArrayHelper::getColumn($arrpostUserFac,'id'),
+                ArrayHelper::getColumn($arrpostUserFac,'activa'));
+        foreach($ar as $clave=>$valor){
+           \Yii::$app->db->createCommand()->
+             update(UserFacultades::tableName(),
+             ['activa'=>$valor],['id'=>$clave])->execute();
+        }
+        
+    }
     
 }

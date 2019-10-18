@@ -173,6 +173,10 @@ return [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => '@frontend/modules/import/messages',
                                             ], 
+                'import.errors' => [
+                                            'class' => 'yii\i18n\PhpMessageSource',
+                                            'basePath' => '@frontend/modules/import/messages',
+                                            ], 
                 'bigitems.errors' => [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => 'frontend\modules\bigitems\messages',
@@ -235,6 +239,14 @@ return [
                                  'class' => 'yii\i18n\PhpMessageSource',
                                  'basePath' => '@frontend/modules/sta/messages',                                         
                                             ], 
+                'sta.errors'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sta/messages',                                         
+                                        ], 
+                'sta.messages'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sta/messages',                                         
+                                            ],     
                 
                       ],
                   ],

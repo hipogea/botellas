@@ -11,7 +11,8 @@ use common\models\masters\Valoresdefault;
 class h {
      const DATE_FORMAT = 'php:Y-m-d';
     const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
-    const TIME_FORMAT = 'php:H:i:s';
+    const TIME_FORMAT = 'php:H:i:s';   
+  
 
     public static function convert($dateStr, $type='date', $format = null) {
         if ($type === 'datetime') {
@@ -60,6 +61,13 @@ class h {
         return yii::$app->mailer;
     }
     
+    public static function currentController(){
+        return Yii::$app->controller->id;
+    }
+    public static function currentAction(){
+        return Yii::$app->controller->action->id;
+    }
+    
     public static function UserIsGuest(){
         return yii::$app->user->isGuest;
     }
@@ -75,7 +83,12 @@ class h {
     public static function settings(){
         return yii::$app->settings;
     }
-    
+    /*  PARA EL MODULO SETTINGS
+     * Lee un valor de la tabla Parameters, 
+     * si tiene esta llave la devuelve
+     * Si no la encuentra devuelve el 
+     * parametro $valorsino que ha especificado 
+     */
     public static function gsetting($seccion,$llave,$valorsino=null){
         if(yii::$app->settings->has($seccion,$llave))
         return yii::$app->settings->get($seccion,$llave);
@@ -83,6 +96,13 @@ class h {
     }
     
     
+     /*  PARA EL MODULO SETTINGS
+     * Lee un valor de la tabla Parameters, 
+     * si tiene esta llave la devuelve
+     * Si no la encuentra , lo registra con el tercer parametro
+     * $valorsino
+      *  
+     */
     public static function getIfNotPutSetting($seccion,$llave,$valorsino,
             $type=\yii2mod\settings\models\enumerables\SettingType::STRING_TYPE ){
         if(yii::$app->settings->has($seccion,$llave)){
@@ -179,6 +199,9 @@ class h {
         
     }
     
+     
+   
+    
    public static function getDimensions(){
        return [
              'E'=> yii::t('base.names','Escalar/Units'),
@@ -190,6 +213,14 @@ class h {
        ];
    } 
    
-  
+   /*Devuelve una ray con documetnos de identidad */
+  public static function AdocId(){
+      return [
+      \BaseHelper::DOC_DNI=>yii::t('base.names','DNI'),
+      \BaseHelper::DOC_PASAPORTE=>yii::t('base.names','PASAPORTE'), 
+            \BaseHelper::DOC_BREVETE=>yii::t('base.names','BREVETE'),  
+                \BaseHelper::DOC_PPT=>yii::t('base.names','PPT'), 
+      ];
+  }
    
 }

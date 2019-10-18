@@ -18,11 +18,12 @@ use yii\widgets\Pjax;
     'attribute' => 'requerida',
     'format' => 'raw',
     'value' => function ($model) {
-        return \yii\helpers\Html::checkbox('activa[]', $model->requerida, [ 'disabled' => true]);
+        return \yii\helpers\Html::checkbox('requerida[]', $model->requerida, [ 'disabled' => true]);
 
              },
 
           ],
+   
                      [
     'attribute' => 'esforeign',
     'format' => 'raw',

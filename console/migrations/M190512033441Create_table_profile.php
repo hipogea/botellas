@@ -16,9 +16,10 @@ class M190512033441Create_table_profile extends  baseMigration
     const NAME_TABlE_USER='{{%user}}';
     public function safeUp()
     {
+        $table=static::NAME_TABlE;
         //var_dump(static::NAME_TABlE);die();
-   if(!$this->existsTable(static::NAME_TABlE)) {
-       $this->createTable(static::NAME_TABlE, [
+   if(!$this->existsTable($table)) {
+       $this->createTable($table, [
             'id'=>$this->primaryKey(),
             'user_id'=>$this->integer(11),
             'duration'=>$this->integer(11),
@@ -29,9 +30,12 @@ class M190512033441Create_table_profile extends  baseMigration
             
             ],
            $this->collateTable());
-       $this->addForeignKey($this->generateNameFk(static::NAME_TABlE), static::NAME_TABlE,
-              'user_id', static::NAME_TABlE_USER,'id');
-       
+       $this->addForeignKey($this->generateNameFk($table), $table,
+              'user_id', $table,'id');
+       $this->putCombo($table, 'tipo', 'TRABAJADOR');
+        $this->putCombo($table, 'tipo', 'ALUMNO');
+         $this->putCombo($table, 'tipo', 'ALUMNO');
+          $this->putCombo($table, 'tipo', 'ALUMNO');
         }
         
          

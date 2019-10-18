@@ -32,7 +32,7 @@ class Facultades extends \common\models\base\modelBase
     {
         return [
             [['codfac', 'desfac'], 'required'],
-            [['codfac', 'code3'], 'string', 'max' => 3],
+            [['codfac', 'code3'], 'string', 'max' => 6],
             [['desfac'], 'string', 'max' => 60],
             [['code1', 'code2'], 'string', 'max' => 2],
             [['codfac'], 'unique'],
@@ -45,8 +45,8 @@ class Facultades extends \common\models\base\modelBase
     public function attributeLabels()
     {
         return [
-            'codfac' => Yii::t('base.names', 'Code'),
-            'desfac' => Yii::t('base.names', 'Name'),
+            'codfac' => Yii::t('base.names', 'Codigo'),
+            'desfac' => Yii::t('base.names', 'Nombre'),
            
         ];
     }
@@ -54,9 +54,9 @@ class Facultades extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getStaCarreras()
+    public function getCarreras()
     {
-        return $this->hasMany(StaCarreras::className(), ['codfac' => 'codfac']);
+        return $this->hasMany(Carreras::className(), ['codfac' => 'codfac']);
     }
 
     /**

@@ -61,7 +61,7 @@ return [
         
          'assetManager'=>[
                'bundles'=>[
-                   'dmstr\web\AdminLteAsset'=>['skin'=>'skin-green-light'],
+                   'dmstr\web\AdminLteAsset'=>['skin'=>'skin-green'],
                              ],
                         ],
         

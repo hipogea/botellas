@@ -13,7 +13,7 @@ class timeHelper {
    }
    
    public static function excedioDuracion($duration, $tolerance=0){
-      return ($duration + $tolerance >= static::getMaxTimeExceute());
+      return ($duration + $tolerance >= static::getMaxTimeExecute());
    }
    } 
    
