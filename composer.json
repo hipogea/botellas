@@ -45,7 +45,11 @@
         "kartik-v/yii2-builder": "@dev",
         "linslin/yii2-curl": "*",
         "ruskid/yii2-csv-importer": "dev-master",
-        "kv4nt/yii2-owl-carousel2": "*"
+        "kv4nt/yii2-owl-carousel2": "*",
+        "rmrevin/yii2-fontawesome": "2.10.*",
+        "2amigos/yii2-chartjs-widget": "~2.0",
+        "kartik-v/yii2-detail-view": "@dev",
+        "kartik-v/yii2-datecontrol": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

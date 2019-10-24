@@ -146,8 +146,43 @@ class FileBehavior extends  Fileb
             ->send();  
  }
  
+ /*
+  * Adjunta un archivo de sde otroa ruta 
+  * no necesariamente del cuador de dialogo
+  * 
+  */
+ public function attachFromPath($path)
+    {
+     $cad=$path."<br>";
+      $files=[]; 
+     if(is_file($path)){
+         $files[]=$path;
+         $cad.="Es file <br>";
+     }elseif(is_dir($path)){
+          $cad.="Es directorio <br>";
+         foreach (FileHelper::findFiles($path) as $file) {
+           $files[]=$file;  
+           
+         }
+     }else{
+          $cad.="NO es File no directorio <br>";
+     }     
+  
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                $newPathFile=$this->getModule()->getUserDirPath() . uniqid().basename($file);
+                if (!copy($file,$newPathFile)) {
+                    throw new \Exception(\Yii::t('yii', 'File upload failed.'));
+                }
+                if (!$this->getModule()->attachFile($newPathFile, $this->owner)) {
+                throw new \Exception(\Yii::t('yii', 'File upload failed.'));
+               }else{
+                 $cad.="Attach exitoso  <br>";  
+               }
+            }
+        }
+      return $cad;   
+    }
  
- 
- 
- 
+   
 }

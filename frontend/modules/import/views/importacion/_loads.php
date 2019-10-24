@@ -5,9 +5,9 @@ use yii\helpers\Url;
 use yii\web\View;
 ?>
 <div style='overflow:auto;'>
-     <?php Pjax::begin(); ?>
+     <?php Pjax::begin(['id'=>'grilla-cargas']); ?>
     <?= GridView::widget([
-        'id'=>'grilla-cargas',
+        'id'=>'grillax-cargas',
         'dataProvider' => $dataProvider,
          'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
@@ -66,15 +66,19 @@ use yii\web\View;
                         
                         'detailCarga' => function($url, $model) {  
                         if(true /*$this->context->isVisible('detailCarga',$model->activo)*/){
-                           $url=\yii\helpers\Url::toRoute(['/finder/selectimage','extension'=>'csv','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
+                          // $url=\yii\helpers\Url::toRoute(['/finder/selectimage','extension'=>'csv','isImage'=>false,'idModal'=>'imagemodal','modelid'=>$model->id,'nombreclase'=> str_replace('\\','_',get_class($model))]);
                         $options = [
+                            'id'=>$model->id,
+                            'class' => 'carga-boton-ajax',
                             'title' => Yii::t('sta.labels', 'Detalles'),
                             //'aria-label' => Yii::t('rbac-admin', 'Activate'),
                             //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'data-method' => 'get',
-                            //'data-pjax' => '0',
+                            //'data-method' => 'get',
+                            'data-pjax' => '0',
                         ];
-                        return Html::button('<span class="glyphicon glyphicon-paperclip"></span>', ['href' => $url, 'title' => 'Editar Adjunto', 'class' => 'botonAbre btn btn-success']);
+                         return Html::a('<span class="btn btn-warning  glyphicon glyphicon-arrow-right"></span>','#', $options/*$options*/);
+                       
+                        //return Html::a('<span class="glyphicon glyphicon-arrow-right"></span>', ['href' => $url, 'title' => 'Probar', 'class' => 'btn btn-warning']);
                         //return Html::a('<span class="btn btn-success glyphicon glyphicon-pencil"></span>', Url::toRoute(['view-profile','iduser'=>$model->id]), []/*$options*/);
                      
                         }else{
@@ -93,6 +97,7 @@ use yii\web\View;
 </div>
 <?php 
   $this->registerJs("$('#btn-carga-nueva').on( 'click', function() { 
+        
             $.ajax({
               url: 'new-carga', 
               type: 'POST',
@@ -124,10 +129,32 @@ use yii\web\View;
                         });  })", View::POS_READY);
 ?>
 
+<?php 
+  $this->registerJs("$('.carga-boton-ajax').on( 'click', function() { 
+      //alert(this.id);
+      $.ajax({
+              url: '".Url::to(['importar'])."', 
+              type: 'get',
+              data:{id:this.id,verdadero:0},
+              dataType: 'html', 
+              error:  function(xhr, textStatus, error){               
+                            var n = Noty('id');                      
+                              $.noty.setText(n.options.id, error);
+                              $.noty.setType(n.options.id, 'error');       
+                                }, 
+              success: function(data) {
+              $('#resultados-carga-ajax').html(data);
+                   
+                        }
+                        });
 
 
+              
+             })", View::POS_READY);
+?>
 
-    
+
+  
     
 
     

@@ -123,13 +123,13 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
         ],
-       [
+       /*[
             'label' => yii::t('base.names','Resultados'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_resultados',[ ]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
              'options' => ['id' => 'myveryowyynID4'],
-        ],
+        ],*/
     ],
 ]);  
  }

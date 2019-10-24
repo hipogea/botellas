@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 
-/* @var $this \yii\web\View */
+/* @var $this \yii\web\\View */
 /* @var $content string */
 
 
@@ -26,8 +26,19 @@ use yii\helpers\Html;
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        
+       
+              
+        
+        
+        
+        
+        
+        
+        
     </head>
-    
+  
+
     
     
     
@@ -35,6 +46,16 @@ use yii\helpers\Html;
     <?php $this->beginBody(); ?>
     <div class="wrapper">
 
+      
+ 
+        
+        
+        
+        
+        
+        
+        
+        
              <?php
 
 

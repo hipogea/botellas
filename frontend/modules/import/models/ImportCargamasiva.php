@@ -3,10 +3,12 @@
 namespace frontend\modules\import\models;
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\helpers\h;
+use yii\helpers\ArrayHelper;
 use common\behaviors\FileBehavior;
 use frontend\modules\import\models\ImportLogcargamasiva;
+use frontend\modules\import\models\ImportCargamasivaUser;
 use Yii;
-
+use yii\web\NotFoundHttpException;
 /**
  * This is the model class for table "{{%import_cargamasiva}}".
  *
@@ -93,6 +95,12 @@ class ImportCargamasiva extends \common\models\base\modelBase
     {
         return $this->hasMany(ImportLogCargamasiva::className(), ['cargamasiva_id' => 'id']);
     }
+    
+    
+    public function getImportCargamasivaUser()
+    {
+        return $this->hasMany(ImportCargamasivaUser::className(), ['cargamasiva_id' => 'id']);
+    }
 
     /**
      * {@inheritdoc}
@@ -120,13 +128,12 @@ class ImportCargamasiva extends \common\models\base\modelBase
      * Regresa una instancia del modelo asociado
      * en la propiedad 'modelo'
      */
-    public function modelAsocc($escenario=null){
-       $clase=New $this->modelo;
+    public function modelAsocc($escenario=null){     
+           $clase=New $this->modelo;
        if(!is_null($escenario)){
            $clase->setScenario($escenario);
        }else{
            $clase->setScenario($this->escenario);
-            
        }
         
       return $clase;
@@ -263,7 +270,8 @@ class ImportCargamasiva extends \common\models\base\modelBase
   * prepara los atributos para almacenarlos en el modelo
   * usa una fila de csv  y los nombres de los campos
   * en la carga
-  * @row: Una fila del archivo csv (es una array de valores devuelto por la funcion fgetcsv())
+  * @row: Una fila del archivo csv (es una array de valores devuelto
+  *  por la funcion fgetcsv())
    * @filashijas : array de registros hijos del objeto de carga
   */
  public function AttributesForModel($row,$filashijas){
@@ -271,7 +279,25 @@ class ImportCargamasiva extends \common\models\base\modelBase
      //$modelo=$cargamasiva->modelAsocc();
      $attributes=[];
       foreach($row as $orden=>$valor){          
-               $attributes[$filashijas[$orden]['nombrecampo']]=$valor;
+               $attributes[$filashijas[$orden]['nombrecampo']]= utf8_encode($valor);
+           }
+     return $attributes;  
+ }
+ 
+ /*
+  * Asigna  valores a los campos clave 
+  * leyendolos de  un fila de datos $row, util para hallar 
+  * modelos a partir de los datos de $row 
+  *  @row: Una fila del archivo csv (es una array de valores devuelto
+  *  por la funcion fgetcsv())
+   * @fieldsPk : array asociativo de nombre de campos clave y su orden  ['campoclave1'=>1 ,'campoclavex'=>2]
+  */
+  
+ 
+ public function AttributesPkForFindModel($row,$fieldsPk){
+     $attributes=[];
+      foreach($fieldsPk as $nameField=>$order){
+               $attributes[$nameField]=$row[$order-1];
            }
      return $attributes;  
  }
@@ -296,14 +322,19 @@ public function isDateorTime($tipo,$nombrecampo){
  }
  
  
- public function camposClave(){
-     if(!$this->insercion){
-         $this->childQuery()->
-                 select('nombrecampo')->
-                 where(['esclave'=>'1'])->
+ /*
+  * Esta funcion devuelve los campos clave del 
+  * modelo asociado, siempre que estos se registren como tal
+  * 'esclave'='1'
+  */
+ 
+ public function camposClave(){   
+     $filas=$this->childQuery()->
+                 select(['nombrecampo','orden'])->
+                 andWhere(['esclave'=>'1'])->
                  asArray()->all();
-         
-     }
+     return array_combine(ArrayHelper::getColumn($filas,'nombrecampo'),
+                   ArrayHelper::getColumn($filas,'orden'));
  }
  
  
@@ -339,6 +370,15 @@ public function ordenCampos(){
    }
 }
  
-  
+  public function findModelAsocc($fila,$scenario=null){
+      //$model=$this->modelAsocc();
+      $clase=$this->model;
+      $registro=$clase::find()->where(
+              $this->AttributesPkForFindModel($fila,$this->camposClave())
+              )->one();
+      if(is_null($registro)) 
+      throw new NotFoundHttpException(Yii::t('sta.errors', 'El registro no existe'));
+      
+  }
  
 }

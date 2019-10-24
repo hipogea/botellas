@@ -46,7 +46,7 @@ class Aluriesgo extends \common\models\base\modelBase
      public function scenarios()
     {
         $scenarios = parent::scenarios(); 
-        $scenarios['import'] = ['codperiodo','entrega_id','nveces','codcur','codcar','codalu'];
+        $scenarios['import'] = ['codperiodo','entrega_id','nveces','codcur','codalu'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }

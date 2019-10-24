@@ -20,15 +20,15 @@ return [
         ],
     ],
     
-   /*'as access' => [
+  /* 'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login*',  
              'site/logout*', 
         ]
-    ],*/
+    ],
     
-    
+    */
    
     
     

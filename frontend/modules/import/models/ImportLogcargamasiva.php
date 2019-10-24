@@ -18,7 +18,7 @@ use Yii;
  *
  * @property ImportCargamasiva $cargamasiva
  */
-class ImportLogcargamasiva extends \common\models\base\modelBase
+class ImportLogcargamasiva extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ class ImportLogcargamasiva extends \common\models\base\modelBase
             [['nombrecampo'], 'string', 'max' => 60],
             [['mensaje'], 'string', 'max' => 80],
             [['level'], 'string', 'max' => 1],
-           // [['fecha'], 'string', 'max' => 18],
+            [['fecha'], 'safe'],
             [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasiva::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
         ];
     }
@@ -52,12 +52,12 @@ class ImportLogcargamasiva extends \common\models\base\modelBase
         return [
             'id' => Yii::t('import.labels', 'ID'),
             'cargamasiva_id' => Yii::t('import.labels', 'Cargamasiva ID'),
-            'nombrecampo' => Yii::t('import.labels', 'Nombrecampo'),
-            'mensaje' => Yii::t('import.labels', 'Mensaje'),
-            'level' => Yii::t('import.labels', 'Level'),
+            'nombrecampo' => Yii::t('import.labels', 'Campo'),
+            'mensaje' => Yii::t('import.labels', 'Mensaje del error'),
+            'level' => Yii::t('import.labels', 'Nivel'),
             'fecha' => Yii::t('import.labels', 'Fecha'),
             'user_id' => Yii::t('import.labels', 'User ID'),
-            'numerolinea' => Yii::t('import.labels', 'Numerolinea'),
+            'numerolinea' => Yii::t('import.labels', 'Número de fila'),
         ];
     }
 

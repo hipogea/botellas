@@ -44,7 +44,9 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
      * {@inheritdoc}
      */
     const SCENARIO_SOLO='solo';
-    const SCENARIO_BATCH='batch';
+    const SCENARIO_BATCH='batch';//varios datos 
+    const SCENARIO_BATCH_MEDIO='import_medio'; //datos pocos
+    const SCENARIO_BATCH_MINIMO='import_minimo'; //datos pocos
     public static function tableName()
     {
         return '{{%sta_alu}}';
@@ -57,8 +59,9 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
     {
         return [
             
-            [[ 'codcar', 'ap', 'am', 'nombres', 'dni'], 'required'],
+            [['codalu', 'codcar', 'ap', 'am', 'nombres'], 'required'],
             [['profile_id'], 'integer'],
+             [['celular'], 'integer'],
             [['codcar'], 'string', 'max' => 6],
              [['codfac'], 'string', 'max' => 8],
             [['ap', 'am', 'nombres'], 'string', 'max' => 40],
@@ -68,7 +71,7 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
              ['codalu','unique','message'=>yii::t('base.errors','Este valor ya está registrado')],
             ['dni','match', 'pattern' => h::gsetting('general', 'formatoDNI')],
             ['dni','unique','message'=>yii::t('base.errors','Este valor ya está registrado')],
-            [['domicilio'], 'string', 'max' => 80],
+            [['domicilio'], 'string', 'max' => 120],
             [['codist', 'codprov', 'codep'], 'string', 'max' => 9],
             [['sexo'], 'string', 'max' => 1],
             [['correo'], 'email'],
@@ -83,7 +86,8 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
     {
         $scenarios = parent::scenarios();
         $scenarios[self::SCENARIO_SOLO] = ['profile_id'];
-        $scenarios[self::SCENARIO_BATCH] = [ 'codcar', 'ap', 'am', 'nombres', 'dni','domicilio','correo','celulares','fijos'];
+        $scenarios[self::SCENARIO_BATCH] = [ 'codalu','codcar', 'ap', 'am', 'nombres', 'dni','domicilio','correo','celulares','fijos'];
+         $scenarios[self::SCENARIO_BATCH_MEDIO] = ['codalu', 'codcar', 'ap', 'am', 'nombres', 'dni','domicilio','celulares'];
        // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
         return $scenarios;
     }

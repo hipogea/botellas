@@ -16,6 +16,25 @@ class FileHelper extends FileHelperOriginal {
         return ['jpg','bmp','png','jpeg','gif','svg','ico'];
     }
     
+    
+    public static function getModelsByModule($moduleName,$withExt=False){
+        //$archivos=self::findFiles(yii::getAlias('@common/models')); 
+        $archivox=[];
+        //PRINT_R(self::getPathModules());DIE();
+        $archivos=self::getModelsFromModules($moduleName);
+        foreach($archivos as $k=>$valor){
+            if($withExt){
+               $archivox[]=self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),'\\');
+         
+            }else{
+              $archivox[]=str_replace('.php','',self::normalizePath(str_replace(yii::getAlias('@root'),'',$valor),'\\'));
+          
+            }
+            }
+        return $archivox;
+      }
+      
+    
     public static function getModels($withExt=False){
         //$archivos=self::findFiles(yii::getAlias('@common/models')); 
         $archivox=[];
@@ -40,10 +59,12 @@ class FileHelper extends FileHelperOriginal {
      
       
       
-      public static function getModelsFromModules(){
+      public static function getModelsFromModules($moduleName=null){
           $arreglo=[];
-        foreach(self::getPathModules() as $k=>$ruta){
+        foreach(self::getPathModules($moduleName) as $k=>$ruta){
+           
            if (is_dir($ruta)){
+                 //echo "l ruta  -> ".$ruta."<br>";
                     $arreglo=array_merge($arreglo, self::findFiles($ruta));
                         }
             }          
@@ -52,19 +73,46 @@ class FileHelper extends FileHelperOriginal {
       
       
       
-    public static function getPathModules(){
-       $ff=[];
-        $caminos=array_values(yii::$app->getModules());
+    public static function getPathModules($moduleName=null){
+         $ff=[];
+         $caminos=array_values(yii::$app->getModules()); 
+         if(!is_null($moduleName)){
+          //return  var_dump(yii::$app->getModules()[$moduleName]); 
+            // print_r(array_values($caminos));die();
+             //foreach($caminos as $calve=>$valor){
+         $ff[]=self::preparePathForFindModels(yii::$app->getModules()[$moduleName]::className());
+            return $ff;
+          // print_r(yii::$app->getModules()[$moduleName]::className());die();
+                          }
+        // }
+         
         //PRINT_R(ARRAY_VALUES(yii::$app->getModules()));DIE();
         foreach($caminos as $calve=>$valor){
+            
           if(is_array($valor)){
-              $ff[]=self::sanitizePath($valor['class']);
+             
+              
+              $ff[]=self::preparePathForFindModels($valor['class']);
           }
         }
          return $ff;   
+    
     }
     
-    private function sanitizePath($path){
+    /*
+     * Esta funcion se encarga de arreglar las rutas cortas
+     * de los nombres de clases u otra rutas y los convierte
+     * a rutas absolutas; pero le agrega ua subraiz 'models' , todo esto con el fin 
+     * de que puedan verificarse los archivos con la funcion FIndFiles()
+     * al momento de buscar modelos
+     * ejemplo: 
+     * 
+     *     "frontend/sta\\midirectorio" => 
+     *     "/home/wwwcase/public_html/frontend/sta/models"
+     * 
+     * 
+     */
+    private function preparePathForFindModels($path){
        $path=trim($path);
         $path=(StringHelper::startsWith($path,'\\'))?substr($path,1):$path;
         $path=(StringHelper::startsWith($path,'/'))?substr($path,1):$path;
@@ -111,6 +159,15 @@ class FileHelper extends FileHelperOriginal {
        
    }
    
+    /*
+    * Arroja la imagen loading
+    */
+   public static function UrlLoadingImage(){
+       $alias=yii::getAlias('@frontend/web/img/loading.gif');       
+       return self::normalizePath(\yii\helpers\Url::base().'/img/loading.gif',DIRECTORY_SEPARATOR);
+       
+   }
+   
     public static function UrlEmptyFile(){
        $alias=yii::getAlias('@frontend/web/img/nofile.png');
        if(!is_file($alias))
@@ -118,6 +175,17 @@ class FileHelper extends FileHelperOriginal {
        return self::normalizePath(\yii\helpers\Url::base().'/img/nofile.png',DIRECTORY_SEPARATOR);
        
    }
+   
+   
+   public static function UrlSomeFile(){
+       $alias=yii::getAlias('@frontend/web/img/somefile.png');
+       if(!is_file($alias))
+       throw new \yii\base\Exception(Yii::t('base.errors', 'The  file {archivo} doesn\'t exists ',['archivo'=>$alias])); 
+       return self::normalizePath(\yii\helpers\Url::base().'/img/somefile.png',DIRECTORY_SEPARATOR);
+       
+   }
+   
+   
    /*
     * Checka si una uirl a un archivo funciona o esta roto el link
     */

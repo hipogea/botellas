@@ -14,6 +14,7 @@ class Reporte extends \common\models\base\modelBase
      */
     public $imagen;
     public $hardFields=['codocu','modelo'];
+    //public $type='pdf';
     public static function tableName()
     {
         return '{{%reportes}}';
@@ -271,5 +272,16 @@ class Reporte extends \common\models\base\modelBase
                                                 ]);
                 return $provider;
                   }
-    
+     public function beforeSave($insert) {
+       
+        if($insert){
+            $this->type='pdf';
+            //$this->prefijo=$this->codfac;
+           //$this->resolveCodocu();
+           // $this->numero=$this->correlativo('numero');
+        }
+        
+        return parent::beforeSave($insert);
+       
+    }
 }

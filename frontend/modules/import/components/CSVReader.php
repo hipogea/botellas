@@ -5,7 +5,7 @@
  */
 namespace frontend\modules\import\components;
 USE ruskid\csvimporter\CSVReader AS MyReader;
-
+use yii;
 use yii\base\Exception;
 
 /**
@@ -61,13 +61,19 @@ class CSVReader  extends MyReader{
      * @return $array csv filtered data 
      */
     public function readFile() {
+        yii::error('veriicando archivo csv',__METHOD__);
         $this->verifiyFile();
-       
+       yii::error('Ya Verifico.. ',__METHOD__);
 
         $lines = []; //Clear and set rows
+        $contador=1;
         if (($fp = fopen($this->filename, 'r')) !== FALSE) {
             while (($line =$this->ReadLineCsv($fp) ) !== FALSE) {
+                
+                 yii::error('Esta es la  linea del archivo csv '.$contador,__METHOD__);
+                //yii::error($line,__METHOD__);
                 array_push($lines, $line);
+                $contador++;
             }
         }
         //Remove unused lines from all lines
@@ -81,10 +87,13 @@ class CSVReader  extends MyReader{
    public function getFirstRow(){
        $this->verifiyFile();
        $inicial=1;
-       //var_dump($inicial);die();
+        
        $linea=null;
+       
        if (($fp = fopen($this->filename, 'r')) !== FALSE) {
+             
             while (($line =$this->ReadLineCsv($fp) ) !== FALSE) {
+                
                 if($this->startFromLine==$inicial){
                      $linea=$line; break;
                 }

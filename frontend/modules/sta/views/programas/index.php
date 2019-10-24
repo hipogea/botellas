@@ -32,11 +32,13 @@ $this->params['breadcrumbs'][] = $this->title;
          
          [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{delete}{view}',
+               'template' => '{update}{delete}{view}',
                 'buttons' => [
                     'update' => function($url, $model) {                        
                         $options = [
-                            'title' => Yii::t('base.verbs', 'Update'),                            
+                            'title' => Yii::t('base.verbs', 'Update'), 
+                            'data-pjax'=>0,
+                            
                         ];
                         return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
                          },
@@ -52,8 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'title' => Yii::t('base.verbs', 'Delete'),                            
                         ];
                         return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-remove"></span>', $url, $options/*$options*/);
-                         }
+                        }
                     ]
+                    
                 ],
          
          
@@ -61,10 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
          
          
 
-            'id',
+            'numero',
             'codfac',
-            'codtra',
-            'codtra_psico',
+            [ 'attribute' => 'descripcion', 'headerOptions' => ['style' => 'width:30%'], ],
+            'codperiodo',
             'fopen',
             //'fclose',
             //'codcur',

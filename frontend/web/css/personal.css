@@ -38,8 +38,24 @@ div.absolute {
     font-weight: bold;
     text-align: center;
     line-height: 28px;
-    opacity: 0.4;
+    opacity: 0.7;
 }
 .cuadro{
     margin:10px;
+}
+
+@media (max-width: 480px) {
+    .ajax-loader{
+        top: 50%; /* IMPORTANT */
+        left: 50%; /* IMPORTANT */
+        display: block;
+        position: absolute;
+        background-color:red;
+        
+        width: 750px;
+        height: 417px;
+
+        margin-top: -208.5px; /* HALF OF THE HEIGHT */
+        margin-left: -375px; /* HALF OF THE WIDTH */
+    }
 }

@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
   ">
     <br>
     <div class="box box-success">
+        <div class="box-body">
 <div class="site-signup">
     <h3><?= Html::encode($this->title) ?></h3>
 
@@ -51,5 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 </div>
     </div>
-       </div>
+       </div> 
+    </div>
 

@@ -14,6 +14,7 @@ use yii\db\Migration;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use DateTime;
+use Carbon\Carbon;
 /**
  * TrabajadoresController implements the CRUD actions for Trabajadores model.
  */
@@ -52,17 +53,17 @@ class TrabajadoresController extends Controller
       //print_r($modelo->rules());die();
         $searchModel = new TrabajadoresSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-if (Yii::$app->request->isAjax){
+/*if (Yii::$app->request->isAjax){
    return $this->renderAjax('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]); 
-}else{
+}else{*/
    return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]); 
-}
+//}
         
     }
 
@@ -74,9 +75,28 @@ if (Yii::$app->request->isAjax){
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+         $model=$this->findModel($id);
+        // var_dump(h::request()->isAjax,$model->load(h::request()->post()));die();
+         if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'Saved record successfully');
+            // Multiple alerts can be set like below
+            Yii::$app->session->setFlash('kv-detail-warning', 'A last warning for completing all data.');
+            Yii::$app->session->setFlash('kv-detail-info', '<b>Note:</b> You can proceed by clicking <a href="#">this link</a>.');
+            return $this->redirect(['view', 'id'=>$model->id]);
+        } else {
+            return $this->render('view', ['model'=>$model]);
+        }
+        
+        
+        
+        
+        
+       
     }
 
     /**
@@ -160,7 +180,13 @@ if (Yii::$app->request->isAjax){
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-         
+       /* $modito=\frontend\modules\import\models\ImportCargamasivaUser::find(31)->one();
+        $modito->setScenario('fechita');
+        $modito->fechacarga=date('Y-m-d H:i:s');
+        $modito->fechacarga=$modito->swichtDate('fechacarga',true);*/
+        //var_dump(Carbon::now());die();
+        //var_dump($modito->fechacarga,$modito->save(),$modito->getFirstError());die();
+        // var_dump(date('d/m/Y H:i:s'));die();
          if (h::request()->isAjax && $model->load(h::request()->post())) {
                 h::response()->format = \yii\web\Response::FORMAT_JSON;
                 return \yii\widgets\ActiveForm::validate($model);

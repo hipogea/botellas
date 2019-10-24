@@ -75,15 +75,6 @@ return array (
       '@reportico/reportico' => $vendorDir . '/reportico/yii2-reportico',
     ),
   ),
-  'rmrevin/yii2-fontawesome' => 
-  array (
-    'name' => 'rmrevin/yii2-fontawesome',
-    'version' => '2.17.1.0',
-    'alias' => 
-    array (
-      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
-    ),
-  ),
   'cebe/yii2-gravatar' => 
   array (
     'name' => 'cebe/yii2-gravatar',
@@ -537,6 +528,15 @@ return array (
       '@kv4nt/owlcarousel' => $vendorDir . '/kv4nt/yii2-owl-carousel2',
     ),
   ),
+  'rmrevin/yii2-fontawesome' => 
+  array (
+    'name' => 'rmrevin/yii2-fontawesome',
+    'version' => '2.10.3.0',
+    'alias' => 
+    array (
+      '@rmrevin/yii/fontawesome' => $vendorDir . '/rmrevin/yii2-fontawesome',
+    ),
+  ),
   '2amigos/yii2-chartjs-widget' => 
   array (
     'name' => '2amigos/yii2-chartjs-widget',
@@ -546,13 +546,22 @@ return array (
       '@dosamigos/chartjs' => $vendorDir . '/2amigos/yii2-chartjs-widget/src',
     ),
   ),
-  'philippfrenzel/yii2fullcalendar' => 
+  'kartik-v/yii2-detail-view' => 
   array (
-    'name' => 'philippfrenzel/yii2fullcalendar',
-    'version' => '4.0.2.0',
+    'name' => 'kartik-v/yii2-detail-view',
+    'version' => '9999999-dev',
     'alias' => 
     array (
-      '@yii2fullcalendar' => $vendorDir . '/philippfrenzel/yii2fullcalendar',
+      '@kartik/detail' => $vendorDir . '/kartik-v/yii2-detail-view/src',
+    ),
+  ),
+  'kartik-v/yii2-datecontrol' => 
+  array (
+    'name' => 'kartik-v/yii2-datecontrol',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/datecontrol' => $vendorDir . '/kartik-v/yii2-datecontrol/src',
     ),
   ),
 );

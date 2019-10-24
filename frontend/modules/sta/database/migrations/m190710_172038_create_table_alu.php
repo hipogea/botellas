@@ -26,7 +26,7 @@ if(!$this->existsTable($table)) {
         'codalu'=>$this->string(14)->append($this->collateColumn()),
          'codfac'=>$this->string(8)->append($this->collateColumn()),
             'dni' => $this->string(12)->append($this->collateColumn()),
-'domicilio'=>$this->string(80)->append($this->collateColumn()),
+'domicilio'=>$this->string(120)->append($this->collateColumn()),
         'codist'=>$this->string(9)->append($this->collateColumn()),
         'codprov'=>$this->string(6)->append($this->collateColumn()),
         'codep'=>$this->string(3)->append($this->collateColumn()),

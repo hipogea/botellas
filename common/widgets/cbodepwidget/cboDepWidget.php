@@ -33,6 +33,7 @@ class cboDepWidget extends \yii\base\Widget
    public $fieldSecondClass;//EL campo a mostrar  de la clase (nameClass)
    public $nameClass; //La clase de donde se extreran los datos
    private $_esdataremota=true; //Se saca data remora
+   public $inputOptions=[];
    /*
     * 3 preopiedades para sacar los datos
     */
@@ -75,6 +76,7 @@ class cboDepWidget extends \yii\base\Widget
                 'model'=>$this->model,
                 'form'=>$this->form,
                 'campo'=>$this->campo,
+               'inputOptions'=>$this->inputOptions,
                  //'esnuevo'=>$this->model->isNewRecord,
               // 'valoresLista'=>$this->getValoresList(),
                //'multiple'=>$this->multiple,

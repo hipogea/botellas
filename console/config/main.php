@@ -105,12 +105,23 @@ return [
         'identityClass' => 'mdm\admin\models\User',
         'loginUrl' => ['admin/user/login'],
          ],
-        'log' => [
+         'log' => [
+                //'traceLevel' => YII_DEBUG ? 3 : 0,            
             'targets' => [
                 [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['info', 'error'],
+                    'class' => 'yii\log\DbTarget',
+                    'levels' => ['trace','error', 'warning','info'],
                 ],
+               /* [
+                    'class' => 'yii\log\EmailTarget',
+                    'levels' => ['error'],
+                    'categories' => ['yii\db\*'],
+                    'message' => [
+                       'from' => ['log@example.com'],
+                       'to' => ['admin@example.com', 'developer@example.com'],
+                       'subject' => 'Database errors at example.com',
+                    ],
+                ],*/
             ],
         ],
     ],

@@ -6,6 +6,8 @@ use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use kartik\grid\GridView as grid;
 ?>
+
+
 <button id="boton-refrescar" type="button" class="btn btn-warning btn-lg">
     <span class="glyphicon glyphicon-refresh"></span><?=yii::t('sta.labels','  Actualizar lista')?></button>
 <div class="talleres-index">

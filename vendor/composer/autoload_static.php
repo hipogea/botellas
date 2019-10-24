@@ -15,8 +15,8 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
+        '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'abede361264e2ae69ec1eee813a101af' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/abs.php',
         '21a5860fbef5be28db5ddfbc3cca67c4' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acos.php',
         '1546e3f9d127f2a9bb2d1b6c31c26ef1' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acosh.php',
@@ -97,7 +97,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'yii2mod\\enum\\' => 13,
             'yii2mod\\editable\\' => 17,
             'yii2mod\\behaviors\\' => 18,
-            'yii2fullcalendar\\' => 17,
             'yidas\\yii\\fontawesome\\' => 22,
             'yidas\\adminlte\\' => 15,
         ),
@@ -155,6 +154,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'kartik\\plugins\\popover\\' => 23,
             'kartik\\plugins\\fileinput\\' => 25,
             'kartik\\plugins\\depdrop\\' => 23,
+            'kartik\\plugins\\dateformatter\\' => 29,
             'kartik\\mpdf\\' => 12,
             'kartik\\helpers\\' => 15,
             'kartik\\growl\\' => 13,
@@ -165,8 +165,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'kartik\\editable\\' => 16,
             'kartik\\dynagrid\\' => 16,
             'kartik\\dialog\\' => 14,
+            'kartik\\detail\\' => 14,
             'kartik\\depdrop\\' => 15,
             'kartik\\datetime\\' => 16,
+            'kartik\\datecontrol\\' => 19,
             'kartik\\date\\' => 12,
             'kartik\\color\\' => 13,
             'kartik\\builder\\' => 15,
@@ -314,10 +316,6 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/yii2mod/yii2-behaviors',
         ),
-        'yii2fullcalendar\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/philippfrenzel/yii2fullcalendar',
-        ),
         'yidas\\yii\\fontawesome\\' => 
         array (
             0 => __DIR__ . '/..' . '/yidas/yii2-fontawesome/src',
@@ -452,6 +450,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/kartik-v/dependent-dropdown',
         ),
+        'kartik\\plugins\\dateformatter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/php-date-formatter',
+        ),
         'kartik\\mpdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-mpdf/src',
@@ -492,6 +494,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-dialog/src',
         ),
+        'kartik\\detail\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-detail-view/src',
+        ),
         'kartik\\depdrop\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-depdrop/src',
@@ -499,6 +505,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'kartik\\datetime\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-datetimepicker/src',
+        ),
+        'kartik\\datecontrol\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-datecontrol/src',
         ),
         'kartik\\date\\' => 
         array (

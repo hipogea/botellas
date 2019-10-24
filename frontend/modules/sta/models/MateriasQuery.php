@@ -7,7 +7,7 @@ namespace frontend\modules\sta\models;
  *
  * @see Materias
  */
-class MateriasQuery extends \frontend\modules\sta\components\ActiveQueryScope
+class MateriasQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {

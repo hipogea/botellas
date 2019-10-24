@@ -92,7 +92,7 @@ class FontVariables
 				),
 			 */
 
-			'fontdata' => [
+			'fontdata' => [                          
 				"dejavusanscondensed" => [
 					'R' => "DejaVuSansCondensed.ttf",
 					'B' => "DejaVuSansCondensed-Bold.ttf",

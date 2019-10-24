@@ -18,7 +18,7 @@ class EntregasSearch extends Entregas
     {
         return [
             [['id'], 'integer'],
-            [['codfac', 'fecha', 'fechacorte', 'version', 'codperiodo', 'codalu'], 'safe'],
+            [['codfac', 'fecha', 'fechacorte', 'version', 'codperiodo', 'descripcion'], 'safe'],
         ];
     }
 
@@ -50,24 +50,20 @@ class EntregasSearch extends Entregas
 
         $this->load($params);
 
-        if (!$this->validate()) {
+      /*  if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
-        }
+        }*/
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-        ]);
+       
 
         $query->andFilterWhere(['like', 'codfac', $this->codfac])
             ->andFilterWhere(['like', 'fecha', $this->fecha])
             ->andFilterWhere(['like', 'fechacorte', $this->fechacorte])
             ->andFilterWhere(['like', 'version', $this->version])
-            ->andFilterWhere(['like', 'codperiodo', $this->codperiodo])
-            ->andFilterWhere(['like', 'codalu', $this->codalu]);
-
+            ->andFilterWhere(['like', 'codperiodo', $this->codperiodo]);
+            //->andFilterWhere(['like', 'codalu', $this->codalu]);  
         return $dataProvider;
     }
 }

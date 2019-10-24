@@ -13,12 +13,12 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 ?>
 <div class="entregas-update">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
 
-    <?= $this->render('_form', [
+    <?= $this->render('_form_update', [
         'model' => $model,
     ]) ?>
 
-</div>
+
 </div>

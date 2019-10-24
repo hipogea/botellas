@@ -27,7 +27,9 @@ class Periodos extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codperiodo'], 'string', 'max' => 6],
+            ['codperiodo', 'safe'],
+             ['codperiodo', 'unique'],
+            [['codperiodo'], 'string', 'max' => 7],
             [['periodo'], 'string', 'max' => 40],
             [['activa'], 'string', 'max' => 1],
         ];

@@ -26,6 +26,7 @@ if(!$this->existsTable($table)) {
                 'user_id' => $this->integer(11),//
                 'descripcion'=>$this->string(40)->notNull()->append($this->collateColumn()),
                 'current_linea'=>$this->integer(11),//
+        'current_linea_test'=>$this->integer(11),//
                 'total_linea'=>$this->integer(11),//
          'estricto'=>$this->char(1)->append($this->collateColumn()),//Si carga con errores , ignora los erroes solo inserta los que pasan
          'activo'=>$this->char(2)->append($this->collateColumn()),

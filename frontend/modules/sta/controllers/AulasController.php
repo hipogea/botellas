@@ -4,6 +4,7 @@ namespace frontend\modules\sta\controllers;
 
 use Yii;
 use frontend\modules\sta\models\Aulas;
+use common\helpers\h;
 use frontend\modules\sta\models\AulasSearch;
 use common\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
@@ -52,9 +53,23 @@ class AulasController extends baseController
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+       $model=$this->findModel($id);
+        // var_dump(h::request()->isAjax,$model->load(h::request()->post()));die();
+         if (h::request()->isAjax && $model->load(h::request()->post())) {
+                h::response()->format = \yii\web\Response::FORMAT_JSON;
+                return \yii\widgets\ActiveForm::validate($model);
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'Saved record successfully');
+             return $this->render('view', ['model'=>$model]);
+            // Multiple alerts can be set like below
+           // Yii::$app->session->setFlash('kv-detail-warning', 'A last warning for completing all data.');
+            //Yii::$app->session->setFlash('kv-detail-info', '<b>Note:</b> You can proceed by clicking <a href="#">this link</a>.');
+           // return $this->redirect(['index']);
+        } else {
+            return $this->render('view', ['model'=>$model]);
+        }
     }
 
     /**

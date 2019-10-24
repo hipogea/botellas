@@ -1230,14 +1230,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
       
   
          
- /*
-  * Convierte una cadena de fecha en fomartto
-  * db/ o user segun el valor de Show
-  */
-  public function formatDate($stringDate,$show){
-      return $this->setFormatTimeFromSettings($stringDate,$show,true);
-  }
-  
+ 
   public static function getShortNameClass(){
      
         $retazos=explode('\\',self::className());
@@ -1344,6 +1337,43 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                 return false;
             }
             
-        }        
+        }  
+     
+    
+      /*
+       * Esta funcion asigna el valor del formato 
+       * de usuario   yy/mm/dd  m.d.YYY o el que haya conigurado  en settings
+       * brindando el formato de fecha PHP 
+       * muy útil cuando se desea ingresar fechas mediante
+       * código sin usar los imputs validadores como 
+       * el JUICALENDAR u otros 
+       * 
+       * @field : Nombre del campo , tiene que estar dentro del array dateorTimeFields
+       * @dateV: Valor de la fecha o tiempo en formato PHP crudo
+       * 
+       * intenamente asigna al campo $field ,el string equivalente
+       * a la fecha php 
+       * por ejemplo: 
+       * 
+       * $model->rawToUser('mifecha',date('Y-m-d H:i:s'));
+       * internamente hace esto :
+       *      $model->mifecha='14/10/2019 23:45:32' 
+       * Esto para que cuendo grabe el campo se conveirta nuevamente
+       * en  el valor crudo original, respectando las conversiones del modelo
+       * 
+       * 
+       * 
+       */  
+    public function rawDateUser($field,$dateV=null){
+        if(is_null($dateV)){
+            $dateV=date('Y-m-d H:i:s');
+        }
+        $this->{$field}=$dateV;
+        $this->{$field}=$this->swichtDate($field,true);  
+        return true;
+    }
+        
+      
+    
 }   
 

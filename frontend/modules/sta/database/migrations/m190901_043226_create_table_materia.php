@@ -5,7 +5,7 @@ use console\migrations\baseMigration;
 class m190901_043226_create_table_materia extends baseMigration
 {
      const NAME_TABLE='{{%sta_materias}}';
-   const NAME_TABLE_FACU='{{%sta_facultades}}';
+   const NAME_TABLE_CARRERAS='{{%sta_carreras}}';
     public function safeUp()
     {
        $table=static::NAME_TABLE;
@@ -15,14 +15,14 @@ if(!$this->existsTable($table)) {
                'nomcur'=>$this->string(40)->append($this->collateColumn()),
              'activa'=>$this->char(1)->append($this->collateColumn()),
          'creditos'=>$this->integer(2),
-         'codfac'=>$this->string(8)->append($this->collateColumn()),
+         'codcar'=>$this->string(6)->notNull()->append($this->collateColumn()),
          'electivo'=>$this->char(1)->append($this->collateColumn()),
          'ciclo'=>$this->integer(2),
         
         ],$this->collateTable());
    $this->addPrimaryKey('pk_codmateria',$table, 'codcur');
     $this->addForeignKey($this->generateNameFk($table), $table,
-              'codfac', static::NAME_TABLE_FACU,'codfac');
+              'codcar', static::NAME_TABLE_CARRERAS,'codcar');
                 /*  $this->addForeignKey($this->generateNameFk($table), $table,
               'codcar', static::NAME_TABLE_CARRERAS,'codcar');*/
             

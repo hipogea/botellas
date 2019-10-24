@@ -34,14 +34,14 @@ class Materias extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codcur'], 'required'],
+            [['codcur','nomcur','codcar','ciclo','creditos','electivo'], 'required'],
             [['creditos', 'ciclo'], 'integer'],
             [['codcur'], 'string', 'max' => 10],
             [['nomcur'], 'string', 'max' => 40],
             [['activa', 'electivo'], 'string', 'max' => 1],
-            [['codfac'], 'string', 'max' => 8],
+            [['codcar'], 'string', 'max' => 6],
             [['codcur'], 'unique'],
-            [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => StaFacultades::className(), 'targetAttribute' => ['codfac' => 'codfac']],
+            [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => Carreras::className(), 'targetAttribute' => ['codcar' => 'codcar']],
         ];
     }
 
@@ -61,20 +61,33 @@ class Materias extends \common\models\base\modelBase
         ];
     }
 
+    
+      public function scenarios()
+    {
+        $scenarios = parent::scenarios(); 
+        $scenarios['import'] = ['codcur','nomcur','codcar','ciclo','creditos','electivo'];
+       /* $scenarios[self::SCENARIO_STATUS] = ['activo'];
+        $scenarios[self::SCENARIO_RUNNING] = ['activo','current_linea','total_linea','fechacarga'];
+ $scenarios['fechita'] = ['fechacarga'];*/
+        return $scenarios;
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getStaAluriesgos()
     {
-        return $this->hasMany(StaAluriesgo::className(), ['codcur' => 'codcur']);
+        return $this->hasMany(Aluriesgo::className(), ['codcur' => 'codcur']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodfac0()
+    
+    
+    
+    public function getFacultad()
     {
-        return $this->hasOne(StaFacultades::className(), ['codfac' => 'codfac']);
+        return $this->hasOne(Carreras::className(), ['codcar' => 'codcar']);
     }
 
     /**

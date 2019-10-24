@@ -9,14 +9,16 @@ use mdm\admin\components\Helper;
 /* @var $searchModel mdm\admin\models\searchs\User */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('rbac-admin', 'Users');
+$this->title = Yii::t('rbac-admin', 'Usuarios');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
     <h4><?= Html::encode($this->title) ?></h4>
     <p>
-        <?= Html::a(Yii::t('base.verbs', 'Create User'), ['create-user'], ['class' => 'btn btn-success']) ?>
+    <div class="box box-success">
+        <div class="box-body">
+        <?= Html::a(Yii::t('base.verbs', 'Crear Usuario'), ['create-user'], ['class' => 'btn btn-success']) ?>
     </p>
     <?php $url= Url::to('view-users') ;?>
     <?=
@@ -39,11 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    return $model->status == 0 ? 'Inactive' : 'Active';
+                    return $model->status == 0 ? 'Inactivo' : 'Activo';
                 },
                 'filter' => [
-                    0 => 'Inactive',
-                    10 => 'Active'
+                    0 => 'Inactivo',
+                    10 => 'Activo'
                 ]
             ],
             [
@@ -53,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'buttons' => [
                     'update' => function($url, $model) {                        
                         $options = [
-                            'title' => Yii::t('rbac-admin', 'Activate'),
-                            'aria-label' => Yii::t('rbac-admin', 'Activate'),
+                            'title' => Yii::t('rbac-admin', 'Activar'),
+                            'aria-label' => Yii::t('rbac-admin', 'Activar'),
                             //'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
                             'data-method' => 'get',
                             'data-pjax' => '0',

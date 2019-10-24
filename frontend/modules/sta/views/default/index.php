@@ -7,6 +7,26 @@ use dosamigos\chartjs\ChartJs;
       <div class="container-fluid">
         <!-- Info boxes -->
         
+        <div class="btn-group">
+    <a href="<?=\yii\helpers\Url::toRoute('/sta/entregas')?>" class="btn btn-warning btn-lg ">
+        <i class="glyphicon glyphicon-briefcase" aria-hidden="true"></i> <?=yii::t('sta.labels','Entregas')?>
+    </a>
+    <a href="<?=\yii\helpers\Url::toRoute('/sta/test')?>" class="btn btn-success btn-lg ">
+        <i class="glyphicon glyphicon-paste " aria-hidden="true"></i> <?=yii::t('sta.labels','Exámenes Piscotécnicos')?>
+    </a>
+            <a href="<?=\yii\helpers\Url::toRoute('/masters/trabajadores')?>" class="btn btn-primary btn-lg ">
+        <i class="glyphicon glyphicon-user " aria-hidden="true"></i> <?=yii::t('sta.labels','Psicólogos')?>
+    </a>
+            
+    <a href="<?=\yii\helpers\Url::toRoute('/sta/periodos')?>" class="btn btn-dark btn-lg ">
+        <i class="glyphicon glyphicon-calendar " aria-hidden="true"></i> <?=yii::t('sta.labels','Periodos')?>
+    </a>
+</div>
+        
+        
+       
+        
+        
      <H4><?=yii::t('sta.labels','Facultades'); ?></H4>
  
           <div class="row">

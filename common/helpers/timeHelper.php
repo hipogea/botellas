@@ -12,8 +12,8 @@ class timeHelper {
       return ini_get('max_execution_time')+0; 
    }
    
-   public static function excedioDuracion($duration, $tolerance=0){
-      return ($duration + $tolerance >= static::getMaxTimeExecute());
+   public static function excedioDuracion($duration, $anticipate=0){
+      return ($duration + $anticipate >= static::getMaxTimeExecute());
    }
    } 
    

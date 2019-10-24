@@ -115,6 +115,17 @@ class ComboHelper  {
                 \common\helpers\FileHelper::getModels());
     }
     
+    
+     /*
+    * Obtiene todos los nombres de los modelos de un modulo
+    */
+    public static function getCboModelsByModule($moduleName){
+             
+        return array_combine(
+                        \common\helpers\FileHelper::getModelsByModule($moduleName),
+                \common\helpers\FileHelper::getModelsByModule($moduleName));
+    }
+    
      /*
     * Obtiene todos los nombres de los modelos de la aplicacion
     */

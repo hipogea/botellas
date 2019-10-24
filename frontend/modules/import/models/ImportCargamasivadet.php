@@ -25,7 +25,7 @@ use Yii;
  */
 class ImportCargamasivadet extends \common\models\base\modelBase
 {
-   public $booleanFields=['activa','requerida','esforeign'];
+   public $booleanFields=['activa','esclave','requerida','esforeign'];
     
     /**
      * {@inheritdoc}
