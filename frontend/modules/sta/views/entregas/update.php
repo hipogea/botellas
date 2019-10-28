@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+ECHO \common\widgets\spinnerWidget\spinnerWidget::widget();
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sta\models\Entregas */
 

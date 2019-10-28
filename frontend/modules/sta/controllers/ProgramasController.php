@@ -8,6 +8,7 @@ use frontend\modules\sta\models\Tallerpsico;
 use frontend\modules\sta\models\TalleresSearch;
 use frontend\modules\sta\models\VwAlutaller;
 use frontend\modules\sta\models\VwAlutallerSearch;
+use frontend\modules\sta\models\VwAluriesgoSearch;
 use frontend\modules\sta\models\TallerpsicoSearch;
 use frontend\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
@@ -93,6 +94,7 @@ class ProgramasController extends baseController
         
         
         $model = $this->findModel($id);
+        yii::error('eNCONTOR MODELO');
 //print_r($model->studentsInRiskForThis()); die();
          $searchStaff = new TallerpsicoSearch();
         $dataProviderStaff = $searchStaff->SearchByTaller($id);
@@ -100,7 +102,7 @@ class ProgramasController extends baseController
          $searchAlumnos = new VwAlutallerSearch();
         $dataProviderAlumnos = $searchAlumnos->searchByFacultad(
                 h::request()->queryParams,$model->codfac);
-
+yii::error('que pasa');
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);

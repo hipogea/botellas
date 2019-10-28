@@ -110,9 +110,11 @@ class ComboHelper  {
     */
     public static function getCboModels(){
              
-        return array_combine(
+       /* return array_combine(
                         \common\helpers\FileHelper::getModels(),
-                \common\helpers\FileHelper::getModels());
+                \common\helpers\FileHelper::getModels());*/
+        $paths= \common\helpers\FileHelper::getModels();
+             return self::map_models($paths);
     }
     
     
@@ -120,10 +122,27 @@ class ComboHelper  {
     * Obtiene todos los nombres de los modelos de un modulo
     */
     public static function getCboModelsByModule($moduleName){
-             
-        return array_combine(
+             $paths=\common\helpers\FileHelper::getModelsByModule($moduleName);
+             return self::map_models($paths);
+        /*return array_combine(
                         \common\helpers\FileHelper::getModelsByModule($moduleName),
-                \common\helpers\FileHelper::getModelsByModule($moduleName));
+                \common\helpers\FileHelper::getModelsByModule($moduleName));*/
+    }
+    
+    /*Funcion que arregla las rutas con los nombres de las tablas
+     * 
+     */
+    
+    private function map_models($paths){
+       /*$paths=(!is_null($moduleName))?\common\helpers\FileHelper::getModelsByModule($moduleName):
+         \common\helpers\FileHelper::getModels();
+        */
+        $models=[];
+        foreach($paths as $clave=>$valor){
+            $models[$valor]=\common\helpers\FileHelper::getShortName($valor);
+        }
+       return $models;
+      
     }
     
      /*

@@ -48,7 +48,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     public $dateorTimeFields=['fechacarga'=>self::_FDATETIME];
     //=['fecingreso'=>self::_FDATE,'cumple'=>self::_FDATE];
     public function init(){
-        $this->current_linea=0;
+        //$this->current_linea=0;
         $this->total_linea=0;
     }
     public static function tableName()
@@ -201,7 +201,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      $carga=$this->cargamasiva;
       if($carga->countChilds() <> count($row)){
          //throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row),'ncolsload'=>$this->cargamasiva->countChilds()]));
-       $this->addError('activo',Yii::t('import.errors', 'The csv file has not the same number columns ({ncolscsv}) than number fields ({ncolsload}) in this load data',['ncolscsv'=>count($row),'ncolsload'=>$this->cargamasiva->countChilds()]));
+       $this->addError('activo',Yii::t('import.errors', 'El archivo  csv de carga adjunto, tiene ({ncolscsv}) columnas y la plantilla de carga tiene  ({ncolsload}) columnas; no coinciden, revise el archivo adjunto',['ncolscsv'=>count($row),'ncolsload'=>$this->cargamasiva->countChilds()]));
       return false;       
       }
        /*  las Filas hijas*/
@@ -228,7 +228,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
           break;
       }
       if(!$validacion){
-          $this->addError('activo',Yii::t('import.errors', 'The csv file has not the same type columns "{columna}"   than type fields in this load data',['columna'=>$nombrecampo]));
+          $this->addError('activo',Yii::t('import.errors', 'Error en el formato de la columna  "{columna}", los tipos no coinciden, revise el archivop de carga',['columna'=>$nombrecampo]));
         // throw new \yii\base\Exception(Yii::t('import.errors', 'The csv file has not the same type columns "{columna}" than type fields in this load data',['columna'=>$nombrecampo]));
            return false; 
               }
@@ -245,6 +245,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
    }
  
     public function logCargaByLine($line,$errores){
+         yii::error($errores); 
     // $errores=$this->getErrors();
      foreach($errores as $campo=>$detalle){
          foreach($detalle as $cla=>$mensaje){
@@ -378,16 +379,27 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                      //dependiendo si es insercion o actualizacion usa una u otra funcion
                     yii::error('Esta es la linea => '.$linea,__METHOD__);  
                     
-                    yii::error($fila,__METHOD__);  
-                    $model=($cargamasiva->insercion)?$cargamasiva->modelAsocc():
-                    $cargamasiva->findModelAsocc($fila);
+                   // yii::error($fila,__METHOD__);  
+                    $model=($cargamasiva->insercion)?$cargamasiva->modelAsocc():$cargamasiva->findModelAsocc($fila);
+                     yii::error('Colocando atributos => '.$linea,__METHOD__); 
                      $model->setAttributes($cargamasiva->AttributesForModel($fila,$filashijas));
                         if($verdadero){
                             try{
-                              $model->save();  
+                                 yii::error('Grabando registro  => '.$linea,__METHOD__); 
+                    
+                              if($model->save()){
+                                 yii::error('Grab0  bien bien   => '.$linea,__METHOD__); 
+                     
+                              }  else{
+                                   yii::error('no grabo    => '.$linea,__METHOD__); 
+                     
+                              }
                             } catch (\yii\db\Exception $ex) {
-                                $model->addError($model->safeAttributes()[0],
+                                 $model->addError($model->safeAttributes()[0],
                                        $ex->getMessage());
+                                 yii::error('caray .. error => '.$linea,__METHOD__); 
+                    
+                               
                             }
                             
                             
@@ -396,6 +408,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                             $model->validate(); 
                             } 
                                         if($model->hasErrors()){
+                                             yii::error('Tiene errores, aegar log  => '.$linea,__METHOD__); 
                                             // var_dump($model->getErrors()); die(); 
                                             $this->logCargaByLine($linea,$model->getErrors());
                                             }
@@ -415,7 +428,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                 $deltaTime=microtime(true)-$timeBegin;
                             if(timeHelper::excedioDuracion($deltaTime,20) )
                                 {
-                                            $interrumpido=!$interrumpido;
+                                     yii::error('Opps se interrumpio  => '.$linea,__METHOD__);      
+                                $interrumpido=!$interrumpido;
                                             break; 
                                       }
                             $linea++; 

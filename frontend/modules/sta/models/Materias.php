@@ -25,7 +25,7 @@ class Materias extends \common\models\base\modelBase
      */
     public static function tableName()
     {
-        return '{{%sta_materias}}';
+        return '{{%sta_materia}}';
     }
 
     /**
@@ -34,14 +34,16 @@ class Materias extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codcur','nomcur','codcar','ciclo','creditos','electivo'], 'required'],
+            [['codcur','codcar','ciclo','creditos','electivo'], 'required'],
             [['creditos', 'ciclo'], 'integer'],
             [['codcur'], 'string', 'max' => 10],
-            [['nomcur'], 'string', 'max' => 40],
+            //[['nomcur'], 'string', 'max' =>70],
             [['activa', 'electivo'], 'string', 'max' => 1],
             [['codcar'], 'string', 'max' => 6],
-            [['codcur'], 'unique'],
-            [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => Carreras::className(), 'targetAttribute' => ['codcar' => 'codcar']],
+            [['codcur'], 'string', 'max' => 10],
+            ['codcur', 'unique', 'targetAttribute' => ['codcur', 'codcar','ciclo']], 
+            [['codcur'], 'exist', 'skipOnError' => true,'message'=>yii::t('sta.labels','Este curso {cursito} no existe Verifique',['cursito'=>$this->codcur]), 'targetClass' => Cursos::className(), 'targetAttribute' => ['codcur' => 'codcur']],
+            [['codcar'], 'exist', 'skipOnError' => true,'message'=>yii::t('sta.labels','Esta carrera  no existe Verifique'), 'targetClass' => Carreras::className(), 'targetAttribute' => ['codcar' => 'codcar']],
         ];
     }
 
@@ -52,7 +54,7 @@ class Materias extends \common\models\base\modelBase
     {
         return [
             'codcur' => Yii::t('sta.labels', 'Codcur'),
-            'nomcur' => Yii::t('sta.labels', 'Nomcur'),
+           // 'nomcur' => Yii::t('sta.labels', 'Nomcur'),
             'activa' => Yii::t('sta.labels', 'Activa'),
             'creditos' => Yii::t('sta.labels', 'Creditos'),
             'codfac' => Yii::t('sta.labels', 'Codfac'),
@@ -65,7 +67,7 @@ class Materias extends \common\models\base\modelBase
       public function scenarios()
     {
         $scenarios = parent::scenarios(); 
-        $scenarios['import'] = ['codcur','nomcur','codcar','ciclo','creditos','electivo'];
+        $scenarios['import'] = ['codcur','codcar','ciclo','activa','creditos','electivo'];
        /* $scenarios[self::SCENARIO_STATUS] = ['activo'];
         $scenarios[self::SCENARIO_RUNNING] = ['activo','current_linea','total_linea','fechacarga'];
  $scenarios['fechita'] = ['fechacarga'];*/

@@ -57,10 +57,10 @@ class AlumnosSearch extends Alumnos
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+       /* $query->andFilterWhere([
             'id' => $this->id,
             'profile_id' => $this->profile_id,
-        ]);
+        ]);*/
 
         $query->andFilterWhere(['like', 'codcar', $this->codcar])
             ->andFilterWhere(['like', 'ap', $this->ap])

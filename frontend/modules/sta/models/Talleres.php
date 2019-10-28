@@ -55,7 +55,8 @@ class Talleres extends \common\models\base\DocumentBase
            // [['codcur'], 'exist', 'skipOnError' => true, 'targetClass' => Materias::className(), 'targetAttribute' => ['codcur' => 'codcur']],
             [['codfac'], 'exist', 'skipOnError' => true, 'targetClass' => Facultades::className(), 'targetAttribute' => ['codfac' => 'codfac']],
             [['codperiodo'], 'exist', 'skipOnError' => true, 'targetClass' => Periodos::className(), 'targetAttribute' => ['codperiodo' => 'codperiodo']],
-        ];
+         [['detalles'], 'safe','on'=>'default'],
+            ];
     }
 
     /**
@@ -65,14 +66,16 @@ class Talleres extends \common\models\base\DocumentBase
     {
         return [
             'id' => Yii::t('sta.labels', 'ID'),
-            'codfac' => Yii::t('sta.labels', 'Codfac'),
-            'codtra' => Yii::t('sta.labels', 'Codtra'),
-            'codtra_psico' => Yii::t('sta.labels', 'Codtra Psico'),
-            'fopen' => Yii::t('sta.labels', 'Fopen'),
-            'fclose' => Yii::t('sta.labels', 'Fclose'),
+            'codfac' => Yii::t('sta.labels', 'Facultad'),
+            'numero' => Yii::t('sta.labels', 'Número'),
+             'descripcion' => Yii::t('sta.labels', 'Descripción'),
+            'codtra' => Yii::t('sta.labels', 'Responsable'),
+            'codtra_psico' => Yii::t('sta.labels', 'Tutor Adjunto'),
+            'fopen' => Yii::t('sta.labels', 'F Inicio'),
+            'fclose' => Yii::t('sta.labels', 'F Cierre'),
             'codcur' => Yii::t('sta.labels', 'Codcur'),
             'activa' => Yii::t('sta.labels', 'Activa'),
-            'codperiodo' => Yii::t('sta.labels', 'Codperiodo'),
+            'codperiodo' => Yii::t('sta.labels', 'Periodo'),
             'electivo' => Yii::t('sta.labels', 'Electivo'),
             'ciclo' => Yii::t('sta.labels', 'Ciclo'),
         ];

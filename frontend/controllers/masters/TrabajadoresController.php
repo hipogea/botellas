@@ -83,10 +83,10 @@ class TrabajadoresController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Saved record successfully');
+            Yii::$app->session->setFlash('success', 'El registro se ha grabado');
             // Multiple alerts can be set like below
-            Yii::$app->session->setFlash('kv-detail-warning', 'A last warning for completing all data.');
-            Yii::$app->session->setFlash('kv-detail-info', '<b>Note:</b> You can proceed by clicking <a href="#">this link</a>.');
+           // Yii::$app->session->setFlash('kv-detail-warning', 'A last warning for completing all data.');
+            //Yii::$app->session->setFlash('kv-detail-info', '<b>Note:</b> You can proceed by clicking <a href="#">this link</a>.');
             return $this->redirect(['view', 'id'=>$model->id]);
         } else {
             return $this->render('view', ['model'=>$model]);
@@ -162,7 +162,7 @@ class TrabajadoresController extends Controller
         
         
         if ($model->load(h::request()->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->codigotra]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -195,7 +195,7 @@ class TrabajadoresController extends Controller
         
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-           return $this->redirect(['view', 'id' => $model->codigotra]);
+           return $this->redirect(['view', 'id' => $model->id]);
         }
 
         

@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
+use frontend\modules\sta\staModule;
 use Yii;
 
 /**
@@ -26,6 +26,11 @@ class VwAlutaller extends \common\models\base\modelBase
     /**
      * {@inheritdoc}
      */
+     public $dateorTimeFields=[
+        'fecna'=>self::_FDATE,
+       
+        ];
+    public $dateOrTimeFields=['fecna'];
     public static function tableName()
     {
         return '{{%vw_alutaller}}';
@@ -69,6 +74,7 @@ class VwAlutaller extends \common\models\base\modelBase
             'talleres_id' => Yii::t('sta.labels', 'Talleres ID'),
             'fingreso' => Yii::t('sta.labels', 'Fingreso'),
             'codtra' => Yii::t('sta.labels', 'Codtra'),
+             'nomcur' => Yii::t('sta.labels', 'Curso'),
         ];
     }
 
@@ -79,5 +85,13 @@ class VwAlutaller extends \common\models\base\modelBase
     public static function find()
     {
         return new VwAlutallerQuery(get_called_class());
+    }
+    
+    public function getUrlImage(){
+       if($this->hasAttachments()){        
+           return $this->files[0]->getUrl();
+       }else{
+           return staModule::getPathImage($this->codalu);        
+       }
     }
 }

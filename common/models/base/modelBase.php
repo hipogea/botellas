@@ -665,7 +665,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             $expresion="/[^a-zA-Z0-9]/";   
             preg_match($expresion,$format,$valores);
             $delimiter=$valores[0]; 
-            yii::error('los valores :'. serialize(explode($delimiter,$format)));
+            //yii::error('los valores :'. serialize(explode($delimiter,$format)));
             $ygriega='Y';
             $mes='m';
             $dia='d';

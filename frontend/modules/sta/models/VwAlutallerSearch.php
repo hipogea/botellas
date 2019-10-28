@@ -100,7 +100,7 @@ class VwAlutallerSearch extends VwAlutaller
            ->andFilterWhere(['like', 'correo', $this->correo])
             ->andFilterWhere(['like', 'codalu', $this->codalu])
             //->andFilterWhere(['like', 'dni', $this->dni])
-            //->andFilterWhere(['like', 'domicilio', $this->domicilio])
+            ->andFilterWhere(['like', 'nombres', $this->nombres])
             ->andFilterWhere(['like', 'celulares', $this->celulares]);
             //->andFilterWhere(['like', 'nomcur', $this->nomcur])
         //  ->andFilterWhere(['like', 'codfac', $this->codfac])

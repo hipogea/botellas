@@ -5,18 +5,15 @@
     z-index: 1;
 
     display: block;
-    background-image: url('../img/install.jpg');
+   background-image: url('../img/relax.jpg');
+   //background-color:#6da252;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     height: 100%;
     width: 100%;
 
-    -webkit-filter: grayscale(50%);
-    -moz-filter: grayscale(50%);
-    -o-filter: grayscale(50%);
-    -ms-filter: grayscale(50%);
-    filter: grayscale(50%);
+   
 }
 
 .install-content {
@@ -34,7 +31,7 @@
 
 .install-logo img {
     margin: 25px auto;
-    width: 70px;
+    width: 170px;
 }
 
 .install-loading-bar {

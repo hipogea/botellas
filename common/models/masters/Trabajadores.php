@@ -76,6 +76,11 @@ class Trabajadores extends modelBase implements \common\interfaces\PersonInterfa
             [['telmoviles', 'referencia'], 'string', 'max' => 30],
             [['codigotra'], 'unique'],
              [['dni'], 'unique'],
+            ['dni','match',
+                 'pattern'=>h::settings()->get('general','formatoDNI'),
+                 'message'=>yii::t('base.errors','El {field} no coincide con el formato ',['field'=>$this->getAttributeLabel('dni')])
+                
+                 ],
         ];
     }
 
@@ -111,12 +116,12 @@ class Trabajadores extends modelBase implements \common\interfaces\PersonInterfa
        //var_dump(self::CarbonNow());
         
        if($this->toCarbon('fecingreso')->greaterThan(self::CarbonNow())){
-            $this->addError('fecingreso', yii::t('base.errors','The field {campo} is greater than current day',
+            $this->addError('fecingreso', yii::t('base.errors','La fecha  {campo} es una fecha futura',
                     ['campo'=>$this->getAttributeLabel('fecingreso')]));
        }
       // if(self::CarbonNow()->diffInYears( $this->toCarbon('cumple')) < 18){
        if($this->age() < 18){
-            $this->addError('cumple', yii::t('base.errors','This person is very Young to be worker',
+            $this->addError('cumple', yii::t('base.errors','Es muy joven para ser trabajador',
                     ['campo'=>$this->getAttributeLabel('cumple')]));
        }
         /*if (!in_array($this->$attribute, ['USA', 'Indonesia'])) {*/

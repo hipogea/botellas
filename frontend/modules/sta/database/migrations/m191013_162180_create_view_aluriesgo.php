@@ -5,8 +5,9 @@ use console\migrations\viewMigration;
 use frontend\modules\sta\models\Alumnos;
 use frontend\modules\sta\models\Aluriesgo;
 use frontend\modules\sta\models\Materias;
+use frontend\modules\sta\models\Cursos;
 use common\helpers\FileHelper;
-class m191012_015240_create_view_aluriesgo  extends viewMigration
+class m191013_162180_create_view_aluriesgo  extends viewMigration
 {
  const NAME_VIEW='{{%vw_aluriesgo}}';
  
@@ -34,7 +35,7 @@ public function safeDown()
  private function getFields(){
      return [ /*Alu*/'a.ap','a.am','a.nombres','a.codfac','a.dni','a.correo','a.celulares','a.fijos',
                   /*Aluriesgo*/'b.id','b.codcur','b.codalu','b.nveces','b.codperiodo','b.codcar',
-                  /*Materias*/ 'c.nomcur','c.creditos','c.electivo','c.ciclo',
+                  /*Materias*/ 'd.nomcur','c.creditos','c.electivo','c.ciclo',
                   
          ];
  }   
@@ -42,7 +43,8 @@ public function safeDown()
      $tablas=[
                   'Alumnos'=> Alumnos::tableName().' as a',
                   'Aluriesgo'=>Aluriesgo::tableName().' as b',
-                  'Materias'=> Materias::tableName().' as c',                  
+                  'Materia'=> Materias::tableName().' as c',    
+                  'Curso'=> Cursos::tableName().' as d',   
                 ];
         return $this->prepareTables($tablas);
  }  
@@ -50,6 +52,7 @@ public function safeDown()
  
  public function getWhere(){
       return " b.codalu=a.codalu".//Con Alu                
-                self::_AND."b.codcur=c.codcur"; //Con Activos
- }
+              self::_AND."b.codcur=c.codcur". //Con Materias
+       self::_AND."c.codcur=d.codcur"; //Con Cursos
+}
 }

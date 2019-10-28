@@ -34,7 +34,7 @@ public function safeDown()
  private function getFields(){
      return [ /*Alu*/'a.ap','a.am','a.nombres','a.codfac','a.dni','a.correo','a.celulares','a.fijos',
                   /*Talleresdet*/'b.id','b.codalu','b.talleres_id','b.fingreso','b.codtra',
-                 // /*Trabajadores*/ 'c.codigotra','c.ap','c.am','c.nombres','c,dni',
+                  /*Materias*/ 'c.nomcur','c.creditos','c.ciclo',
                   
          ];
  }   
@@ -42,14 +42,14 @@ public function safeDown()
      $tablas=[
                   'Alumnos'=> Alumnos::tableName().' as a',
                   'Talleresdet'=> Talleresdet::tableName().' as b',
-                 // 'Trabajadores'=> Materias::tableName().' as c',                  
+                  'Materias'=> Materias::tableName().' as c',                  
                 ];
         return $this->prepareTables($tablas);
  }  
 
  
  public function getWhere(){
-      return " b.codalu=a.codalu";//Con Alu                
-                //self::_AND."b.codcur=c.codcur"; //Con Activos
+      return " b.codalu=a.codalu";//Talleres det Con Alumnos               
+              self::_AND."b.codcur=c.codcur"; //Alumnos Con Cursos
  }
 }

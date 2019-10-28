@@ -274,7 +274,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
   *  por la funcion fgetcsv())
    * @filashijas : array de registros hijos del objeto de carga
   */
- public function AttributesForModel($row,$filashijas){
+ public function AttributesForModel($row,$filashijas){ 
       //$filashijas=$this->childQuery()->orderBy(['orden'=>SORT_ASC])->asArray()->all();
      //$modelo=$cargamasiva->modelAsocc();
      $attributes=[];
@@ -378,7 +378,7 @@ public function ordenCampos(){
               )->one();
       if(is_null($registro)) 
       throw new NotFoundHttpException(Yii::t('sta.errors', 'El registro no existe'));
-      
+      return $registro;
   }
  
 }

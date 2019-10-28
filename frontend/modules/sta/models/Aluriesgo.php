@@ -33,6 +33,7 @@ class Aluriesgo extends \common\models\base\modelBase
     {
         return [
             [['entrega_id', 'nveces'], 'integer'],
+             //[['descripcion'], 'string', 'max' => 40],
             [['codperiodo','entrega_id','codcur','codalu','nveces'],'required','on'=>'import'],
             [['codcur'], 'string', 'max' => 10],
             [['codalu'], 'string', 'max' => 14],

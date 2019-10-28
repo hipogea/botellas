@@ -4,7 +4,8 @@ use yii\helpers\Html;
 //use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
-use kartik\grid\GridView as grid;
+use kartik\grid\GridView ;
+
 ?>
 
 
@@ -18,82 +19,61 @@ use kartik\grid\GridView as grid;
 
     
     <div style='overflow:auto;'>
-   <?php Pjax::begin(); ?>
-        <?= grid::widget([
+   <?php 
+   
+   $gridColumns = [
+[
+    
+                'class' => 'yii\grid\ActionColumn',
+   ], 
+[
+    'class' => 'kartik\grid\ExpandRowColumn',
+   'detailRowCssClass'=>'',
+    'width' => '50px',
+    'value' => function ($model, $key, $index, $column) {
+        return GridView::ROW_COLLAPSED;
+    },
+    'detail' => function ($model, $key, $index, $column) {
+        return Yii::$app->controller->renderPartial('_form_view_alu', ['model' => $model]);
+    },
+    'expandOneOnly' => true
+],
+
+
+[
+    
+    'attribute' => 'ap',    
+   
+],
+[
+    
+    'attribute' => 'nombres',    
+   
+],
+         
+[
+    
+    'attribute' => 'codalu',    
+   
+],
+/*[
+    'class' => 'kartik\grid\CheckboxColumn',
+   // 'headerOptions' => ['class' => 'kartik-sheet-style'],
+    'pageSummary' => '<small>(amounts in $)</small>',
+    //'pageSummaryOptions' => ['colspan' => 3, 'data-colspan-dir' => 'rtl']
+],*/
+];
+   
+   
+   
+   
+   Pjax::begin(['id'=>'grilla-minus']); ?>
+        <?= GridView::widget([
         'dataProvider' => $dataProviderAlumnos,
          //'summary' => '',
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'filterModel' => $searchAlumnos,
-        'columns' => [
-            
-         
-         [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{update}{delete}{view}',
-                'buttons' => [
-                    'update' => function($url, $model) {                        
-                        $options = [
-                            'title' => Yii::t('base.verbs', 'Update'),                            
-                        ];
-                        return Html::a('<span class="btn btn-info btn-sm glyphicon glyphicon-pencil"></span>', $url, $options/*$options*/);
-                         },
-                          'view' => function($url, $model) {                        
-                        $options = [
-                            'title' => Yii::t('base.verbs', 'View'),                            
-                        ];
-                        return Html::a('<span class="btn btn-warning btn-sm glyphicon glyphicon-search"></span>', $url, $options/*$options*/);
-                         },
-                         'delete' => function($url, $model) {                        
-                        $options = [
-                            'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'title' => Yii::t('base.verbs', 'Delete'),                            
-                        ];
-                        return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-remove"></span>', $url, $options/*$options*/);
-                         }
-                    ]
-                ],
-         
-         [
-            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'codtra',
-            'pageSummary' => 'Total',
-            'editableOptions'=>[
-                'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                'data'=>['1'=>'UNO','2'=>'DOS'] ,
-                //'ajaxSettings'=>['data'=>['karina'=>'toledo']],
-            ],
-            'vAlign' => 'middle',
-            'width' => '210px',
-           //'data'=>['modelo'=>'mimodelo']
-           // 'editableOptions'=> [
-            //'attribute'=>'status_id',
-            //'value'=>'status.related_value',
-          //'header' => 'profile',
-          //'format' => Editable::FORMAT_BUTTON,
-          
-        //]
-         ],
-         
-         
-            'ap',
-            'am',
-               'codalu',         
-            'nombres',
-
-           // 'id',
-           // 'codfac',
-           // 'codtra',
-           // 'codtra_psico',
-           // 'fopen',
-            //'fclose',
-            //'codcur',
-            //'activa',
-            //'codperiodo',
-            //'electivo',
-            //'ciclo',
-
-          
-        ],
+        'columns' => $gridColumns,
     ]); ?>
         
     <?php Pjax::end(); ?>
@@ -129,7 +109,8 @@ $('#boton-refrescar').on( 'click', function(){
                                         $.noty.setText(n.options.id, json['warning']);
                              $.noty.setType(n.options.id, 'warning');
                               } 
-                        $.pjax({container: '#grilla-minus'});
+                              $.pjax.defaults.timeout = false;  
+                       // $.pjax.reload({container: '#grilla-minus'});
                         },
    cache: true
   })

@@ -61,7 +61,7 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
             
             [['codalu', 'codcar', 'ap', 'am', 'nombres'], 'required'],
             [['profile_id'], 'integer'],
-             [['celular'], 'integer'],
+             [['celulares'], 'integer'],
             [['codcar'], 'string', 'max' => 6],
              [['codfac'], 'string', 'max' => 8],
             [['ap', 'am', 'nombres'], 'string', 'max' => 40],

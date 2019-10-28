@@ -11,7 +11,7 @@ use common\helpers\h;
 <!-- Script -->
 <?php 
  //var_dump(yii::$app->user);die();
- $image=Html::img('@web/img/logo_svg.svg', ['alt' => 'Logo','width'=>40,'height'=>30]); ?>  
+ $image=Html::img('@web/img/atenea.svg', ['alt' => 'Logo','width'=>80,'height'=>80]); ?>  
     <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg"> '.$image . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">

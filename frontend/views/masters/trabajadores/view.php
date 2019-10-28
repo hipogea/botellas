@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\masters\Trabajadores */
 
-$this->title = yii::t('base.actions','View {name}',['name'=>$model->nombrecompleto]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('base.actions', 'Workers'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->codigotra;
+$this->title = yii::t('base.actions','Visualizar {name}',['name'=>$model->nombrecompleto]);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('base.actions', 'Trabajadores'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->id;
 \yii\web\YiiAsset::register($this);
 ?>
 <h4> </h4>
@@ -18,11 +18,11 @@ $this->params['breadcrumbs'][] = $model->codigotra;
 <div class="box box-success">
     <div class="box-body">
     <p>
-        <?= Html::a(Yii::t('base.verbs', 'Update'), ['update', 'id' => $model->codigotra], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('base.verbs', 'Delete'), ['delete', 'id' => $model->codigotra], [
+        <?= Html::a(Yii::t('base.verbs', 'Editar'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(Yii::t('base.verbs', 'Eliminar'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => Yii::t('control.errors', 'Are you sure you want to delete this item?'),
+                'confirm' => Yii::t('control.errors', '¿Desea eliminar este registro?'),
                 'method' => 'post',
             ],
         ]) ?>

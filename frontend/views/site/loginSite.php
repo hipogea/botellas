@@ -6,7 +6,7 @@
 
         <div class="install-content">
             <div class="install-logo">
-                <img src=" <?= yii\helpers\Url::to("@web/img/akaunting-logo-white.png") ?> " width="20"  height="60"  alt="Akaunting" />
+                <img src=" <?= yii\helpers\Url::to("@web/img/atenea.svg") ?> " width="120"  height="120"  alt="Atenea" />
             </div>
 
             <div class="box box-success box-solid">

@@ -7,7 +7,7 @@ $params = array_merge(
 );
 
 return [
-    
+    'name'=>'Minerva',
     'sourceLanguage' => 'en-US',
     'id' => 'frontend',
     'basePath' => dirname(__DIR__),

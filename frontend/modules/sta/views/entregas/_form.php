@@ -16,11 +16,8 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 ?>
 
 <div class="entregas-form">
-
-    <br>
     <?php $form = ActiveForm::begin(['id'=>'entregas-form',/*'enableAjaxValidation' => true*/]); ?>
-      <div class="box-header">
-        <div class="col-md-12">
+      <div class="box-header">        <div class="col-md-12">
             <div class="form-group no-margin">
                 
         <?= Html::submitButton("<span class='glyphicon glyphicon-floppy-disk'></span>".".     .".Yii::t('sta.labels', 'Guardar'), ['class' => 'btn btn-success']) ?>

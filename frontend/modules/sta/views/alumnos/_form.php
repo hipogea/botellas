@@ -28,13 +28,13 @@ use common\helpers\h;
       <div class="box-body">
         <?php //print_r($model->attributes);var_dump($model->facultad); die(); ?>
 
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+  <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
      <?= Html::label(yii::t('base.names','Facultad'),'45545rret',['class' => 'control-label']) ?>
     <?=  Html::input('text', 'namefacu', $model->facultad->desfac,['disabled'=>'disabled','class' => 'form-control']) ?>
             
 
  </div>
-   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
+   <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">  
    <?php 
    //$model->fillRelations();
    // print_r($model->_obRelations);die();
@@ -48,21 +48,37 @@ use common\helpers\h;
             //'foreignskeys'=>[1,2,3],
         ]);  ?>
     </div>
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'ap')->textInput(['maxlength' => true]) ?>
+          
+          
+       
+          <div class="col-md-12">
+              <div class="col-lg-3 col-md-8 col-sm-6 col-xs-12">
+                   <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                        <?= $form->field($model, 'ap')->textInput(['maxlength' => true]) ?>
 
- </div>
+                  </div>
 
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'am')->textInput(['maxlength' => true]) ?>
+                     <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                       <?= $form->field($model, 'am')->textInput(['maxlength' => true]) ?>
 
- </div>
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-     <?= $form->field($model, 'nombres')->textInput(['maxlength' => true]) ?>
+                     </div>
+                                <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
+                           <?= $form->field($model, 'nombres')->textInput(['maxlength' => true]) ?>
 
- </div>
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    <?php  //h::settings()->invalidateCache();  ?>
+                              </div>
+                            
+              </div>
+              <div class="col-md-4">
+                  <img src="<?=$model->getUrlImage()?>" class="img-thumbnail">
+              </div>
+          </div>       
+          
+          
+          
+          
+          
+          <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                           <?php  //h::settings()->invalidateCache();  ?>
                        <?= $form->field($model, 'fecna')->widget(DatePicker::class, [
                              'language' => h::app()->language,
                            // 'readonly'=>true,
@@ -77,16 +93,40 @@ use common\helpers\h;
                             //'dateFormat' => h::getFormatShowDate(),
                             'options'=>['class'=>'form-control']
                             ]) ?>
-</div>
+                           </div>
+          
+          
+          
+          
+          
+ 
+          
+            
+  
+          
+          
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'codalu')->textInput(['maxlength' => true]) ?>
 
  </div>
+          
+          
+          
+          
+          
+          
+          
+          
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
      <?= $form->field($model, 'dni')->textInput(['maxlength' => true]) ?>
 
  </div>
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+     <?= $form->field($model, 'correo')->textInput(['maxlength' => true]) ?>
+
+ </div>
+          
+  <div class="col-lg-3 col-md-12 col-sm-6 col-xs-12">
      <?= $form->field($model, 'domicilio')->textInput(['maxlength' => true]) ?>
 
  </div>

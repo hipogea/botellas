@@ -131,12 +131,18 @@ class FileHelper extends FileHelperOriginal {
      *  /Commin/aperded//demas       devuelve demas  
      */
    public function getShortName($fileName,$delimiter=DIRECTORY_SEPARATOR){
+       $className = $fileName;
+       if (preg_match('@\\\\([\w]+)$@', $fileName, $matches)) {
+            $className = $matches[1];
+        }
+        return $className;
+     /*  
        $fileName=self::normalizePath($fileName,$delimiter);
        RETURN strrev( substr(strrev($fileName),
                             4,
                             (strpos(strrev($fileName),$delimiter)===false)?strlen(strrev($fileName))-4:strpos(strrev($fileName),$delimiter)-4
                                 )
-                    );
+                    );*/
    }
    
    public function getUrlImageUserGuest(){

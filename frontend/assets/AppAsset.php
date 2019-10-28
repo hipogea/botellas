@@ -16,7 +16,7 @@ class AppAsset extends AssetBundle
        // 'css/app.css',
         'css/site.css',
         'css/personal.css',
-        'css/font-awesome.min.css',       
+        'css/font-awesome.min_1.css',       
         'css/ionicons.min.css',
         'css/akaunting-green.css',
          'css/bootstrap.min.css',

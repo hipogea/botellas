@@ -194,7 +194,7 @@ class ImportacionController extends baseController
          'Numero de línea de inicio de proceso'=>$carga->firstLineTobegin(),         
          'Numero de registros a Procesar'=>$carga->total_linea-$carga->firstLineTobegin()+1 ,
          'Número de registros Procesados'=>$numeroregistros,
-         'Porcentaje de registros Procesados'=>($numeroregistros*100/($carga->total_linea-$carga->firstLineTobegin()+1 )). ' % ',
+         //'Porcentaje de registros Procesados'=>($numeroregistros*100/($carga->total_linea-$carga->firstLineTobegin()+1 )). ' % ',
          'Numero de registros encontrados con errores'=>$nerrores,
          'Numero de registros Totales en el Archivo'=>$carga->total_linea,
          'Tiempo transcurrido'=> ((integer)(microtime(true)-$tinicial)).' '.yii::t('base.names','Segundos'),

@@ -68,8 +68,7 @@ class AccessControl extends \yii\base\ActionFilter
         $actionId = $action->getUniqueId();
         $user = $this->getUser();
         //var_dump($user);die();
-        if($user->identity->id==7)
-         return true;
+       
         if (Helper::checkRoute(
                 '/' . $actionId, Yii::$app->getRequest()->get(), $user
                 )) {

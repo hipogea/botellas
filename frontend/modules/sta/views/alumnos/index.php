@@ -45,7 +45,10 @@ $colorPluginOptions =  [
     ]
 ];
 $gridColumns = [
-
+[
+    
+                'class' => 'yii\grid\ActionColumn',
+   ], 
 [
     'class' => 'kartik\grid\ExpandRowColumn',
     'width' => '50px',
@@ -72,10 +75,14 @@ $gridColumns = [
     'attribute' => 'nombres',    
    
 ],
-[
-    
-    'attribute' => 'codalu',    
-   
+[    
+    'attribute' => 'codalu',
+],
+            [    
+    'attribute' => 'codfac',
+],
+            [    
+    'attribute' => 'codcar',
 ],
 [
     'class' => 'kartik\grid\CheckboxColumn',
@@ -133,8 +140,8 @@ $gridColumns = [
     'persistResize' => false,
     'toggleDataOptions' => ['minCount' => 10],
     //'exportConfig' => $exportConfig,
-    'itemLabelSingle' => 'book',
-    'itemLabelPlural' => 'books'
+    'itemLabelSingle' => yii::t('sta.labels','Alumno'),
+    'itemLabelPlural' => yii::t('sta.labels','Alumnos'),
 ]);  
 
 ?>
