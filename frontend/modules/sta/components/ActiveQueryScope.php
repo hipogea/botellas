@@ -20,6 +20,8 @@ class ActiveQueryScope extends \yii\db\ActiveQuery
                ]);
         parent::init();
     }
+    // HOLA MODIFICANDO
+
    
     
    public function complete(){
@@ -32,7 +34,7 @@ class ActiveQueryScope extends \yii\db\ActiveQuery
    
    /*
     * Cada que se efectue una llamada a un SQL
-    * Siempre filtrará los valores de facultades 
+    * Siempre filtrará los valores de facultagitdes 
     * asignados en la tabla 'userfacultades' a cada usuario
     * sin necesidad de escribir la condicion una y otra vez
     * Se vale de los valores  devueltos porla funcion 
