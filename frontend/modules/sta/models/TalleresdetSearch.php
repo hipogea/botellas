@@ -9,7 +9,7 @@ use frontend\modules\sta\models\Talleres;
 /**
  * TalleresSearch represents the model behind the search form of `frontend\modules\sta\models\Talleres`.
  */
-class TalleresSearch extends Talleres
+class TalleresdetSearch extends Talleres
 {
     /**
      * {@inheritdoc}
@@ -70,6 +70,37 @@ class TalleresSearch extends Talleres
 
         return $dataProvider;
     }
-    
+     public function searchById($params,$id)
+    {
+        $query = Talleres::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'ciclo' => $this->ciclo,
+        ]);
+
+        $query->andFilterWhere(['like', 'codfac', $this->codfac])
+            ->andWhere(['talleres_id'=>$id])
+            ->andFilterWhere(['like', 'activa', $this->activa])
+            ->andFilterWhere(['like', 'codperiodo', $this->codperiodo])
+            ->andFilterWhere(['like', 'electivo', $this->electivo]);
+
+        return $dataProvider;
+    }
      
 }

@@ -21,6 +21,7 @@ use common\helpers\h;
  */
 class ProgramasController extends baseController
 {
+     public $nameSpaces = ['frontend\modules\sta\models'];
     /**
      * {@inheritdoc}
      */
@@ -102,7 +103,7 @@ class ProgramasController extends baseController
          $searchAlumnos = new VwAlutallerSearch();
         $dataProviderAlumnos = $searchAlumnos->searchByFacultad(
                 h::request()->queryParams,$model->codfac);
-yii::error('que pasa');
+//yii::error('que pasa');
         
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -204,4 +205,8 @@ yii::error('que pasa');
             PRINT_R($model->getErrors());DIE();
         }*/
     }
+   public function actionEditTutor(){
+       if ($this->is_editable())
+            return $this->editField();
+   }
 }

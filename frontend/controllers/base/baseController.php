@@ -35,8 +35,11 @@ class baseController extends Controller
      // var_dump(h::request()->post());die();
        // var_dump($this->getNamespace($this->findKeyArrayInPost()));die();
         $className=$this->getNamespace($this->findKeyArrayInPost());
+         //var_dump($this->findKeyArrayInPost(),$className);die();
+       // var_dump(static::EDIT_EDITABLE_KEY);die();
       $model=$className::findOne( h::request()->post(static::EDIT_EDITABLE_KEY));
-        // use Yii's response format to encode output as JSON
+        var_dump(static::EDIT_EDITABLE_KEY);die();
+      // use Yii's response format to encode output as JSON
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $model->{h::request()->post(static::EDIT_EDITABLE_ATTRIBUTE)}=h::request()->
                 post($this->findKeyArrayInPost())[h::request()->

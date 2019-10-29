@@ -30,6 +30,11 @@ use Yii;
  */
 class Talleres extends \common\models\base\DocumentBase
 {
+   public $dateorTimeFields=[
+       'fopen'=> self::_FDATE,
+         'fclose'=> self::_FDATE,
+       ];
+    
     /**
      * {@inheritdoc}
      */

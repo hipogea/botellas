@@ -74,6 +74,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     {
         return [
             [['cargamasiva_id', 'descripcion'], 'required'],
+            [['user_id'], 'safe'],
             [['cargamasiva_id', 'user_id', 'current_linea', 'total_linea'], 'integer'],
             [['fechacarga'], 'string', 'max' => 19],
             [['descripcion', 'duracion'], 'string', 'max' => 40],
@@ -104,9 +105,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      public function scenarios()
     {
         $scenarios = parent::scenarios(); 
-        $scenarios[self::SCENARIO_MINIMO] = ['cargamasiva_id','descripcion','tienecabecera','current_linea_test','activo'];
+        $scenarios[self::SCENARIO_MINIMO] = ['user_id','cargamasiva_id','descripcion','tienecabecera','current_linea_test','activo'];
         $scenarios[self::SCENARIO_STATUS] = ['activo'];
-        $scenarios[self::SCENARIO_RUNNING] = ['activo','current_linea','total_linea','current_linea_test','fechacarga'];
+        $scenarios[self::SCENARIO_RUNNING] = ['user_id','activo','current_linea','total_linea','current_linea_test','fechacarga'];
  $scenarios['fechita'] = ['fechacarga'];
         return $scenarios;
     }
@@ -548,6 +549,10 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
          return $isReady;
     } 
 
-
+public static function lastRecordCreated(){
+    return static::find()->
+            where(['user_id'=>h::userId()])->
+            orderBy(['id' => SORT_DESC])->one();
+}
     
 }

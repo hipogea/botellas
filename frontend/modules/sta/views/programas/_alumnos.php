@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
 use kartik\grid\GridView ;
+use frontend\modules\sta\helpers\comboHelper;
 
 ?>
 
@@ -20,7 +21,8 @@ use kartik\grid\GridView ;
     
     <div style='overflow:auto;'>
    <?php 
-   
+   $dataTutores= comboHelper::getCboTutoresByProg($model->id);
+   //print_r($dataTutores);die();
    $gridColumns = [
 [
     
@@ -39,23 +41,58 @@ use kartik\grid\GridView ;
     'expandOneOnly' => true
 ],
 
-
-[
-    
-    'attribute' => 'ap',    
-   
+[  'attribute' => 'ap',
 ],
-[
-    
-    'attribute' => 'nombres',    
-   
+[  'attribute' => 'nombres', 
 ],
          
-[
-    
-    'attribute' => 'codalu',    
-   
+[ 
+    'attribute' => 'codalu', 
 ],
+
+           
+            
+ /*[
+    'class'=>'kartik\grid\EditableColumn',
+    'attribute'=>'codtra',
+    'editableOptions'=>[
+        //'header'=>'Tutor',
+       // 'formOptions'=>['action' => ['/book/editbook']], // point to the new action        
+        'inputType'=>\kartik\editable\Editable::INPUT_SELECT2,
+        'data'=>[], // any list of values
+       //'options' => ['class'=>'form-control'],
+        
+    ],*/
+     
+     [
+            'class' => 'kartik\grid\EditableColumn',
+            'attribute' => 'codtra',
+           // 'pageSummary' => 'Total',
+            'editableOptions'=>[
+                'inputType' => Editable::INPUT_DROPDOWN_LIST,
+                'data'=>$dataTutores ,
+                'formOptions'=>['action' => [$this->context->id.'/edit-tutor']], // point to the new action 
+                //'editableKey'=>'holis',
+                //'ajaxSettings'=>['data'=>['karina'=>'toledo']],
+            ],
+            'vAlign' => 'middle',
+            'width' => '210px',
+           //'data'=>['modelo'=>'mimodelo']
+           // 'editableOptions'=> [
+            //'attribute'=>'status_id',
+            //'value'=>'status.related_value',
+          //'header' => 'profile',
+          //'format' => Editable::FORMAT_BUTTON,
+          
+        //]
+         ]
+         
+    /*'hAlign'=>'right',
+    'vAlign'=>'middle',
+    'width'=>'100px',*/
+  
+    
+
 /*[
     'class' => 'kartik\grid\CheckboxColumn',
    // 'headerOptions' => ['class' => 'kartik-sheet-style'],

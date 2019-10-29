@@ -73,7 +73,7 @@ class VwAlutaller extends \common\models\base\modelBase
             'codalu' => Yii::t('sta.labels', 'Codalu'),
             'talleres_id' => Yii::t('sta.labels', 'Talleres ID'),
             'fingreso' => Yii::t('sta.labels', 'Fingreso'),
-            'codtra' => Yii::t('sta.labels', 'Codtra'),
+            'codtra' => Yii::t('sta.labels', 'Tutor'),
              'nomcur' => Yii::t('sta.labels', 'Curso'),
         ];
     }
@@ -93,5 +93,9 @@ class VwAlutaller extends \common\models\base\modelBase
        }else{
            return staModule::getPathImage($this->codalu);        
        }
+    }
+    
+    public function getPrimaryKey($asArray = false) {
+        return $this->id;
     }
 }

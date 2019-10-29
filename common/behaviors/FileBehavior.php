@@ -3,7 +3,7 @@ namespace common\behaviors;
 use nemmo\attachments\behaviors\FileBehavior as Fileb;
 use nemmo\attachments\models\File;
 use common\helpers\FileHelper;
-
+use yii;
 /*
  * Esta clase se extiende de la clase original 
  * nemmo\attachments\behaviors\FileBehavior
@@ -118,6 +118,7 @@ class FileBehavior extends  Fileb
   * Sea cuakl sea imagen o archivo
   */
  public function getUrlFirstFile(){
+     //return $this->files[0]->path;
     return($this->urlFiles===[])?
      FileHelper::UrlEmptyFile():
         $this->urlFiles[0];
@@ -164,7 +165,7 @@ class FileBehavior extends  Fileb
            
          }
      }else{
-          $cad.="NO es File no directorio <br>";
+          yii::error('NO es file es direcrtorio',__METHOD__);
      }     
   
         if (!empty($files)) {
@@ -176,7 +177,7 @@ class FileBehavior extends  Fileb
                 if (!$this->getModule()->attachFile($newPathFile, $this->owner)) {
                 throw new \Exception(\Yii::t('yii', 'File upload failed.'));
                }else{
-                 $cad.="Attach exitoso  <br>";  
+                yii::error('Attach Exitoso '.$newPathFile.'---'.$file,__METHOD__);
                }
             }
         }

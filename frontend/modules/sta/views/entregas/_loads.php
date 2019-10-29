@@ -25,8 +25,8 @@
                               $.noty.setText(n.options.id, error);
                               $.noty.setType(n.options.id, 'error');       
                                 }, 
-              success: function(data) {  
-                        $('#carga-temporal').html(data);
+              success: function(json) {  
+                       $.pjax.reload({container: '#grilla-cargas'});
                         }
                         });
              })", View::POS_READY);
@@ -47,6 +47,14 @@ use yii\helpers\Html;
       //  'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            /* [
+    'attribute' => 'ruta',
+    'format' => 'raw',
+    'value' => function ($model) {             
+        return $model->urlFirstFile;
+             },
+
+          ], */ 
             [ 'attribute' => 'hasFile',
                'headerOptions' => ['style' => 'width:10%'],
                 'format' => 'raw',
@@ -63,8 +71,7 @@ use yii\helpers\Html;
             'fechacarga',
             'tienecabecera',
             'duracion',
-            'activo',
-                              
+            'activo',                          
             [
                 'class' => 'yii\grid\ActionColumn',
                 //'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),

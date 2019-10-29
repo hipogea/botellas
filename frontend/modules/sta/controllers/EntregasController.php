@@ -214,16 +214,18 @@ class EntregasController extends baseController
              'descripcion'=>'CARGA MASIVA-'. uniqid(),
             'activo'=>'10',
              'tienecabecera'=>$entrega->tienecabecera,
+             'user_id'=>h::userId(),
             ];        
         if(ImportCargamasivaUser::firstOrCreateStatic($attributes,'minimo')){
-            $carguita=$model->importCargamasivaUser[0];
+           // $carguita=$model->importCargamasivaUser[0];
+            $carguita= ImportCargamasivaUser::lastRecordCreated();
         $mensaje= $carguita->
             attachFromPath($entrega->files[0]->getPath());
             $carguita->total_linea=$carguita->csv->numberLinesToImport();
             $carguita->save();
             //$datos['success']=$mensaje."<br>".yii::t('sta.messages','Se creó el detalla de carga exitosamente');
         }
-          
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;  
        return $this->renderAjax('carga',[
            'model'=>$carguita,
            'identrega'=>$entrega->id,

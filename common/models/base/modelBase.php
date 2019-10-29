@@ -727,7 +727,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                     //echo "ok  ----->";
                         return true;
                 } catch (\yii\db\Exception $exception) {
-                    echo "    --->  error  :    ". $exception->getMessage();
+                  //  echo "    --->  error  :    ". $exception->getMessage();
                      return false;
              } 
                 

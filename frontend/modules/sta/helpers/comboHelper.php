@@ -36,6 +36,21 @@ class comboHelper extends Combito
                 where(['codfac'=>$codfac])->all(),
                 'codcar','descar');
     }
+    /*
+     * Dvel todos los piscologos dentro de una programa
+     */
+     public static function getCboTutoresByProg($id){
+         $psicologos= \frontend\modules\sta\models\Tallerpsico::find()
+                 ->select(['codtra'])
+                 ->where(['talleres_id'=>$id])->asArray()->all();
+ $codigos=ArrayHelper::getColumn($psicologos, 'codtra');
+        return ArrayHelper::map(
+                \common\models\masters\Trabajadores::find()->
+                where(['in',
+              'codigotra', $codigos
+               ])->all(),
+                'codigotra','ap');
+    }
 }
 
 
