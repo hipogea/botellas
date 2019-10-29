@@ -15,7 +15,17 @@ $this->title = 'Profile';
 <div class="site-login">
     <h6><?= Html::encode($this->title) ?></h6>
  <div class="box box-success">
-    <div class="box-header">
+    
+
+ 
+        
+             
+            
+            
+              <?php  
+              $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
+                  
+     <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
@@ -26,15 +36,8 @@ $this->title = 'Profile';
         </div>
     </div>
       <div class="box-body">
-
- 
-        
-             
-            
-            
-              <?php  
-              $form = ActiveForm::begin(['id' => 'profile-form','options' => ['enctype' => 'multipart/form-data']]); ?>
-                  
+     
+     
                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     <?= \common\widgets\imagewidget\ImageWidget::widget(['name'=>'imagenrep','model'=>$model]); ?>
    </div>

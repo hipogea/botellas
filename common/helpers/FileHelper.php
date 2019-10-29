@@ -130,7 +130,7 @@ class FileHelper extends FileHelperOriginal {
      *  /Commin/aperded//demas.php  devuelve  demas
      *  /Commin/aperded//demas       devuelve demas  
      */
-   public function getShortName($fileName,$delimiter=DIRECTORY_SEPARATOR){
+   public static function getShortName($fileName,$delimiter=DIRECTORY_SEPARATOR){
        $className = $fileName;
        if (preg_match('@\\\\([\w]+)$@', $fileName, $matches)) {
             $className = $matches[1];
@@ -209,5 +209,22 @@ class FileHelper extends FileHelperOriginal {
             }
          return true;
    }
-           
+   
+   /*
+    * FORMTEA BYTES EN OTRAS UNIDEDADES
+    */
+   function formatBytes($bytes, $precision = 2) { 
+    $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+
+    $bytes = max($bytes, 0); 
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+    $pow = min($pow, count($units) - 1); 
+
+    // Uncomment one of the following alternatives
+    // $bytes /= pow(1024, $pow);
+    // $bytes /= (1 << (10 * $pow)); 
+
+    return round($bytes, $precision) . ' ' . $units[$pow]; 
+} 
+   
 }

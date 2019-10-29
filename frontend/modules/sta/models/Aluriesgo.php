@@ -33,8 +33,18 @@ class Aluriesgo extends \common\models\base\modelBase
     {
         return [
             [['entrega_id', 'nveces'], 'integer'],
+             
              //[['descripcion'], 'string', 'max' => 40],
             [['codperiodo','entrega_id','codcur','codalu','nveces'],'required','on'=>'import'],
+           ['codperiodo', 'unique', 'targetAttribute' => 
+                 ['codalu','codcar','codcur', 'codperiodo'],
+              'message'=>yii::t('sta.errors',
+                      'Esta combinacion de valores {codalu}-{codcur}-{codperiodo}-{codcar} ya existe',
+                      ['codalu'=>$this->getAttributeLabel('codalu'),
+                        'codcur'=>$this->getAttributeLabel('codcur'),
+                          'codperiodo'=>$this->getAttributeLabel('codperiodo'),
+                          'codcar'=>$this->getAttributeLabel('codcar')]
+                      )],
             [['codcur'], 'string', 'max' => 10],
             [['codalu'], 'string', 'max' => 14],
             [['codalu'], 'exist', 'skipOnError' => true,'message'=>'no exiset alu', 'targetClass' => Alumnos::className(), 'targetAttribute' => ['codalu' => 'codalu']],

@@ -119,6 +119,17 @@ class CSVReader  extends MyReader{
         $escape = isset($this->fgetcsvOptions['escape']) ? $this->fgetcsvOptions['escape'] : "\\";
         return fgetcsv($fp, $length, $delimiter, $enclosure, $escape);
    }
-   
-   
+   /*
+    * Devuelve el numero de lineas para 
+    * importar del archivo csv 
+    */
+  public function numberLinesToImport(){      
+       $contador=1;
+        if (($fp = fopen($this->filename, 'r')) !== FALSE) {
+            while (($this->ReadLineCsv($fp) ) !== FALSE) {
+                $contador++;
+            }
+        }
+      return $contador;
+  } 
 }

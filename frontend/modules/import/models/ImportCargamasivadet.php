@@ -59,17 +59,18 @@ class ImportCargamasivadet extends \common\models\base\modelBase
         return [
             'id' => Yii::t('import.labels', 'ID'),
             'cargamasiva_id' => Yii::t('import.labels', 'Cargamasiva ID'),
-            'nombrecampo' => Yii::t('import.labels', 'Nombrecampo'),
-            'aliascampo' => Yii::t('import.labels', 'Aliascampo'),
-            'sizecampo' => Yii::t('import.labels', 'Sizecampo'),
-            'activa' => Yii::t('import.labels', 'Activa'),
-            'requerida' => Yii::t('import.labels', 'Requerida'),
-            'tipo' => Yii::t('import.labels', 'Tipo'),
-            'esclave' => Yii::t('import.labels', 'Esclave'),
+            'nombrecampo' => Yii::t('import.labels', 'Campo'),
+            'aliascampo' => Yii::t('import.labels', 'Alias'),
+            'sizecampo' => Yii::t('import.labels', 'Ancho'),
+            'activa' => Yii::t('import.labels', 'Activo'),
+            'requerida' => Yii::t('import.labels', 'Oblig.'),
+            'tipo' => Yii::t('import.labels', 'Tipo Dato'),
+            'esclave' => Yii::t('import.labels', 'Clave'),
             'detalle' => Yii::t('import.labels', 'Detalle'),
-            'esforeign' => Yii::t('import.labels', 'Esforeign'),
+            'esforeign' => Yii::t('import.labels', 'Relacionado'),
             'parent_id' => Yii::t('import.labels', 'Parent ID'),
-            'modelo' => Yii::t('import.labels', 'Modelo'),
+            'modelo' => Yii::t('import.labels', 'Tabla'),
+            'nveces' => Yii::t('import.labels', 'N repetic'),
         ];
     }
 

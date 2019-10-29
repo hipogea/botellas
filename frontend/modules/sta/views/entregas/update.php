@@ -18,6 +18,11 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 
     <?= $this->render('_form_update', [
         'model' => $model,
+        'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+         'dataProviderFields'=>$dataProviderFields,
+        'modelCarga'=>$modelCarga,
+        
     ]) ?>
 
 

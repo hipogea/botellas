@@ -34,6 +34,52 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
       <?= $form->field($model, 'numero')->textInput(['disabled'=>'disabled']) ?>
 
+ </div>
+           <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+  
+    
+    <?= ComboDep::widget([
+               'model'=>$model,
+               'controllerName'=>'import/importacion',
+               'actionName'=>'escenarios',
+               'form'=>$form,
+               'data'=> ComboHelper::getCboModelsByModule('sta'),
+               'campo'=>'modelo',
+               'idcombodep'=>'entregas-escenario',
+        /* Opciones del input*/
+                'inputOptions'=>[ 'disabled'=>(($model->cargamasiva_id)>0)?'disabled':false,],
+               /* 'source'=>[ //fuente de donde se sacarn lso datos 
+                    /*Si quiere colocar los datos directamente 
+                     * para llenar el combo aqui , hagalo coloque la matriz de los datos
+                     * aqui:  'id1'=>'valor1', 
+                     *        'id2'=>'valor2,
+                     *         'id3'=>'valor3,
+                     *        ...
+                     * En otro caso 
+                     * de la BD mediante un modelo  
+                     */
+                        /*Docbotellas::className()=>[ //NOmbre del modelo fuente de datos
+                                        'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
+                                        'camporef'=>'descripcion',//columna a mostrar 
+                                        'campofiltro'=>'codenvio'/* //cpolumna 
+                                         * columna que sirve como criterio para filtrar los datos 
+                                         * si no quiere filtrar nada colocwue : false | '' | null
+                                         *
+                        
+                         ]*/
+                   'source'=>[],
+                            ]
+               
+               
+        )  ?>
+ </div>      
+       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
+   <?= $form->field($model, 'escenario')->
+            dropDownList(($model->isNewRecord)?[]:[$model->escenario=>$model->escenario],
+                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                     'disabled'=>(($model->cargamasiva_id)>0)?'disabled':false,
+                       ]
+                    ) ?>
  </div> 
   <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
       <?= $form->field($model, 'fecha',['enableAjaxValidation' => true])->widget(DatePicker::class, [
@@ -92,54 +138,9 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
    </div> 
           
    
- <div class="col-md-12"> 
-  
-    
-    <?= ComboDep::widget([
-               'model'=>$model,
-               'controllerName'=>'import/importacion',
-               'actionName'=>'escenarios',
-               'form'=>$form,
-               'data'=> ComboHelper::getCboModelsByModule('sta'),
-               'campo'=>'modelo',
-               'idcombodep'=>'entregas-escenario',
-        /* Opciones del input*/
-                'inputOptions'=>['enableAjaxValidation' => true],
-               /* 'source'=>[ //fuente de donde se sacarn lso datos 
-                    /*Si quiere colocar los datos directamente 
-                     * para llenar el combo aqui , hagalo coloque la matriz de los datos
-                     * aqui:  'id1'=>'valor1', 
-                     *        'id2'=>'valor2,
-                     *         'id3'=>'valor3,
-                     *        ...
-                     * En otro caso 
-                     * de la BD mediante un modelo  
-                     */
-                        /*Docbotellas::className()=>[ //NOmbre del modelo fuente de datos
-                                        'campoclave'=>'id' , //columna clave del modelo ; se almacena en el value del option del select 
-                                        'camporef'=>'descripcion',//columna a mostrar 
-                                        'campofiltro'=>'codenvio'/* //cpolumna 
-                                         * columna que sirve como criterio para filtrar los datos 
-                                         * si no quiere filtrar nada colocwue : false | '' | null
-                                         *
-                        
-                         ]*/
-                   'source'=>[],
-                            ]
-               
-               
-        )  ?>
- </div>      
-       <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
-   <?= $form->field($model, 'escenario')->
-            dropDownList(($model->isNewRecord)?[]:[$model->escenario=>$model->escenario],
-                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
-                    // 'class'=>'probandoSelect2',
-                       ]
-                    ) ?>
- </div> 
+
      <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= $form->field($model, 'tienecabecera')->checkBox() ?>
+    <?= $form->field($model, 'tienecabecera')->checkBox([ 'disabled'=>($model->hasAttachments())?true:false,]) ?>
 
  </div>   
           

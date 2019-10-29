@@ -90,13 +90,13 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
         return [
             'id' => Yii::t('import.labels', 'ID'),
             'cargamasiva_id' => Yii::t('import.labels', 'Cargamasiva ID'),
-            'fechacarga' => Yii::t('import.labels', 'Fechacarga'),
-            'user_id' => Yii::t('import.labels', 'User ID'),
-            'descripcion' => Yii::t('import.labels', 'Descripcion'),
-            'current_linea' => Yii::t('import.labels', 'Current Linea'),
+            'fechacarga' => Yii::t('import.labels', 'Fecha'),
+            'user_id' => Yii::t('import.labels', 'Iduser'),
+            'descripcion' => Yii::t('import.labels', 'Descripción'),
+            'current_linea' => Yii::t('import.labels', 'Linea'),
             'total_linea' => Yii::t('import.labels', 'Total Linea'),
-            'tienecabecera' => Yii::t('import.labels', 'Tienecabecera'),
-            'duracion' => Yii::t('import.labels', 'Duracion'),
+            'tienecabecera' => Yii::t('import.labels', 'Cabecera'),
+            'duracion' => Yii::t('import.labels', 'Duración'),
              'hasFile' => Yii::t('import.labels', 'Adjunto'),
         ];
     }
@@ -312,6 +312,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
         $this->deleteFile($this->id); //BORRAR EL ARCHIVO DE CARGA ADJUNTO
         return parent::afterSave($insert, $changedAttributes);
     }
+    
+    
     
    
     /*Retorna si tiene el csv adjunto (El primero) 

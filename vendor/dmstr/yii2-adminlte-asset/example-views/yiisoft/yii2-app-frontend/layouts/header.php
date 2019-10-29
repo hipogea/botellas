@@ -54,11 +54,11 @@ use common\helpers\h;
                             <div class="pull-left">
 
 
-                                <?= Html::button('Add Favorite', ['href' => Url::to(['/site/addfavorite']), 'title' => 'Add this page to Favorites...', 'class' => 'botonAbre btn btn-success']); ?>
+                                <?= Html::button(yii::t('base.verbs','Añadir Favoritos'), ['href' => Url::to(['/site/addfavorite']), 'title' => 'Add this page to Favorites...', 'class' => 'botonAbre btn btn-default']); ?>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(
-                                    'Sign out',
+                                    yii::t('base.verbs','Salir'),
                                     ['/site/logout'],
                                     ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
                                 ) ?>

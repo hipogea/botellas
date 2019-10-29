@@ -36,7 +36,7 @@ if(!$this->existsTable($table)) {
        'tienecabecera'=>$this->char(1)->append($this->collateColumn()),
         'modelo'=>$this->string(180)->notNull()->append($this->collateColumn()),
          'escenario'=>$this->string(40)->notNull()->append($this->collateColumn()),
-        
+         'cargamasiva_id'=>$this->integer(11),
        
         ],$this->collateTable());
    //$this->addPrimaryKey('pk_codmateria',$table, 'codcur');

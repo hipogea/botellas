@@ -5,12 +5,15 @@ namespace frontend\modules\sta\controllers;
 use Yii;
 use frontend\modules\sta\models\Entregas;
 use frontend\modules\sta\models\EntregasSearch;
+
 use frontend\controllers\base\baseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use frontend\modules\import\models\ImportCargamasiva as CargaMasiva;
+use frontend\modules\import\models\ImportCargamasivadetSearch;
 use frontend\modules\import\models\ImportCargamasivaUser;
+use frontend\modules\import\models\ImportCargamasivaUserSearch;
 use common\helpers\h;
 
 /**
@@ -112,7 +115,19 @@ class EntregasController extends baseController
         ]);
         $modelito->validate();
         print_r($modelito->getErrors());die();*/
+        
         $model = $this->findModel($id);
+        $filter=($model->cargamasiva_id >0)?$model->cargamasiva_id:-1; //Si no tiene asociado la carga masiva no filtrar nada
+      // var_dump($filter);die();
+        
+         $searchModelFields = new ImportCargamasivadetSearch();
+        $dataProviderFields = $searchModelFields->searchById($filter);
+        //var_dump($dataProviderFields->getTotalCount());die();
+        $searchModel = new ImportCargamasivaUserSearch();
+        $dataProvider = $searchModel->searchById($filter);
+        $modelCarga= CargaMasiva::findOne(['id'=>$model->cargamasiva_id]);
+        
+        
         //var_dump($model->attributes,$model->getAttributes(),$model->safeAttributes());die();
         if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
             Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -125,6 +140,11 @@ class EntregasController extends baseController
 
         return $this->render('update', [
             'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'modelCarga'=> $modelCarga,
+            'dataProviderFields'=>$dataProviderFields,
+        
         ]);
     }
 
@@ -163,41 +183,33 @@ class EntregasController extends baseController
      * en el módulo de importaciones
      */
    public function actionAjaxCreateUpload(){
-       
-       
        $datos=[];
-       /* $datos['success']='hola'; 
-         h::response()->format = \yii\web\Response::FORMAT_JSON;
-        return $datos;*/
-       $id=h::request()->get('id');
-       
-      $entrega= $this->findModel($id);
-      
-       $model=New CargaMasiva();
-       $model->setAttributes([
-           'user_id'=>h::userId(),
-           'insercion'=>'1',
-           'escenario'=>$entrega->escenario,
-            'format'=>'csv',
-           //'tienecabecera'=>'1',
-           'descripcion'=>$entrega->descripcion,
-           'modelo'=>$entrega->modelo,
-       ]);
-       
-       //yii::error('apunrtando',__METHOD__);
-       
-      
-        //$detalle=New ImportCargamasivaUser();
-       
      
-       
-       
-       
-       
-       // h::response()->format = \yii\web\Response::FORMAT_JSON;
-       if($model->save()){
-           $model->refresh();
-            $attributes=[
+        $id=h::request()->get('id');
+        $entrega= $this->findModel($id);
+   if($entrega->hasAttachments()){
+     if(!($entrega->cargamasiva_id >0 )){ //si no tiene carga masiva asociada aun 
+                    $model=New CargaMasiva();
+                         $model->setAttributes([
+                                    'user_id'=>h::userId(),
+                                     'insercion'=>'1',
+                                    'escenario'=>$entrega->escenario,
+                                        'format'=>'csv',
+                                    //'tienecabecera'=>'1',
+                                                 'descripcion'=>$entrega->descripcion,
+                                        'modelo'=>$entrega->modelo,
+                                        ]);
+                                if($model->save())
+                                $model->refresh();
+          
+     }else{
+         $model= CargaMasiva::findOne($entrega->cargamasiva_id);
+     }
+     
+     $entrega->cargamasiva_id=$model->id; //Enlazando entregas con Carga masiva   
+         $entrega->cargamasiva_id=$model->id; //Enlazando entregas con Carga masiva
+            $entrega->save();
+         $attributes=[
             'cargamasiva_id'=>$model->id,
              'descripcion'=>'CARGA MASIVA-'. uniqid(),
             'activo'=>'10',
@@ -206,24 +218,20 @@ class EntregasController extends baseController
         if(ImportCargamasivaUser::firstOrCreateStatic($attributes,'minimo')){
             $carguita=$model->importCargamasivaUser[0];
         $mensaje= $carguita->
-                    attachFromPath($entrega->files[0]->getPath());
+            attachFromPath($entrega->files[0]->getPath());
+            $carguita->total_linea=$carguita->csv->numberLinesToImport();
+            $carguita->save();
             //$datos['success']=$mensaje."<br>".yii::t('sta.messages','Se creó el detalla de carga exitosamente');
-        }else{
-             //$datos['error']=yii::t('sta.messages','No se pudo crear el detalle de carga');
         }
-           
-          /* $datos['success']=yii::t('sta.messages',
-                     'Se realizó la creación del registro de carga'
-                     )."<br>".$datos['success']; */ 
-       }else{
-         /* $datos['error']=yii::t('sta.messages',
-                     $model->getFirstError()
-                     );  */ 
-       }
+          
        return $this->renderAjax('carga',[
            'model'=>$carguita,
            'identrega'=>$entrega->id,
                ]);
+   } else{
+        
+    }
+   
    }
    /*
     * Encuentra el primer aregistro de importacion 

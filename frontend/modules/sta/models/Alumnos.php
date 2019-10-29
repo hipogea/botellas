@@ -98,9 +98,9 @@ class Alumnos extends \common\models\base\modelBase implements PersonInterface ,
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('sta.labels', 'ID'),
-            'profile_id' => Yii::t('sta.labels', 'Profile'),
-            'codcar' => Yii::t('sta.labels', 'Cod Esp'),
+            //'id' => Yii::t('sta.labels', 'ID'),
+            //'profile_id' => Yii::t('sta.labels', 'Profile'),
+            'codcar' => Yii::t('sta.labels', 'Espec'),
             'ap' => Yii::t('sta.labels', 'Ap Paterno'),
             'am' => Yii::t('sta.labels', 'A Materno'),
             'nombres' => Yii::t('sta.labels', 'Nombres'),
