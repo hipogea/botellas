@@ -65,6 +65,13 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
             'active' => false,
              'options' => ['id' => 'myveryofgwyynID4'],
         ],
+        [
+            'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_calendario',[ ]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => false,
+             'options' => ['id' => 'myveryofgwyy67yynID4'],
+        ],
     ],
 ]);  
  }

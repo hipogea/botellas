@@ -1,3 +1,4 @@
+.gitignore
 .log
 .sql
 .bmp
@@ -13,6 +14,7 @@
 .yml
 .html
 .md
+.png
 
 
 
@@ -70,3 +72,4 @@ phpunit.phar
 *.yml
 *.html
 *.md
+*.png
