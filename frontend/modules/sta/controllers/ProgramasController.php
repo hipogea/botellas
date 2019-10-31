@@ -5,6 +5,7 @@ namespace frontend\modules\sta\controllers;
 use Yii;
 use frontend\modules\sta\models\Talleres;
 use frontend\modules\sta\models\Tallerpsico;
+use frontend\modules\sta\models\RangosSearch;
 use frontend\modules\sta\models\TalleresSearch;
 use frontend\modules\sta\models\VwAlutaller;
 use frontend\modules\sta\models\VwAlutallerSearch;
@@ -95,10 +96,13 @@ class ProgramasController extends baseController
         
         
         $model = $this->findModel($id);
-        yii::error('eNCONTOR MODELO');
+        //yii::error('eNCONTOR MODELO');
 //print_r($model->studentsInRiskForThis()); die();
          $searchStaff = new TallerpsicoSearch();
         $dataProviderStaff = $searchStaff->SearchByTaller($id);
+        
+        $searchRangos = new RangosSearch();
+        $dataProviderRangos = $searchRangos->SearchByTaller($id);
 
          $searchAlumnos = new VwAlutallerSearch();
         $dataProviderAlumnos = $searchAlumnos->searchByFacultad(
@@ -112,7 +116,8 @@ class ProgramasController extends baseController
         return $this->render('update', [
             'model' => $model,
            'dataProviderStaff'=>$dataProviderStaff,
-            'searchStaff' =>$searchStaff,
+             'dataProviderRangos'=> $dataProviderRangos,
+           // 'searchStaff' =>$searchStaff,
             'dataProviderAlumnos'=>$dataProviderAlumnos,
             'searchAlumnos' => $searchAlumnos,
         ]);
@@ -187,20 +192,41 @@ class ProgramasController extends baseController
     public function actionAgregaPsico($id){
         
          $this->layout = "install";
-        $modelclipro = $this->findModel($id);
+        $modelprograma = $this->findModel($id);
+        $varios=$modelprograma->freeStudents();
+        $modelprograma->sincronizeCant();
+        $cantidadLibres=count($varios);unset($varios);
        $model=New Tallerpsico();
+       
+       
+       
        $model->talleres_id=$id;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+       
+       if(h::request()->isAjax && $model->load(h::request()->post())){
+            
+            if ($model->save()) {
+                         $model->assignStudentsByRandom();
             //echo \yii\helpers\Html::script("$('#createCompany').modal('hide'); window.parent.$.pjax({container: '#grilla-contactos'})");
-            $this->closeModal('buscarvalor', 'grilla-staff');
-        } elseif (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_psico', [
+                         $this->closeModal('buscarvalor', 'grilla-staff');
+                        } else{
+                            h::response()->format = \yii\web\Response::FORMAT_JSON;
+                        return \yii\widgets\ActiveForm::validate($model);
+                       //print_r($model->getErrors());die();
+             }
+         
+        }
+       
+      return $this->renderAjax('_psico', [
                         'model' => $model,
                         'id' => $id,
+                        'cantidadLibres'=>$cantidadLibres,
+                    
                             //'vendorsForCombo'=>  $vendorsForCombo,
                             //'aditionalParams'=>$aditionalParams
-            ]);
-        }
+            ]);   
+             
+       
+        
         /*ELSE{
             PRINT_R($model->getErrors());DIE();
         }*/

@@ -41,10 +41,21 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     { 
-        //echo h::user()->identity->tableName();die();
+        
+        
+//echo h::user()->identity->tableName();die();
         /*$limon=new \common\models\Profile;
         echo $limon->persona::className();die();*/
-
+ /*$reg=\frontend\modules\sta\models\Citas::findOne(1);
+ $fechainicio=$reg->toCarbon('finicio');
+ $fechatermino=$reg->toCarbon('ftermino');
+ var_dump($fechatermino->diffInMinutes($fechainicio),
+         $fechatermino->diffInSeconds($fechainicio),
+          $fechatermino->diffInHours($fechainicio),
+          $fechatermino->diffInDays($fechainicio),
+         $fechatermino->diffInWeeks($fechainicio)
+         );die();*/
+//$fecha= \Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'); 
 //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();
        // var_dump(Trabajadores::find()->where(['codigotra'=>'70w03'])->one());die();
         //echo \common\models\masters\Centros::find()->where(true)->one()->codcen;die();

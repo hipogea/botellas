@@ -9,14 +9,16 @@ use common\helpers\h;
  use kartik\date\DatePicker;
 ?>
 
-<div class="borereuccess">
+<div class="box box-success">
     <br>
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id'=>'myformulario'
+    ]); ?>
       <div class="box-header">
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= Html::submitButton(Yii::t('sta.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('sta.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
             
 
             </div>
@@ -24,12 +26,9 @@ use common\helpers\h;
     </div>
       <div class="box-body">
   
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-      <?= $form->field($model, 'calificacion')->textInput(['maxlength' => true]) ?>
+ 
 
-  </div>
-
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+  <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12"> 
      <?php 
   // $necesi=new Parametros;
     echo selectWidget::widget([
@@ -37,13 +36,19 @@ use common\helpers\h;
             'model'=>$model,
             'form'=>$form,
             'campo'=>'codtra',
-        'ordenCampo'=>2,
-            //'foreignskeys'=>[1,2,3],
+         'ordenCampo'=>2,
+         'addCampos'=>[3,4,5],
+        'inputOptions'=>['enableAjaxValidation'=>true],
         ]);  ?>
 
  </div> 
  
-  <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+<div class="col-lg-3 col-md-6 col-sm-12 col-xs-12">
+    
+      <?= $form->field($model, 'nalumnos',['enableAjaxValidation'=>true])->textInput(['maxlength' => 3]) ?>
+
+  </div>
+   <div class="col-lg-3 col-md-6 col-sm-12 col-xs-12"> 
       <?= $form->field($model, 'fregistro')->widget(DatePicker::class, [
                             'language' => h::app()->language,
                            'pluginOptions'=>[
@@ -58,7 +63,10 @@ use common\helpers\h;
                             ]) ?>
 
  </div> 
- 
+ <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-info">
+      <?=yii::t('sta.labels','Cantidad de alumnos libres : {alumnos}',['alumnos'=>$cantidadLibres])?>
+
+  </div> 
 
     <?php ActiveForm::end(); ?>
 

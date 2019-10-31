@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 
     <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
 <div class="box box-success">
+ 
     <?php  
  if(!$model->isNewRecord){
     //var_dump($this->context);die();
@@ -34,7 +35,7 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
         ],
         [
           'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_staff',[ 'searchStaff' =>$searchStaff,  'model' => $model,'dataProviderStaff'=>$dataProviderStaff]),
+            'content'=> $this->render('_staff',[ 'model' => $model,'dataProviderStaff'=>$dataProviderStaff]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
@@ -60,17 +61,24 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
         ],
         [
             'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnos'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_alumnos',[ 'dataProviderAlumnos'=>$dataProviderAlumnos, 'searchAlumnos' => $searchAlumnos,'model'=>$model ]),
+            'content'=> $this->renderAjax('_alumnos',[ 'dataProviderAlumnos'=>$dataProviderAlumnos, 'searchAlumnos' => $searchAlumnos,'model'=>$model ]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
              'options' => ['id' => 'myveryofgwyynID4'],
         ],
         [
-            'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnos'), //$this->context->countDetail() obtiene el contador del detalle
+            'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnos 1'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_calendario',[ ]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
              'options' => ['id' => 'myveryofgwyy67yynID4'],
+        ],
+        [
+            'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnosaa'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('rangos',['model'=>$model,'dataProviderRangos'=> $dataProviderRangos ]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => false,
+             'options' => ['id' => 'myveryofgwyy67ioyynID4'],
         ],
     ],
 ]);  

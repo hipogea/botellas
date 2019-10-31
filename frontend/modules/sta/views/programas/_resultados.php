@@ -1,5 +1,5 @@
 <?php
-
+/*
 use kriss\calendarSchedule\CalendarScheduleWidget;
 use yii\web\JsExpression;
 
@@ -38,3 +38,5 @@ echo CalendarScheduleWidget::widget([
         'eventClick' => new JsExpression('function(event) {console.log("eventClick", event)}'),
     ]
 ]);
+ * 
+ * */

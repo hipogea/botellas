@@ -1,10 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-//use yii\grid\GridView;
+use yii\grid\GridView;
 use yii\widgets\Pjax;
 use kartik\editable\Editable;
-use kartik\grid\GridView ;
+//use kartik\grid\GridView ;
 use frontend\modules\sta\helpers\comboHelper;
 
 ?>
@@ -16,7 +16,7 @@ use frontend\modules\sta\helpers\comboHelper;
 
     <div class="box-body">
     
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php // echo $thigrids->render('_search', ['model' => $searchModel]); ?>
 
     
     <div style='overflow:auto;'>
@@ -24,96 +24,53 @@ use frontend\modules\sta\helpers\comboHelper;
    $dataTutores= comboHelper::getCboTutoresByProg($model->id);
    //print_r($dataTutores);die();
    $gridColumns = [
-[
-    
-                'class' => 'yii\grid\ActionColumn',
-   ], 
-[
-    'class' => 'kartik\grid\ExpandRowColumn',
-   'detailRowCssClass'=>'',
-    'width' => '50px',
-    'value' => function ($model, $key, $index, $column) {
-        return GridView::ROW_COLLAPSED;
-    },
-    'detail' => function ($model, $key, $index, $column) {
-        return Yii::$app->controller->renderPartial('_form_view_alu', ['model' => $model]);
-    },
-    'expandOneOnly' => true
-],
-
 [  'attribute' => 'ap',
 ],
 [  'attribute' => 'nombres', 
+],         
+[
+                'attribute'=>'codalu',
+                'format'=>'html',
+                'value' => function ($model, $key, $index, $column) {
+                    $options=['id'=>$model->codalu,
+                              'class'=>'class_link_ajax'
+                               ];
+                    return Html::a($model->codalu, '#', $options);
+                        },
 ],
-         
 [ 
-    'attribute' => 'codalu', 
+    'attribute' => 'codtra', 
 ],
-
-           
-            
- /*[
-    'class'=>'kartik\grid\EditableColumn',
-    'attribute'=>'codtra',
-    'editableOptions'=>[
-        //'header'=>'Tutor',
-       // 'formOptions'=>['action' => ['/book/editbook']], // point to the new action        
-        'inputType'=>\kartik\editable\Editable::INPUT_SELECT2,
-        'data'=>[], // any list of values
-       //'options' => ['class'=>'form-control'],
-        
-    ],*/
-     
-     [
-            'class' => 'kartik\grid\EditableColumn',
-            'attribute' => 'codtra',
-           // 'pageSummary' => 'Total',
-            'editableOptions'=>[
-                'inputType' => Editable::INPUT_DROPDOWN_LIST,
-                'data'=>$dataTutores ,
-                'formOptions'=>['action' => [$this->context->id.'/edit-tutor']], // point to the new action 
-                //'editableKey'=>'holis',
-                //'ajaxSettings'=>['data'=>['karina'=>'toledo']],
-            ],
-            'vAlign' => 'middle',
-            'width' => '210px',
-           //'data'=>['modelo'=>'mimodelo']
-           // 'editableOptions'=> [
-            //'attribute'=>'status_id',
-            //'value'=>'status.related_value',
-          //'header' => 'profile',
-          //'format' => Editable::FORMAT_BUTTON,
-          
-        //]
-         ]
-         
-    /*'hAlign'=>'right',
-    'vAlign'=>'middle',
-    'width'=>'100px',*/
-  
-    
-
-/*[
-    'class' => 'kartik\grid\CheckboxColumn',
-   // 'headerOptions' => ['class' => 'kartik-sheet-style'],
-    'pageSummary' => '<small>(amounts in $)</small>',
-    //'pageSummaryOptions' => ['colspan' => 3, 'data-colspan-dir' => 'rtl']
-],*/
+       [ 
+    'attribute' => 'celulares', 
+],
 ];
    
    
    
    
-   Pjax::begin(['id'=>'grilla-minus']); ?>
-        <?= GridView::widget([
+   ?>
+        <?php 
+        Pjax::begin(['id'=>'sumilla']);
+        echo GridView::widget([
+             'id' => 'kv-grid-demo',
         'dataProvider' => $dataProviderAlumnos,
          //'summary' => '',
-         'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
+        // 'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'filterModel' => $searchAlumnos,
         'columns' => $gridColumns,
-    ]); ?>
+           //  'pjax' => true, // pjax is set to always true for this demo
+            //'toggleDataContainer' => ['class' => 'btn-group mr-2'],
+           /* 'panel' => [
+        'type' => GridView::TYPE_WARNING,
+        //'heading' => $heading,
+    ],*/
+    
+    ]);
+        Pjax::end();
+        ?>
         
-    <?php Pjax::end(); ?>
+    
     </div>
     </div>
 </div>

@@ -31,6 +31,8 @@ if(!$this->existsTable($table)) {
          'codfac'=>$this->string(8)->notNull()->append($this->collateColumn()),
          'electivo'=>$this->char(1)->append($this->collateColumn()),
          'ciclo'=>$this->integer(2),
+         'duracioncita'=>$this->integer(3),
+        'tolerancia'=>$this->decimal(4,2),
         'codocu'=>$this->char(3)->append($this->collateColumn()),
         'descripcion'=>$this->string(40)->notNull()->append($this->collateColumn()),
          'detalles'=>$this->text()->append($this->collateColumn()),

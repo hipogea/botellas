@@ -54,7 +54,13 @@ use yii\widgets\Pjax;
             'trabajadores.ap',
                              'trabajadores.am',
                              'trabajadores.nombres',
-            
+            [
+                'attribute'=>'nalumnos',
+                'format'=>'raw',
+                'value' => function ($model, $key, $index, $column) {
+                    return '<span class="badge badge-success" >'.$model->nalumnos.'</span>';
+                        },
+                ]
             //'fclose',
             //'codcur',
             //'activa',
@@ -73,5 +79,5 @@ use yii\widgets\Pjax;
        
 <?php
  $url= Url::to(['agrega-psico','id'=>$model->id,'gridName'=>'grilla-staff','idModal'=>'buscarvalor']);
-   echo  Html::button(yii::t('base.verbs','Create'), ['href' => $url, 'title' => 'Nuevo Contacto de ','id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
-?>    
+   echo  Html::button(yii::t('base.verbs','Create'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Tutor'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
+?> 

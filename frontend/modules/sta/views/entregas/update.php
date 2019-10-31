@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 <div class="entregas-update">
 
     <h4><?= Html::encode($this->title) ?></h4>
-
+   
     <?= $this->render('_form_update', [
         'model' => $model,
         'searchModel' => $searchModel,
