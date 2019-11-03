@@ -235,4 +235,22 @@ class ProgramasController extends baseController
        if ($this->is_editable())
             return $this->editField();
    }
+   /*
+    * Desafilia el tutor
+    * y devuelve los mensajes acecidos
+    */
+     public function actionAjaxDetachPsico($id){
+         if(h::request()->isAjax){
+             
+             
+             
+               h::response()->format = \yii\web\Response::FORMAT_JSON;
+           
+             $modelo= Tallerpsico::findOne($id);
+            
+              $modelo->dettachTutor();
+              return $modelo->messages();
+         }
+       
+    }
 }

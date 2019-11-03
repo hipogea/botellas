@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
+use common\traits\timeTrait;
 use Yii;
 
 /**
@@ -29,7 +29,7 @@ use Yii;
 class Citas extends \common\models\base\modelBase
 {
     
-    
+    use timeTrait;
     public $dateorTimeFields=[
         'fechaprog'=>self::_FDATETIME,
          'finicio'=>self::_FDATETIME,

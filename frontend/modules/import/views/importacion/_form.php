@@ -14,7 +14,10 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 
 <div class="import-cargamasiva-form">
 <div class="box box-success">
-    <?php $form = ActiveForm::begin(); ?>
+       <?php $form = ActiveForm::begin([
+           'id'=>'form-cargamasiva',
+    'fieldClass'=>'\common\components\MyActiveField'
+    ]); ?>
     
   <div class="box-footer">
         <div class="col-md-12">
@@ -24,38 +27,13 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
      </div>
     </div>
     <div class="box-body">
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+ <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12"> 
       <?= $form->field($model, 'descripcion')->textInput() ?>
 
  </div>
-    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= $form->field($model, 'user_id')->textInput() ?>
-
- </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
-    <?= $form->field($model, 'insercion')->checkBox() ?>
-
- </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
-   <?= $form->field($model, 'escenario')->
-            dropDownList(($model->isNewRecord)?[]:[$model->escenario=>$model->escenario],
-                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
-                    // 'class'=>'probandoSelect2',
-                       ]
-                    ) ?>
- </div> 
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
-   <?= $form->field($model, 'lastimport')->textInput(['maxlength' => true]) ?>
-
- </div>
-  
-    
    
- <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
-  <?= $form->field($model, 'format')->textInput(['maxlength' => true]) ?>
 
- </div>
- <div class="col-md-12"> 
+        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12"> 
   
     
     <?= ComboDep::widget([
@@ -66,6 +44,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
                'data'=> ComboHelper::getCboModels(),
                'campo'=>'modelo',
                'idcombodep'=>'importcargamasiva-escenario',
+               'inputOptions'=>[ 'disabled'=>(!$model->isNewRecord)?true:false],
                /* 'source'=>[ //fuente de donde se sacarn lso datos 
                     /*Si quiere colocar los datos directamente 
                      * para llenar el combo aqui , hagalo coloque la matriz de los datos
@@ -91,6 +70,31 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
                
         )  ?>
  </div>  
+        
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
+   <?= $form->field($model, 'escenario')->
+            dropDownList(($model->isNewRecord)?[]:[$model->escenario=>$model->escenario],
+                    ['prompt'=>'--'.yii::t('base.verbs','Choose a Value')."--",
+                     'disabled'=>(!$model->isNewRecord)?true:false
+                       ]
+                    ) ?>
+ </div> 
+         <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12"> 
+    <?= $form->field($model, 'insercion')->checkBox() ?>
+
+ </div> 
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">  
+   <?= $form->field($model, 'lastimport')->textInput(['maxlength' => true,'disabled'=>true]) ?>
+
+ </div>
+  
+    
+   
+ <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">   
+  <?= $form->field($model, 'format')->textInput(['maxlength' => true]) ?>
+
+ </div>
+ 
     
     
   

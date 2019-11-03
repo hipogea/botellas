@@ -38,9 +38,9 @@ class Tallerpsico extends \common\models\base\modelBase
             [['talleres_id', 'codtra'], 'required'],
             [['talleres_id','nalumnos'], 'integer'],
             [['codtra'], 'string', 'max' => 6],
-            ['codtra', 'unique', 'targetAttribute' => ['codtra', 'talleres_id'],'message'=>yii::t('sta.labels','Este tutor ya está registrado')],
-             [['calificacion'], 'string', 'max' => 1],
-             [['nalumnos'], 'safe'],
+            [['codtra', 'talleres_id'], 'unique', 'targetAttribute' => ['codtra'],'message'=>yii::t('sta.labels','Este tutor ya está registrado')],
+             //[['calificacion'], 'string', 'max' => 1],
+             [['nalumnos','calificacion'], 'safe'],
             [['nalumnos'], 'validateCantidades','on'=>'default'],
             [['talleres_id'], 'exist', 'skipOnError' => true, 'targetClass' => Talleres::className(), 'targetAttribute' => ['talleres_id' => 'id']],
         ];
@@ -155,13 +155,22 @@ class Tallerpsico extends \common\models\base\modelBase
          * Si no los tiene se borra nada mas
          * Si los tuviese, se descativa 
          */
+        
         $cantidad=$this->detachStudents();//desacoplar estudiantes
-      if($this->hasCitas()){
+        $this->addMessage(self::MESSAGE_SUCCESS,yii::t('import.messages',' {numero} Alumnos fueron desafiliados con este tutor',['numero'=>$cantidad]));
+        
+        if($this->hasCitas()){
+        $this->addMessage(self::MESSAGE_WARNING,yii::t('import.messages','Este tutor ya tenía citas programadas o efectuadas, sólo es posible desactivarlo '));
+      
          $this->disabled();//desactivarlo
+         $this->addMessage(self::MESSAGE_SUCCESS,yii::t('import.messages','El tutor ha sido desactivado '));
+      
       }else{
           $this->delete();
-                  
+           $this->addMessage(self::MESSAGE_SUCCESS,yii::t('import.messages','El tutor ha sido desactivado '));
+                
       }
+      $this->taller->sincronizeCant();
     }
     
     
@@ -176,9 +185,10 @@ class Tallerpsico extends \common\models\base\modelBase
     public function disabled(){
         $old=$this->getScenario();
         $this->setScenario(self::SCENARIO_STATUS);
-        $this->calificacion=0;
+        $this->calificacion=false;
         $f=$this->save();
         $this->setScenario($old);
+        yii::error($this->getFirstError(),__METHOD__);
         return $f;
     }
     

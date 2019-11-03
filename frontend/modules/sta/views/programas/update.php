@@ -89,4 +89,4 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 
 </div>
     </div>
-<?=\common\widgets\spinnerWidget\spinnerWidget::widget(); ?>
+

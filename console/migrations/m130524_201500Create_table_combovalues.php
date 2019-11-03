@@ -20,7 +20,7 @@ if ($this->db->schema->getTableSchema(static::NAME_TABLE, true) === null) {
              'id'=>$this->primaryKey(),
             'nombretabla'=>$this->string(120)->append($this->collateColumn()), //define si es venta o compra
             'codcen' => $this->string(5)->append($this->collateColumn()),
-            'codigo' => $this->string(3)->append($this->collateColumn()),
+            'codigo' => $this->string(6)->append($this->collateColumn()),
             'valor' => $this->string(60)->append($this->collateColumn()), 
             'valor1' => $this->string(3)->append($this->collateColumn()), 
             'valor2' => $this->string(3)->append($this->collateColumn()), 

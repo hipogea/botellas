@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-
+use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
 ?>
 <div class="talleres-index">
 
@@ -35,13 +35,10 @@ use yii\widgets\Pjax;
                         ];
                         return Html::a('<span class="btn btn-warning btn-sm glyphicon glyphicon-search"></span>', $url, $options/*$options*/);
                          },
-                         'delete' => function($url, $model) {                        
-                        $options = [
-                            'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'title' => Yii::t('base.verbs', 'Delete'),                            
-                        ];
-                        return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-remove"></span>', $url, $options/*$options*/);
-                         }
+                         'delete' => function ($url,$model) {
+			    $url = Url::toRoute($this->context->id.'/ajax-detach-psico',['id'=>$model->id]);
+                             return Html::a('<span class="btn btn-danger btn-sm glyphicon glyphicon-trash"></span>', '#', ['title'=>$url,/*'id'=>$model->codparam,*/'family'=>'holas','id'=> \yii\helpers\Json::encode(['id'=>$model->id,'modelito'=> str_replace('@','\\',get_class($model))]),/*'title' => 'Borrar'*/]);
+                            }
                     ]
                 ],
          
@@ -50,7 +47,7 @@ use yii\widgets\Pjax;
          
          
 
-           
+           'codtra',
             'trabajadores.ap',
                              'trabajadores.am',
                              'trabajadores.nombres',
@@ -60,7 +57,16 @@ use yii\widgets\Pjax;
                 'value' => function ($model, $key, $index, $column) {
                     return '<span class="badge badge-success" >'.$model->nalumnos.'</span>';
                         },
-                ]
+                ],
+                                [
+    'attribute' => 'calificacion',
+    'format' => 'raw',
+    'value' => function ($model) {
+        return \yii\helpers\Html::checkbox('calificacion[]', $model->calificacion, [ 'disabled' => true]);
+
+             },
+
+          ],
             //'fclose',
             //'codcur',
             //'activa',
@@ -70,7 +76,18 @@ use yii\widgets\Pjax;
 
           
         ],
-    ]); ?>
+    ]);
+             
+        echo linkAjaxGridWidget::widget([
+           'id'=>'mifpapaxx',
+            'idGrilla'=>'grilla-staff',
+            'family'=>'holas',
+          'type'=>'GET',
+           'evento'=>'click',
+            //'foreignskeys'=>[1,2,3],
+        ]); 
+         
+             ?>
     <?php Pjax::end(); ?>
 </div>
     </div>
@@ -78,6 +95,11 @@ use yii\widgets\Pjax;
   
        
 <?php
+
+  
+
+
+
  $url= Url::to(['agrega-psico','id'=>$model->id,'gridName'=>'grilla-staff','idModal'=>'buscarvalor']);
    echo  Html::button(yii::t('base.verbs','Create'), ['href' => $url, 'title' => yii::t('sta.labels','Agregar Tutor'),'id'=>'btn_contacts', 'class' => 'botonAbre btn btn-success']); 
 ?> 

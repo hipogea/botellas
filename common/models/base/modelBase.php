@@ -158,7 +158,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
     
     const PREFIX_ADVANCED = '@';
     const PREFIX_BASIC = '/';
-   
+     const MESSAGE_ERROR='error';
+     const MESSAGE_WARNING='warning';
+        const MESSAGE_SUCCESS='success';
     /*tipos de formatos de fechas a asignar a un campo en 
      * la propiedad $dateorTimeFields (mire los comentarios de esta propiedad, vea el ejemplo) 
      */
@@ -235,7 +237,16 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
    
     public $booleanFields=[]; // array para almacenar los campos que se consideran booleanos 
     
-   
+    
+    /*Array que guarda los mensajes 
+     * de usuario, algo asi como almacenar variabels de sesion
+     * pero sirven para que cuando se desarrollen funciones internas dentro del modelo
+     * estas queden regstrando loq ue vapasando
+     * y kluego desde el controlado
+     * pasarlos a un repsonse en ajax o una vista 
+     * 
+     */
+   private $_messages=[];
    
    
   public function makeReport(){}
@@ -1375,7 +1386,45 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
         return true;
     }
         
-      
+  public function addMessage($category=self::MESSAGE_ERROR,$message){
+       $this->_messages[$category][]=$message."\n";
+       return true;
+  } 
+  public function flushMessages($category=null){
+      if($category===null)
+          $this->_messages=[];
+       $this->_messages[$category]=[];
+       return true;
+  }
+public function messagesForCategory($category){
+     if(array_key_exists($category,$this->_messages))
+             throw new ServerErrorHttpException(Yii::t('base.errors', 'La categoría {cat} solicitada no existe en el array messages',['cat'=>$category]));  
+     return $this->_messages[$category];
+}
+public function messages(){
+  return $this->_messages;  
+}
+public function firstMessage($category=null){
+   if($category===null){
+     if(count($this->_messages[self::MESSAGE_ERROR])>0)
+    return $this->_messages[self::MESSAGE_ERROR][0];
+    if(count($this->_messages[self::MESSAGE_WARNING])>0)
+         return $this->_messages[self::MESSAGE_WARNING][0];
+    if(count($this->_messages[self::MESSAGE_SUCCESS])>0)
+         return $this->_messages[self::MESSAGE_SUCCESS][0];      
+       return '';  
+   }else{
+       if(array_key_exists($category,$this->_messages)){
+            if(count($this->_messages[$category])>0)
+              return $this->_messages[$category][0];  
+               return '';
+       }else{
+         throw new ServerErrorHttpException(Yii::t('base.errors', 'La categoría {cat} solicitada no existe en el array messages',['cat'=>$category]));  
+       }
+         
+   }
+    
+  }   
     
 }   
 

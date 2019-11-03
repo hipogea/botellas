@@ -7,7 +7,7 @@ namespace common\helpers;
 use yii;
  
 
-class RangeDates {
+class RangeDates extends \yii\base\Component{
     
      const ESCALE_SECONDS='Seconds';
     const ESCALE_MINUTES='Minutes';
@@ -41,14 +41,14 @@ class RangeDates {
    
    
     public function __construct(Array $dates){
+        //var_dump($dates[0]->greaterThanOrEqualTo($dates[1]));die();
         if(count($dates) <> 2)
          throw new \yii\base\Exception(Yii::t('base.errors', 'La propiedad dates Debe de contener {can} elementos',['can'=>2]));
         if(!($dates[0] instanceof \Carbon\Carbon) or 
            !($dates[1] instanceof \Carbon\Carbon))
           throw new \yii\base\Exception(Yii::t('base.errors', 'La propiedad dates debe ser un array debe contener instancias de Carbon'));
          
-       if($dates[0]->greaterThanOrEqualTo($dates[1])){           
-       }
+       if($dates[0]->greaterThanOrEqualTo($dates[1]))           
          throw new \yii\base\Exception(Yii::t('base.errors', 'La fecha de inicio es mayor o igual que la fecha de termino'));
        
    $this->_dates=$dates;

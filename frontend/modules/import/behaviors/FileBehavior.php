@@ -3,31 +3,42 @@ namespace frontend\modules\import\behaviors;
 use common\behaviors\FileBehavior as Fileb;
 use nemmo\attachments\models\File;
 use common\helpers\FileHelper;
+USE yii\db\ActiveRecord;
 
 /*
- * Esta clase se extiende de la clase original 
- * nemmo\attachments\behaviors\FileBehavior
- * Le ahorrara mucho trabajo al momento de trabajar
- * con archivos adjuntos, en especial sin son imagenes
+ * Esta clase se extiende de la clase general
+ * common
+
  * 
  */
 
 class FileBehavior extends  Fileb
 {
   
-    public function saveUploads($event)
+    /*Aregando un evento pàra 
+     * registrar las subidas de  los archivos 
+     * 
+     */
+    public function events()
     {
-        parent::saveUploads($event);
-     //$this->owner->completeData
+       $originalEvents=parent::events(); 
+        $originalEvents[ActiveRecord::EVENT_AFTER_INSERT]='infoFromUpload';
+        $originalEvents[ActiveRecord::EVENT_AFTER_UPDATE]='infoFromUpload';
+       
+       \yii::error( $originalEvents);
+       return parent::events();
+       
+    }
+    
+    public function  infoFromUpload($event){
+        
+        yii::error('esta funcionando el evento');
     }
 
-    public function deleteUploads($event)
-    {
-        parent::deleteUploads($event);
-        
-    }
- 
- 
- 
+
+    
+   
+    
+    
    
 }

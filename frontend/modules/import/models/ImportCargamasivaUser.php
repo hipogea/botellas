@@ -5,6 +5,7 @@ use frontend\modules\import\models\ImportCargamasiva;
 
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\behaviors\FileBehavior;
+//use frontend\modules\import\behaviors\FileBehavior;
 use common\helpers\timeHelper;
 use common\helpers\h;
 use Yii;
@@ -553,6 +554,21 @@ public static function lastRecordCreated(){
     return static::find()->
             where(['user_id'=>h::userId()])->
             orderBy(['id' => SORT_DESC])->one();
+}
+
+/*
+ * Saca toda la infor del archivo adjunto
+ * Solo del primer archivo adjunto  $this->files[0] el resto 
+ * lo ignora   $this->files[0]
+ */
+public function infoFileAttached(){
+    $info=[];
+    if($this->hasAttachments()){
+        $info['extension']=$this->files[0]->type."-".$this->files[0]->mime;
+        $info['name']=$this->files[0]->type."-".$this->files[0]->mime;
+    }else{
+        return [];
+    }
 }
     
 }

@@ -47,13 +47,22 @@ class TrabajadoresController extends Controller
         /*$limon=new \common\models\Profile;
         echo $limon->persona::className();die();*/
  /*$reg=\frontend\modules\sta\models\Citas::findOne(1);
- $fechainicio=$reg->toCarbon('finicio');
- $fechatermino=$reg->toCarbon('ftermino');
- var_dump($fechatermino->diffInMinutes($fechainicio),
-         $fechatermino->diffInSeconds($fechainicio),
-          $fechatermino->diffInHours($fechainicio),
-          $fechatermino->diffInDays($fechainicio),
-         $fechatermino->diffInWeeks($fechainicio)
+ $reg2=\frontend\modules\sta\models\Citas::findOne(2);
+ $foc=$reg->toCarbon('finicio');
+ $ftc=$reg->toCarbon('ftermino');
+ $fo=$reg2->toCarbon('finicio');
+  $ft=$reg2->toCarbon('ftermino');
+  
+ $rangeCompare=new \common\helpers\RangeDates([$reg->toCarbon('finicio'),
+     $reg->toCarbon('ftermino')]);
+ $rangeSearch=new \common\helpers\RangeDates([$reg2->toCarbon('finicio'),
+     $reg2->toCarbon('ftermino')]);
+ 
+   
+ var_dump($reg->isRangeIntoOtherRange($rangeCompare, $rangeSearch),
+         $rangeCompare->getDiff($ftc,$ft),
+         ($rangeCompare->tolerance)*$rangeCompare->duration,
+         $foc->greaterThan($ft)
          );die();*/
 //$fecha= \Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'); 
 //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();

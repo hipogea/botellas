@@ -86,6 +86,7 @@ return [
                          'frontend\modules\report\database\migrations',
                             'frontend\modules\import\database\migrations',
                             'frontend\modules\sta\database\migrations',
+                            'frontend\modules\sigi\database\migrations',
                             ],
                         ],
         'fixture' => [

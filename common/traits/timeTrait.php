@@ -67,7 +67,11 @@ trait timeTrait
     public function isRangeIntoOtherRange(RangeDates $rangeCompare, //rango a buscar
             RangeDates $rangeSearch, //rANGO A COMPARAR 
             $withBorder=true){
-         return (
+        yii::error($this->intofisrtCondition($rangeCompare, $rangeSearch, $withBorder));
+      yii::error($this->intoSecondCondition($rangeCompare, $rangeSearch));
+       yii::error( $this->intoThirdCondition($rangeCompare, $rangeSearch));
+          yii::error($this->intoFourthCondition($rangeCompare, $rangeSearch) );
+        return (
                  $this->intofisrtCondition($rangeCompare, $rangeSearch, $withBorder) &&
                  (
                   $this->intoSecondCondition($rangeCompare, $rangeSearch) or
@@ -97,7 +101,7 @@ trait timeTrait
 
 private function intoSecondCondition(RangeDates $rangeCompare, 
           RangeDates $rangeSearch){      
-         return (($rangeCompare->diff($rangeCompare->finalDate,$rangeSearch->initialDate) >= (1-$rangeCompare->tolerance)*$rangeCompare->duration) &&
+         return (($rangeCompare->getDiff($rangeCompare->finalDate,$rangeSearch->initialDate) >= (1-$rangeCompare->tolerance)*$rangeCompare->duration) &&
            ($rangeCompare->initialDate->lessThanOrEqualTo($rangeSearch->initialDate))
            );
            
@@ -114,7 +118,7 @@ private function intoSecondCondition(RangeDates $rangeCompare,
   
   private function intoFourthCondition(RangeDates $rangeCompare, 
           RangeDates $rangeSearch){      
-         return (($rangeCompare->diff($rangeCompare->finalDate,$rangeSearch->finalDate) >= (1-$rangeCompare->tolerance)*$rangeCompare->duration) &&
+         return (($rangeCompare->getDiff($rangeCompare->finalDate,$rangeSearch->finalDate) < ($rangeCompare->tolerance)*$rangeCompare->duration) &&
            ($rangeCompare->initialDate->lessThanOrEqualTo($rangeSearch->finalDate))
            );
            
@@ -123,8 +127,9 @@ private function intoSecondCondition(RangeDates $rangeCompare,
   /*Verifica que rangecompare
    * no coincide en nada con 
    * RangeSearch, es decir NO SE TRASLAPAN
+   * 
    */
-  public function traslape(RangeDates $rangeCompare, 
+  public function traslapeRange(RangeDates $rangeCompare, 
           RangeDates $rangeSearch){
       return !($rangeSearch->initialDate->greaterThan($rangeCompare->finalDate) or
        $rangeCompare->initialDate->greaterThan($rangeSearch->finalDate));

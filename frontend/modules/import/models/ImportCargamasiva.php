@@ -28,7 +28,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
   
      const EXTENSION_CSV='csv';
     public $booleanFields=['insercion','tienecabecera'];
-    
+    public $hardFields=['modelo','escenario'];
     /**
      * {@inheritdoc}
      */
@@ -43,7 +43,7 @@ class ImportCargamasiva extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['user_id', 'insercion', 'escenario', 'descripcion', 'format', 'modelo'], 'required'],
+            [['insercion', 'escenario', 'descripcion', 'format', 'modelo'], 'required'],
             [['user_id'], 'integer'],
             [['insercion'], 'string', 'max' => 1],
             [['escenario', 'descripcion'], 'string', 'max' => 40],
@@ -60,13 +60,13 @@ class ImportCargamasiva extends \common\models\base\modelBase
     {
         return [
             'id' => Yii::t('import.labels', 'ID'),
-            'user_id' => Yii::t('import.labels', 'User ID'),
+            'user_id' => Yii::t('import.labels', 'Usuario'),
             'insercion' => Yii::t('import.labels', 'Insercion'),
             'escenario' => Yii::t('import.labels', 'Escenario'),
-            'lastimport' => Yii::t('import.labels', 'Lastimport'),
+            'lastimport' => Yii::t('import.labels', 'Ultima Carga'),
             'descripcion' => Yii::t('import.labels', 'Descripcion'),
-            'format' => Yii::t('import.labels', 'Format'),
-            'modelo' => Yii::t('import.labels', 'Modelo'),
+            'format' => Yii::t('import.labels', 'Formato'),
+            'modelo' => Yii::t('import.labels', 'Tabla'),
         ];
     }
     
@@ -148,35 +148,11 @@ class ImportCargamasiva extends \common\models\base\modelBase
                // print_r($columnas);die();
               foreach($columnas as $nameField=>$oBCol){ 
                 	if($modeloatratar->isAttributeSafe($nameField) &&
-                          !$this->existsChildField($nameField) 
+                          !$this->existsChildField($nameField) && 
+                          !($oBCol->dbType =='text')
                      ){
-                            //var_dump($modeloatratar->primaryKey(true),$modeloatratar->getTableSchema()->foreignKeys);die();
-                        // if(in_array($nameField ,array_values($modeloatratar->primaryKey(true)))){
-                             //$esclave=true;
-                            // $orden=array_search($nameField,array_values($modeloatratar->primaryKey(true)))+1;
-                         //} else{
-                            // $esclave=false;
-                             //$orden=$i+count($modeloatratar->primaryKey(true));
-                        // } 
-                        /* $modeli=New ImportCargamasivadet;
-                         $modeli->setAttributes([
-                                           'cargamasiva_id'=>$this->id,
-                                             'nombrecampo'=>$nameField,
-                                            'aliascampo'=>$modeloatratar->getAttributeLabel($nameField),
-                                            'sizecampo'=>$oBCol->size,
-                                            'activa'=>true,
-                                            'requerida'=>$modeloatratar->isAttributeRequired($nameField),
-                                            'tipo'=>$oBCol->dbType,
-                                            'orden'=>$orden,
-                                            'esclave'=>$esclave,
-                                            'esforeign'=>in_array($nameField,array_keys($modeloatratar->getTableSchema()->foreignKeys)),
-                                            
-                                        ]);
-                         if(!$modeli->save())
-                         {
-                             print_r($modeli->getErrors());die();
-                         }*/
-                            //echo "ahi va ".$nameField."<br>";
+                          //yii::error($nameField,__METHOD__);   
+                        yii::error($oBCol->dbType,__METHOD__);
                         if(ImportCargamasivadet::firstOrCreateStatic(
                                         [
                                            'cargamasiva_id'=>$this->id,
@@ -380,5 +356,10 @@ public function ordenCampos(){
       throw new NotFoundHttpException(Yii::t('sta.errors', 'El registro no existe'));
       return $registro;
   }
- 
+ public function beforeSave($insert) {
+        if($insert){
+            $this->user_id=h::userId();
+        }
+       return parent::beforeSave($insert);
+    }
 }
