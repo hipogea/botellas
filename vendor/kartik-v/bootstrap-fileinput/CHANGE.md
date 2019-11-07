@@ -1,6 +1,31 @@
 Change Log: `bootstrap-fileinput`
 =================================
 
+## version 5.0.6
+
+**Date:** 11-Sep-2019
+
+- (enh #1464): Correct preview frame float styling issues.
+- (bug #1463): Correct file input unlock after file validation errors (for non-ajax mode).
+- (bug #1460): Correct `filebatchselected` event trigger.
+- (bug #1459): Upload Async does not recognize initialPreview correctly for ajax response immediately sent with uploadUrl.
+- (bug #1457): Correct `removeFromPreviewOnError` validation.
+- (enh #1455): Default preview template to `other` when invalid file type is passed.
+
+## version 5.0.5
+
+**Date:** 23-Aug-2019
+
+- (enh #1450): Update Russian Translations.
+- (enh #1449): Lock file input while files are being read for preview.
+- (enh #1446): New property `showConsoleLogs` to control display of plugin console messages.
+- (enh #1445): Correct invalid thumb frame log errors.
+- (enh #1442): Implement `.npmignore` to clean unwanted files for NPM package.
+- (enh #1438): Activating Open Collective.
+- (enh #1436): Improve Portuguese translations.
+- (enh #1435): Handle special characters in file thumb id attribute.
+- (enh #1429): Enhance thumbnail preview identifiers.
+
 ## version 5.0.4
 
 **Date:** 30-Jun-2019

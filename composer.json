@@ -12,10 +12,11 @@
         "irc": "irc://irc.freenode.net/yii",
         "source": "https://github.com/yiisoft/yii2"
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "stable", 
+    
     "require": {
         "php": ">=5.4.0",
-       "yiisoft/yii2": "*",
+       "yiisoft/yii2": "~2.0.20",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
         "codeception/codeception": "^2.5",
@@ -49,7 +50,12 @@
         "rmrevin/yii2-fontawesome": "2.10.*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "kartik-v/yii2-detail-view": "@dev",
-        "kartik-v/yii2-datecontrol": "dev-master"
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "kriss/yii2-calendar-schedule": "^1.0",
+        "philippfrenzel/yii2fullcalendar": "*",
+        "npm-asset/fullcalendar": "^3.9",
+        "aminkt/yii2-tree-view-widget": "*"
+        
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

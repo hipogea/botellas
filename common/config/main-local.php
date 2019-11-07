@@ -10,7 +10,7 @@
 'username'=>'wwwcase_db',
 'password'=>'RNbSJQz',
 'charset'=>'utf8',
-'tablePrefix'=>'7av4v_',
+//'tablePrefix'=>'7av4v_',
 ],
 ],
 'language'=>'es',
