@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
         'css/ionicons.min.css',
         'css/akaunting-green.css',
          'css/bootstrap.min.css',
+         'css/bootstrap.min.css',
         'css/install.css',
          'css/select2.css',
     ];

@@ -141,4 +141,38 @@ class EdificiosController extends baseController
 
         throw new NotFoundHttpException(Yii::t('sigi.labels', 'The requested page does not exist.'));
     }
+    
+     public function actionAgregaApoderado($id){        
+         $this->layout = "install";
+         
+        $modeledificio = $this->findModel($id);        
+       $model=New \frontend\modules\sigi\models\SigiApoderados();
+       $model->edificio_id=$id;
+       
+       $datos=[];
+        if(h::request()->isPost){
+            $model->load(h::request()->post());
+             h::response()->format = \yii\web\Response::FORMAT_JSON;
+            $datos=\yii\widgets\ActiveForm::validate($model);
+            if(count($datos)>0){
+               return ['success'=>2,'msg'=>$datos];  
+            }else{
+                $model->save();
+                //$model->assignStudentsByRandom();
+                  return ['success'=>1,'id'=>$model->edificio_id];
+            }
+        }else{
+           return $this->renderAjax('_apoderado', [
+                        'model' => $model,
+                        'id' => $id,
+                        'gridName'=>h::request()->get('gridName'),
+                        'idModal'=>h::request()->get('idModal'),
+                        //'cantidadLibres'=>$cantidadLibres,
+          
+            ]);  
+        }
+       
+       
+    }
+    
 }

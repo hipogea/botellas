@@ -123,11 +123,12 @@ class baseMigration extends Migration
     private static function fillCboValor($i,$realNameTable,$namefield,$valor,$largo){
        
         if($largo==1){
-              if(count($valores)< 26){
+              if($valor=='Z'){
+                  return false;
+              }else {
                   $code=self::selectLetter($i);  
                   return true;
-              }else {
-                  return false;
+                  
               }
         }else{
             $code='1'.str_pad($i, $largo-1, '0', STR_PAD_LEFT);

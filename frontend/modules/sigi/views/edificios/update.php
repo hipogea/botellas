@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+
 use kartik\tabs\TabsX;
 
 
@@ -29,16 +30,22 @@ $this->params['breadcrumbs'][] = Yii::t('sigi.labels', 'Update');
       'encodeLabels'=>false,
     'items' => [
         [
-          'label'=>'<i class="fa fa-home"></i> '.yii::t('sta.labels','Principal'), //$this->context->countDetail() obtiene el contador del detalle
+          'label'=>'<i class="fa fa-hospital"></i> '.yii::t('sta.labels','Edificio'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_form',['model' => $model]),
             'active' => true,
              'options' => ['id' => 'myveryownID3'],
         ],
         [
-          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_segunda',[ 'model' => $model]),
+          'label'=>'<i class="fa fa-cubes"></i> '.yii::t('sta.labels','Unidades'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_unidades',[ 'model' => $model]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
+        ],
+        [
+          'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Apoderados'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_apoderados',[ 'model' => $model]),
+            'active' => false,
+             'options' => ['id' => 'myveryoddwnID4'],
         ],
        
         

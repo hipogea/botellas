@@ -290,10 +290,10 @@ class ImportCargamasiva extends \common\models\base\modelBase
                   (substr(strtoupper($tipo),0,4)=='DECI')
                   ) ;
  }
-public function isDateorTime($tipo,$nombrecampo){
+public function isDateorTime($tipo,$nombrecampo,$longitud){
      return (((substr(strtoupper($tipo),0,4)=='CHAR')or
                   (substr(strtoupper($tipo),0,5)=='VARCHAR')
-                   )&& (in_array($longitud,[10,18])) && 
+                   )&& (in_array($longitud,[10,19])) && 
                     (in_array($nombrecampo,$this->modelAsocc()->dateTimeFields)));
  }
  

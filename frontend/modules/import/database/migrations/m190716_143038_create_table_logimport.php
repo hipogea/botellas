@@ -8,7 +8,7 @@ use console\migrations\baseMigration;
 class m190716_143038_create_table_logimport extends baseMigration
 {
      const NAME_TABLE='{{%import_logcargamasiva}}';
-     const NAME_TABLE_PARENT='{{%import_cargamasiva}}';
+     const NAME_TABLE_PARENT='{{%import_carga_user}}';
  //const NAME_TABLE_DOCUMENTOS='{{%documentos}}';
     public function safeUp()
     {

@@ -11,11 +11,12 @@ use frontend\modules\sta\helpers\comboHelper;
 
 
 <button id="boton-refrescar" type="button" class="btn btn-warning btn-lg">
-    <span class="glyphicon glyphicon-refresh"></span><?=yii::t('sta.labels','  Actualizar lista')?></button>
-<div class="talleres-index">
+    <span class="glyphicon glyphicon-refresh"></span><?=yii::t('sta.labels','  Actualizar lista')?>
+</button>
+
 
     <div class="box-body">
-    
+  
     <?php // echo $thigrids->render('_search', ['model' => $searchModel]); ?>
 
     
@@ -72,8 +73,8 @@ use frontend\modules\sta\helpers\comboHelper;
         
     
     </div>
-    </div>
-</div>
+    
+
   
   <?php    $this->registerJs("
          
@@ -112,3 +113,5 @@ $('#boton-refrescar').on( 'click', function(){
  
 );",\yii\web\View::POS_END);  
   ?>
+
+    </div>

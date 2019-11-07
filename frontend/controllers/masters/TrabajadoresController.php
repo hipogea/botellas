@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\controllers\masters;
-
+ use console\components\Command;
 use Yii;
 use common\models\masters\Trabajadores;
 use common\models\config\Configuracion;
@@ -41,6 +41,37 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     { 
+    //var_dump(\Carbon\Carbon::rawCreateFromFormat('H:i:s', '00:00', NULL));die();
+        
+        //var_dump(\Carbon\Carbon::createFromFormat('H:i','09:23'));die();
+        
+        //$\model= \frontend\modules\sta\models\Rangos::findOne(15);
+       // var_dump($model->toCarbon('hinicio'));die();
+       //var_dump(\frontend\modules\sigi\models\SigiUnidades::findOne(2)->getChildsUnits()->count());
+       //die();
+
+
+
+
+// Command::execute('migrate/down', ['interactive'=>false]);
+        //Command::execute('migrate/up', ['interactive' => false]);
+        
+        
+        //Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
+       //Command::execute('migrate', ['migrationPath'=>'@yii2mod/settings/migrations', 'interactive' => false]);  
+      //Command::execute('migrate', ['migrationPath'=>'@mdm/admin/migrations', 'interactive' => false]);  
+     //Command::execute('migrate', ['migrationPath'=>'@nemmo/attachments/migrations', 'interactive' => false]);  
+         
+        //Command::execute('migrate-admin', ['interactive' => false]);
+                         
+                          
+                       
+                     
+       //die();
+       
+        
+        
+        
         
         
 //echo h::user()->identity->tableName();die();

@@ -1,6 +1,6 @@
 <?php
 namespace frontend\modules\sigi\models;
-
+use common\models\masters\Clipro;
 use Yii;
 
 /**
@@ -38,11 +38,13 @@ class SigiUnidades extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['codtipo', 'npiso', 'edificio_id', 'numero', 'nombre'], 'required'],
+            [['codtipo', 'npiso','codpro', 'edificio_id', 'numero', 'nombre'], 'required'],
             [['npiso', 'edificio_id', 'parent_id'], 'integer'],
            ['numero', 'unique', 'targetAttribute' => ['edificio_id','numero']],
             [['area', 'participacion'], 'number'],
             [['detalles'], 'string'],
+            [['codpro'], 'safe'],
+            [['estreno'], 'safe'],
             [['codtipo'], 'string', 'max' => 4],
             [['numero'], 'string', 'max' => 12],
             [['nombre'], 'string', 'max' => 25],
@@ -97,7 +99,7 @@ class SigiUnidades extends \common\models\base\modelBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodtipo0()
+    public function getTipo()
     {
         return $this->hasOne(SigiTipoUnidades::className(), ['codtipo' => 'codtipo']);
     }
@@ -109,6 +111,16 @@ class SigiUnidades extends \common\models\base\modelBase
     {
         return $this->hasOne(Edificios::className(), ['id' => 'edificio_id']);
     }
+    
+     public function getChildsUnits()
+    {
+        return $this->hasMany(SigiUnidades::className(), ['parent_id' => 'id']);
+    }
+    
+     public function getClipro()
+    {
+        return $this->hasOne(Clipro::className(), ['codpro' => 'codpro']);
+    }
 
     /**
      * {@inheritdoc}
@@ -119,4 +131,21 @@ class SigiUnidades extends \common\models\base\modelBase
         return new SigiUnidadesQuery(get_called_class());
     }
     
+    public function beforeSave($insert) {
+        if($insert){
+            if(empty($this->nombre)){
+              $this->nombre=substr(SigiTipoUnidades::findOne($this->codtipo)->desunidad.'-'.$this->numero,0,25); 
+            }
+                
+        }
+        return parent::beforeSave($insert);
+    }
+    
+    public function hasChildunits(){
+        return($this->getChildsUnits()->count()==0)?true:false;
+    }
+    
+    public function isEntregado(){
+        return (empty($this->estreno))?false:true;
+    }
 }

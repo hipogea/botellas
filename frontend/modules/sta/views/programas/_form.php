@@ -7,6 +7,7 @@ use frontend\modules\sta\widgets\cboperiodos\cboperiodos;
 use common\widgets\selectwidget\selectWidget;
 use common\helpers\h;
  use kartik\date\DatePicker;
+   use kartik\time\TimePicker;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\sta\models\Talleres */
 /* @var $form yii\widgets\ActiveForm */
@@ -27,11 +28,19 @@ use common\helpers\h;
         </div>
     </div>
       <div class="box-body">
-     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-         <div class="alert alert-warning"><?=yii::t('sta.messages','Quedan {cantidad} Alumnos sin tutor asignado',['cantidad'=>$model->countStudentsFree()])?>
-     
-         </div>     
-        </div>     
+        <?php 
+      
+
+
+        
+        
+             $canti=$model->countStudentsFree();
+           if($canti>0){ ?>
+                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="alert alert-warning"><?=yii::t('sta.messages','Quedan {cantidad} Alumnos sin tutor asignado',['cantidad'=>$canti])?>
+                        </div>     
+                    </div> 
+            <?php } ?>
     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
       <?= $form->field($model, 'numero')->textInput(['disabled' => 'disabled','maxlength' => true]) ?>
 

@@ -35,9 +35,10 @@ $this->params['breadcrumbs'][] = ['label' => $model-><?= $generator->getNameAttr
 $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-update">
-<div class="box box-success">
+<h4><i class="fa fa-edit"></i><?= '<?=' ?> Html::encode($this->title) ?></h4>
+   
+    <div class="box box-success">
     
-   <h4><i class="fa fa-edit"></i><?= '<?=' ?> Html::encode($this->title) ?></h4>
     <?= '<?php ' ?>echo TabsX::widget([
     'position' => TabsX::POS_ABOVE,
      'bordered'=>true,

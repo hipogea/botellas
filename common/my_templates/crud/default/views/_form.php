@@ -33,7 +33,7 @@ use yii\widgets\ActiveForm;
         <div class="col-md-12">
             <div class="form-group no-margin">
                 
-        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
+        <?= "<?= " ?>Html::submitButton('<span class="fa fa-save"></span>   '.<?= $generator->generateString('Save') ?>, ['class' => 'btn btn-success']) ?>
             
 
             </div>

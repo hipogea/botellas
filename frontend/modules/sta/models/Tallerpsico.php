@@ -35,10 +35,10 @@ class Tallerpsico extends \common\models\base\modelBase
     public function rules()
     {
         return [
-            [['talleres_id', 'codtra'], 'required'],
+            [['talleres_id', 'codtra','nalumnos'], 'required'],
             [['talleres_id','nalumnos'], 'integer'],
             [['codtra'], 'string', 'max' => 6],
-            [['codtra', 'talleres_id'], 'unique', 'targetAttribute' => ['codtra'],'message'=>yii::t('sta.labels','Este tutor ya está registrado')],
+            [['codtra'], 'unique', 'targetAttribute' => ['codtra', 'talleres_id'],'message'=>yii::t('sta.labels','Este tutor ya está registrado')],
              //[['calificacion'], 'string', 'max' => 1],
              [['nalumnos','calificacion'], 'safe'],
             [['nalumnos'], 'validateCantidades','on'=>'default'],

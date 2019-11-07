@@ -22,7 +22,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
   <div class="box-footer">
         <div class="col-md-12">
             <div class="form-group no-margin">
-        <?= Html::submitButton(Yii::t('import.labels', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('import.labels', 'Grabar'), ['class' => 'btn btn-success']) ?>
     </div>
      </div>
     </div>
@@ -98,7 +98,8 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     
     
   
-
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+    
 
     
     <?php ActiveForm::end(); ?>
@@ -114,26 +115,26 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
     'align' => TabsX::ALIGN_LEFT,
     'items' => [
         [
-            'label' => yii::t('base.names','Fields'), //$this->context->countDetail() obtiene el contador del detalle
+            'label' => yii::t('base.names','Columnas'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_campos',[ 'form' => $form, 'dataProvider' => $itemsFields]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => true,
              'options' => ['id' => 'myveryownID3'],
         ],
         [
-            'label' => yii::t('base.names','Loads'), //$this->context->countDetail() obtiene el contador del detalle
+            'label' => yii::t('base.names','Cargas'), //$this->context->countDetail() obtiene el contador del detalle
             'content'=> $this->render('_loads',[  'model' => $model,'form' => $form, 'dataProvider' => $itemsLoads]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
              'options' => ['id' => 'myveryownID4'],
         ],
-       /*[
-            'label' => yii::t('base.names','Resultados'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_resultados',[ ]),
+       [
+            'label' => yii::t('base.names','Errores'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_emptyresult',[ ]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
-             'options' => ['id' => 'myveryowyynID4'],
-        ],*/
+             'options' => ['id' => 'myverop5yowyynID4'],
+        ],
     ],
 ]);  
  }
@@ -143,6 +144,7 @@ use common\widgets\cbodepwidget\cboDepWidget as ComboDep;
 </div>
 </div>
 </div>
+    </div>
     
     
 

@@ -66,4 +66,8 @@ div.absolute {
     text-shadow: 1px 1px 4px rgba(206,89,55,0.25) !important;
     }
     
+    .d-inline {
+    display: inline!important;
+}
+    
 }

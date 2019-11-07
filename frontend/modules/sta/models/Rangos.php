@@ -1,7 +1,8 @@
 <?php
 
 namespace frontend\modules\sta\models;
-
+use common\helpers\h;
+USE \yii2mod\settings\models\enumerables\SettingType;
 use Yii;
 
 /**
@@ -18,9 +19,11 @@ use Yii;
  */
 class Rangos extends \common\models\base\modelBase
 {
-   
+   const SCENARIO_HORAS='horas';
     public $booleanFields=['activo'];
-    
+    public $dateorTimeFields=[
+        'hinicio'=>self::_FHOUR,
+        'hfin'=>self::_FHOUR];
     /**
      * {@inheritdoc}
      */
@@ -37,7 +40,8 @@ class Rangos extends \common\models\base\modelBase
         return [
             [['talleres_id', 'dia', 'hinicio', 'hfin', 'tolerancia','nombredia'], 'required'],
             [['talleres_id', 'dia'], 'integer'],
-            [['nombredia','activo'], 'safe'],
+            [['hinicio','hfin','activo'], 'safe','on'=>self::SCENARIO_HORAS],
+             [['hinicio','hfin'], 'validateHoras','on'=>self::SCENARIO_HORAS],
             [['hinicio', 'hfin'], 'string', 'max' => 5],
             [['talleres_id'], 'exist', 'skipOnError' => true, 'targetClass' => Talleres::className(), 'targetAttribute' => ['talleres_id' => 'id']],
         ];
@@ -57,6 +61,14 @@ class Rangos extends \common\models\base\modelBase
             'tolerancia' => Yii::t('sta.labels', 'Tolerancia'),
         ];
     }
+    
+      public function scenarios()
+    {
+        $scenarios = parent::scenarios(); 
+        $scenarios[self::SCENARIO_HORAS] = ['hinicio','hfin','activo'];
+       // $scenarios[self::SCENARIO_REGISTER] = ['username', 'email', 'password'];
+        return $scenarios;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -75,5 +87,19 @@ class Rangos extends \common\models\base\modelBase
         return new RangosQuery(get_called_class());
     }
     
-    
+    public function validateHoras($attribute, $params)
+    {
+      $duracionminima= h::getIfNotPutSetting('sta','duracionMinimaRango',3, SettingType::INTEGER_TYPE);
+        $diferenciaenhoras=$this->toCarbon('hfin')->diffInHours($this->toCarbon('hinicio'));
+        if( $diferenciaenhoras <  $duracionminima and $diferenciaenhoras >=0){
+             $this->addError('hinicio', yii::t('base.errors','El rango del horario es muy corto o nulo',
+                    ['campo'=>$this->getAttributeLabel('hinicio')]));
+        }
+        if( $diferenciaenhoras < 0){
+             $this->addError('hinicio', yii::t('base.errors','Hora inicio mayor que hora fin',
+                    ['campo'=>$this->getAttributeLabel('hinicio')]));
+        }
+        
+    }
+ 
 }

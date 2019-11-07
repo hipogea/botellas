@@ -167,7 +167,7 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
     const _FDATE='date';
     const _FDATETIME='datetime';
     const _FTIME='time';
-    
+    const _FHOUR='hour';
     
     /* claves para transformar los formatos de fechas  
      **/
@@ -555,6 +555,9 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
             $typ=$this->dateorTimeFields[$field];
             $formatToShow= $this->gsetting($key, $typ);
              $formatToAnalize= $this->gsetting($this->reverseKey($key), $typ); 
+             if($show)yii::error('foramto para analizar :'.$formatToAnalize);
+              if($show)yii::error('foramto para mostrar :'.$formatToShow);
+               if($show)yii::error('typ :'.$typ);
              $objetof=DateTime::createFromFormat($this->getGeneralFormat($formatToAnalize,$typ,$show),$this->{$field});
                   
           $resultado=Yii::$app->formatter->asDate(
@@ -592,10 +595,10 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
         }
         
         private function verifyTimeFields(){
-            $allowedValues=[self::_FDATE,self::_FDATETIME,self::_FTIME];
+            $allowedValues=[self::_FHOUR,self::_FDATE,self::_FDATETIME,self::_FTIME];
             foreach(array_values($this->dateorTimeFields) as $key=>$value){
                 if(!in_array($value,$allowedValues)){
-                    throw new ServerErrorHttpException(Yii::t('error', 'Wrong property {valor}  in field time {campo} Times  ',['valor'=>$value,'campo'=>$key]));
+                    throw new ServerErrorHttpException(Yii::t('base.errors', 'Wrong property {valor}  in field time {campo} Times  ',['valor'=>$value,'campo'=>$key]));
     		                   
                 }
             }
@@ -692,16 +695,19 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                 if($type==static::_FDATE)return $dia.$delimiter.$mes.$delimiter.$ygriega;
                 if($type==static::_FDATETIME)return $dia.$delimiter.$mes.$delimiter.$ygriega.' H:i:s';
                 if($type==static::_FTIME)return 'H:i:s';
+                if($type==static::_FHOUR)return 'H:i';
             }
             if(strtolower(substr(trim($format),0,1))=='y'){
                 if($type==static::_FDATE)return $ygriega.$delimiter.$mes.$delimiter.$dia;
                 if($type==static::_FDATETIME)return $ygriega.$delimiter.$mes.$delimiter.$dia.' H:i:s';
                 if($type==static::_FTIME)return 'H:i:s';
+                 if($type==static::_FHOUR)return 'H:i';
             }
             
             /*sI SE TRATARA DE UN TIME */
              if(strtolower(substr(trim($format),0,1))=='h' ){               
                 if($type==static::_FTIME)return 'H:i:s';
+                 if($type==static::_FHOUR)return 'H:i';
             }
            
         }
@@ -730,8 +736,8 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                        //print_r($model->attributes);die();
                        
                  IF(!$model->insert()){
-                     //yii::error($model->getErrors(),__METHOD__);
-                      print_r($model->getErrors());die();
+                     yii::error($model->getErrors(),__METHOD__);
+                      //print_r($model->getErrors());die();
                      return false;
                  }
                    // print_r($model->getErrors());die();
@@ -1148,8 +1154,13 @@ class modelBase extends \yii\db\ActiveRecord  implements baseInterface
                     $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FDATETIME),static::_FDATETIME,true),
                       $this->{$attribute});
             if($this->dateorTimeFields[$attribute]==static::_FTIME)
+                //echo $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FTIME),static::_FTIME,true);die();
               return Carbon::createFromFormat(
                      $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FTIME),static::_FTIME,true),
+                      $this->{$attribute});
+            if($this->dateorTimeFields[$attribute]==static::_FHOUR)
+              return Carbon::createFromFormat(
+                    $this->getGeneralFormat($this->gsetting(static::_FORMATUSER, static::_FHOUR),static::_FHOUR,true),
                       $this->{$attribute});
                    
           

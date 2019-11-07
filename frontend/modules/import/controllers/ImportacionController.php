@@ -175,6 +175,7 @@ class ImportacionController extends baseController
     
     
   public function actionImport($id){
+      
      // set_time_limit(300); // 5 minutes 
       //$id=h::request()->get('id');
       $tinicial= microtime(true);
@@ -200,8 +201,7 @@ class ImportacionController extends baseController
          'Tiempo transcurrido'=> ((integer)(microtime(true)-$tinicial)).' '.yii::t('base.names','Segundos'),
          'Numero de errores de carga'=>$nerrores,
      ];
-     
-     return $this->renderAjax('_resultados',[
+    $resultado=$this->renderAjax('_resultados',[
          'resumen'=>$arrayResumen,
        'dataProvider'=>$dataProvider,
          //'searchModel' =>$searchModel,
@@ -210,8 +210,16 @@ class ImportacionController extends baseController
        'nerrores'=>$nerrores,
        'model'=>$carga
                                 ]); 
+    
+   if(h::request()->get('isJson')=='si'){
+      h::response()->format = \yii\web\Response::FORMAT_JSON;  
+       $resul=[];
+       $resul['success']= \yii\helpers\Json::encode($resultado);
+       return $resul;
+   }else{  
+     return $resultado;
     }
-  
+  } 
     
     
     
