@@ -1,12 +1,5 @@
 <?php
 
-namespace frontend\modules\export\controllers;
-
-use yii\web\Controller;
-
-/**
- * Default controller for the `export` module
- */
 class DefaultController extends Controller
 {
     /**

@@ -49,7 +49,12 @@
         "rmrevin/yii2-fontawesome": "2.10.*",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "kartik-v/yii2-detail-view": "@dev",
-        "kartik-v/yii2-datecontrol": "dev-master"
+        "kartik-v/yii2-datecontrol": "dev-master",
+        "philippfrenzel/yii2fullcalendar": "*",
+        "fxp/composer-asset-plugin": "*",
+        "ptrnov/yii2-scheduler-fullcalendar": "*",
+        "kriss/yii2-calendar-schedule": "^1.0" 
+        
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

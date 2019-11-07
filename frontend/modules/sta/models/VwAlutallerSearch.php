@@ -68,7 +68,8 @@ class VwAlutallerSearch extends VwAlutaller
             //->andFilterWhere(['like', 'domicilio', $this->domicilio])
             ->andFilterWhere(['like', 'celulares', $this->celulares])
             //->andFilterWhere(['like', 'nomcur', $this->nomcur])
-          ->andFilterWhere(['like', 'codfac', $this->codfac]);
+          ->andFilterWhere(['like', 'codfac', $this->codfac])
+        ->andFilterWhere(['like', 'codtra', $this->codtra]);
           //  ->andFilterWhere(['like', 'codperiodo', $this->codperiodo]);
 
         return $dataProvider;
@@ -101,7 +102,11 @@ class VwAlutallerSearch extends VwAlutaller
             ->andFilterWhere(['like', 'codalu', $this->codalu])
             //->andFilterWhere(['like', 'dni', $this->dni])
             ->andFilterWhere(['like', 'nombres', $this->nombres])
-            ->andFilterWhere(['like', 'celulares', $this->celulares]);
+                 ->andFilterWhere(['like', 'celulares', $this->celulares])
+            //->andFilterWhere(['like', 'nomcur', $this->nomcur])
+          ->andFilterWhere(['like', 'codfac', $this->codfac])
+        ->andFilterWhere(['like', 'codtra', $this->codtra]);
+           
             //->andFilterWhere(['like', 'nomcur', $this->nomcur])
         //  ->andFilterWhere(['like', 'codfac', $this->codfac])
            // ->andFilterWhere(['like', 'codperiodo', $this->codperiodo]);

@@ -20,19 +20,22 @@ return [
         ],
     ],
     
-   'as access' => [
+  /* 'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/login*',  
              'site/logout*', 
         ]
-    ],
+    ],*/
     
     
    
     
     
     'modules' => [
+        'sigi' => [
+            'class' => 'frontend\modules\sigi\Module',
+        ],
       
         'sta' => [
             'class' => 'frontend\modules\sta\staModule',
@@ -177,6 +180,11 @@ return [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => '@frontend/modules/import/messages',
                                             ], 
+                                              
+                'import.messages' => [
+                                            'class' => 'yii\i18n\PhpMessageSource',
+                                            'basePath' => '@frontend/modules/import/messages',
+                                            ], 
                 'bigitems.errors' => [
                                             'class' => 'yii\i18n\PhpMessageSource',
                                             'basePath' => 'frontend\modules\bigitems\messages',
@@ -246,8 +254,23 @@ return [
                 'sta.messages'=>[
                                  'class' => 'yii\i18n\PhpMessageSource',
                                  'basePath' => '@frontend/modules/sta/messages',                                         
-                                            ],     
-                
+                                            ],  
+                'sta.labels'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sta/messages',                                         
+                                            ], 
+                'sigi.actions'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sigi/messages',                                         
+                                            ], 
+                'sigi.errors'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sigi/messages',                                         
+                                        ], 
+                'sigi.labels'=>[
+                                 'class' => 'yii\i18n\PhpMessageSource',
+                                 'basePath' => '@frontend/modules/sigi/messages',                                         
+                                        ], 
                       ],
                   ],
         

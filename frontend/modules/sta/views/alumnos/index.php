@@ -12,11 +12,11 @@ $this->title = Yii::t('sta.labels', 'Alumnos');
 //$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="alumnos-index">
-
+    <a href="ssss" class="botonAbre">picha  aqui </a>
     <h4><?= Html::encode($this->title) ?></h4>
     <div class="box box-success">
      <div class="box-body">
-    
+   
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

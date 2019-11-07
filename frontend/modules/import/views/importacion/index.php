@@ -7,17 +7,18 @@ use yii\widgets\Pjax;
 /* @var $searchModel frontend\modules\import\models\ImportCargamasivaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('import.labels', 'Import Cargamasivas');
+$this->title = Yii::t('import.labels', 'Registros de importación');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="import-cargamasiva-index">
-<div class="box box-success">
+
     <h4><?= Html::encode($this->title) ?></h4>
+    <div class="box box-success">
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a(Yii::t('import.labels', 'Create Import Cargamasiva'), ['create'], ['class' => 'btn btn-success']) ?>
+    <br>
+        <?= Html::a(Yii::t('import.labels', 'Crear'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <div style='overflow:auto;'>
     <?= GridView::widget([
@@ -26,12 +27,29 @@ $this->params['breadcrumbs'][] = $this->title;
          'tableOptions'=>['class'=>'table table-condensed table-hover table-bordered table-striped'],
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            
 
-            'id',
-            'user_id',
-            'insercion',
+            'descripcion',
+           ['attribute' => 'user_id',
+               'format'=>'raw',
+                'value' => function ($data) {
+                return '<span class="glyphicon glyphicon-user"></span>      '.\common\helpers\h::getNameUserById($data->user_id); // $data['name'] for array data, e.g. using SqlDataProvider.
+            },
+            ],
+           ['attribute' => 'insercion',
+               'format'=>'raw',
+                'value' => function ($data) {
+                return ($data->insercion)?'<span class="glyphicon glyphicon-check"></span>':''; // $data['name'] for array data, e.g. using SqlDataProvider.
+            },
+            ],
+                    ['attribute' => 'modelo',
+               'format'=>'raw',
+                'value' => function ($data) {
+                return \common\helpers\FileHelper::getShortName($data->modelo); // $data['name'] for array data, e.g. using SqlDataProvider.
+            },
+            ],
             'escenario',
+           
             'lastimport',
             //'descripcion',
             //'format',

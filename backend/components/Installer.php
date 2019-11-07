@@ -245,12 +245,14 @@ class Installer
             return false;
         }
         set_time_limit(300); // 5 minutes 
-      Command::execute('migrate/up', ['interactive' => false]);
-       Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
+         Command::execute('migrate/up', ['interactive' => false]);
+         Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
         Command::execute('migrate', ['migrationPath'=>'@yii2mod/settings/migrations', 'interactive' => false]);  
       Command::execute('migrate', ['migrationPath'=>'@mdm/admin/migrations', 'interactive' => false]);  
      Command::execute('migrate', ['migrationPath'=>'@nemmo/attachments/migrations', 'interactive' => false]);  
-             // Set database details
+           
+     
+        // Set database details
         static::saveDbVariables($host, $port, $database, $username, $password);
 
         return true;
@@ -547,10 +549,12 @@ public static function createSettings(){
       h::settings()->set('timeUser','date', 'dd/MM/yyyy');
       h::settings()->set('timeUser','datetime', 'dd/MM/yyyy hh:ii:ss');
       h::settings()->set('timeUser','time', 'hh:ii:ss');
+      h::settings()->set('timeUser','hour', 'hh:ii');
       h::settings()->set('timeBD','date', 'Y-m-d');
       h::settings()->set('timeBD','datetime', 'Y-m-d H:i:s');
       h::settings()->set('timeBD','time', 'H:i:s');
-      
+       h::settings()->set('timeBD','time', 'H:i:s');
+        h::settings()->set('timeBD','hour', 'H:i');
       ///Valores para el modulo sta
       h::settings()->set('sta','regexcodalu','/[1-9]{1}[0-9]{3}[0-9]{1}[0-9]{3}[A-Z]{1}/');
      

@@ -25,6 +25,7 @@ if(!$this->existsTable($table)) {
         'fingreso'=>$this->char(10)->append($this->collateColumn()),
         'detalles'=>$this->text()->append($this->collateColumn()),
         */
+          'nalumnos'=>$this->integer(3),
          'fregistro'=>$this->char(10)->notNull()->append($this->collateColumn()),
         'codtra'=>$this->string(6)->notNull()->append($this->collateColumn()),
         'calificacion'=>$this->char(1)->append($this->collateColumn()),

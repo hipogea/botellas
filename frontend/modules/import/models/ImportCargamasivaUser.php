@@ -5,6 +5,7 @@ use frontend\modules\import\models\ImportCargamasiva;
 
 use frontend\modules\import\components\CSVReader as MyCSVReader;
 use common\behaviors\FileBehavior;
+//use frontend\modules\import\behaviors\FileBehavior;
 use common\helpers\timeHelper;
 use common\helpers\h;
 use Yii;
@@ -183,7 +184,8 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     if(count($registros)>0){
         return $registros[0]->getPath();
     }else{
-         throw new \yii\base\Exception(Yii::t('import.errors', 'No hay ningún archivo csv adjunto'));
+        $this->addError('activo',yii::t('import.errors','No hay ningún archivo adjunto para efectuar la importación'));
+         //throw new \yii\base\Exception(Yii::t('import.errors', 'No hay ningún archivo csv adjunto'));
      
     } 
        
@@ -219,7 +221,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
           if(($carga->isTypeChar($tipo)&&($longitud <> strlen($valor))) or
            ($carga->isTypeVarChar($tipo) &&($longitud < strlen($valor))) or                
            ($carga->isNumeric($tipo)&& (!is_numeric($valor)) ) or                   
-         ( $carga->isDateorTime($tipo,$nombrecampo)&& (
+         ( $carga->isDateorTime($tipo,$nombrecampo,$longitud)&& (
                             (strpos($valor,"-")===false) &&
                             (strpos($valor,"/")===false) &&
                              (strpos($valor,".")===false)
@@ -250,7 +252,9 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
     // $errores=$this->getErrors();
      foreach($errores as $campo=>$detalle){
          foreach($detalle as $cla=>$mensaje){
-             $this->insertLogCarga($line, $campo, $mensaje, '0');
+             yii::error('uy  recorreindo los errores');
+             if(!($this->insertLogCarga($line, $campo, $mensaje, '0')))
+               yii::error('uy fallo');       
          }
      }
  }
@@ -271,9 +275,14 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
      	$model=new ImportLogcargamasiva();
         //$model->rawDateUser('fecha');
         $model->setAttributes($attributes);
-        $retorno= $model->save();
+    $grabo= $model->save();
+    if(!$grabo){
+        \yii::error($model->getErrors());
+    }
+    return $grabo;
         //if(!$retorno){print_r($model->getErrors());die();}
         //unset($model);
+        
         
  }
  
@@ -395,7 +404,7 @@ class ImportCargamasivaUser extends \common\models\base\modelBase
                      
                               }  else{
                                    yii::error('no grabo    => '.$linea,__METHOD__); 
-                     
+                                 yii::error($model->getErrors()); 
                               }
                             } catch (\yii\db\Exception $ex) {
                                  $model->addError($model->safeAttributes()[0],
@@ -553,6 +562,21 @@ public static function lastRecordCreated(){
     return static::find()->
             where(['user_id'=>h::userId()])->
             orderBy(['id' => SORT_DESC])->one();
+}
+
+/*
+ * Saca toda la infor del archivo adjunto
+ * Solo del primer archivo adjunto  $this->files[0] el resto 
+ * lo ignora   $this->files[0]
+ */
+public function infoFileAttached(){
+    $info=[];
+    if($this->hasAttachments()){
+        $info['extension']=$this->files[0]->type."-".$this->files[0]->mime;
+        $info['name']=$this->files[0]->type."-".$this->files[0]->mime;
+    }else{
+        return [];
+    }
 }
     
 }

@@ -21,7 +21,7 @@ if(!$this->existsTable($table)) {
          'id'=>$this->primaryKey(),
           'entrega_id'=>$this->integer(11),
           //'codfac'=>$this->string(8)->append($this->collateColumn()),
-          'codcur'=>$this->string(10)->append($this->collateColumn())->notNull(),
+          'codcur'=>$this->string(10)->notNull()->append($this->collateColumn()),
           //'activa'=>$this->char(1)->append($this->collateColumn()),
         'codperiodo'=>$this->string(7)->append($this->collateColumn()),
          'codalu'=>$this->string(14)->append($this->collateColumn())->notNull(),
@@ -32,8 +32,8 @@ if(!$this->existsTable($table)) {
         
         ],$this->collateTable());
    //$this->addPrimaryKey('pk_codmateria',$table, 'codcur');
-   $this->addForeignKey($this->generateNameFk($table), $table,
-              'codcur', static::NAME_TABLE_MATERIAS,'codcur');
+   /*$this->addForeignKey($this->generateNameFk($table), $table,
+              'codcur', static::NAME_TABLE_MATERIAS,'codcur');*/
         $this->addForeignKey($this->generateNameFk($table), $table,
               'codalu', static::NAME_TABLE_ALUMNOS,'codalu');
         $this->addForeignKey($this->generateNameFk($table), $table,
@@ -42,9 +42,7 @@ if(!$this->existsTable($table)) {
               'codcar', static::NAME_TABLE_CARRERAS,'codcar');*/
             $this->addForeignKey($this->generateNameFk($table), $table,
               'codcar', static::NAME_TABLE_CARRERAS,'codcar');
-                /*  $this->addForeignKey($this->generateNameFk($table), $table,
-              'codcar', static::NAME_TABLE_CARRERAS,'codcar');*/
-            
+           
             }
  }
 

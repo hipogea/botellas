@@ -1,7 +1,7 @@
 <?php
 
 namespace frontend\controllers\masters;
-
+ use console\components\Command;
 use Yii;
 use common\models\masters\Trabajadores;
 use common\models\config\Configuracion;
@@ -41,10 +41,61 @@ class TrabajadoresController extends Controller
      */
     public function actionIndex()
     { 
-        //echo h::user()->identity->tableName();die();
+    //var_dump(\Carbon\Carbon::rawCreateFromFormat('H:i:s', '00:00', NULL));die();
+        
+        //var_dump(\Carbon\Carbon::createFromFormat('H:i','09:23'));die();
+        
+        //$\model= \frontend\modules\sta\models\Rangos::findOne(15);
+       // var_dump($model->toCarbon('hinicio'));die();
+       //var_dump(\frontend\modules\sigi\models\SigiUnidades::findOne(2)->getChildsUnits()->count());
+       //die();
+
+
+
+
+// Command::execute('migrate/down', ['interactive'=>false]);
+        //Command::execute('migrate/up', ['interactive' => false]);
+        
+        
+        //Command::execute('migrate', ['migrationPath'=>'@yii/rbac/migrations', 'interactive' => false]);  
+       //Command::execute('migrate', ['migrationPath'=>'@yii2mod/settings/migrations', 'interactive' => false]);  
+      //Command::execute('migrate', ['migrationPath'=>'@mdm/admin/migrations', 'interactive' => false]);  
+     //Command::execute('migrate', ['migrationPath'=>'@nemmo/attachments/migrations', 'interactive' => false]);  
+         
+        //Command::execute('migrate-admin', ['interactive' => false]);
+                         
+                          
+                       
+                     
+       //die();
+       
+        
+        
+        
+        
+        
+//echo h::user()->identity->tableName();die();
         /*$limon=new \common\models\Profile;
         echo $limon->persona::className();die();*/
-
+ /*$reg=\frontend\modules\sta\models\Citas::findOne(1);
+ $reg2=\frontend\modules\sta\models\Citas::findOne(2);
+ $foc=$reg->toCarbon('finicio');
+ $ftc=$reg->toCarbon('ftermino');
+ $fo=$reg2->toCarbon('finicio');
+  $ft=$reg2->toCarbon('ftermino');
+  
+ $rangeCompare=new \common\helpers\RangeDates([$reg->toCarbon('finicio'),
+     $reg->toCarbon('ftermino')]);
+ $rangeSearch=new \common\helpers\RangeDates([$reg2->toCarbon('finicio'),
+     $reg2->toCarbon('ftermino')]);
+ 
+   
+ var_dump($reg->isRangeIntoOtherRange($rangeCompare, $rangeSearch),
+         $rangeCompare->getDiff($ftc,$ft),
+         ($rangeCompare->tolerance)*$rangeCompare->duration,
+         $foc->greaterThan($ft)
+         );die();*/
+//$fecha= \Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'); 
 //var_dump(\Carbon\Carbon::createFromFormat('d/m/Y','15/08/2019'));         die();
        // var_dump(Trabajadores::find()->where(['codigotra'=>'70w03'])->one());die();
         //echo \common\models\masters\Centros::find()->where(true)->one()->codcen;die();

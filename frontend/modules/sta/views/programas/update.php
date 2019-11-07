@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 
     <h4><i class="fa fa-edit"></i><?= Html::encode($this->title) ?></h4>
 <div class="box box-success">
+ 
     <?php  
  if(!$model->isNewRecord){
     //var_dump($this->context);die();
@@ -30,14 +31,14 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
             'content'=> $this->render('_form',['model' => $model]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => true,
-             'options' => ['id' => 'myveryownID3'],
+             'options' => ['id' => 'tabid1'],
         ],
         [
           'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Tutores'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_staff',[ 'searchStaff' =>$searchStaff,  'model' => $model,'dataProviderStaff'=>$dataProviderStaff]),
+            'content'=> $this->render('_staff',[ 'model' => $model,'dataProviderStaff'=>$dataProviderStaff]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
-             'options' => ['id' => 'myveryownID4'],
+             'options' => ['id' => 'tabid2'],
         ],
        [
             'label'=>'<i class="fa fa-map-o"></i> '.yii::t('sta.labels','Resultados'), //$this->context->countDetail() obtiene el contador del detalle
@@ -56,14 +57,28 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
              ],
            ],
            'active' => false,
-             'options' => ['id' => 'myveryowyynID4'],
+             'options' => ['id' => 'tabID3'],
         ],
         [
             'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Alumnos'), //$this->context->countDetail() obtiene el contador del detalle
-            'content'=> $this->render('_alumnos',[ 'dataProviderAlumnos'=>$dataProviderAlumnos, 'searchAlumnos' => $searchAlumnos,'model'=>$model ]),
+            'content'=> $this->renderAjax('_alumnos',[ 'dataProviderAlumnos'=>$dataProviderAlumnos, 'searchAlumnos' => $searchAlumnos,'model'=>$model ]),
 //'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
             'active' => false,
-             'options' => ['id' => 'myveryofgwyynID4'],
+             'options' => ['id' => 'tabID4'],
+        ],
+        [
+            'label'=>'<i class="fa fa-users"></i> '.yii::t('sta.labels','Test'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('_tests',['model'=>$model ]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => false,
+              'options' => ['id' => 'tabID5'],
+        ],
+        [
+            'label'=>'<i class="fa fa-calendar"></i> '.yii::t('sta.labels','Rangos'), //$this->context->countDetail() obtiene el contador del detalle
+            'content'=> $this->render('rangos',['model'=>$model,'dataProviderRangos'=> $dataProviderRangos ]),
+//'content' => $this->render('detalle',['form'=>$form,'orden'=>$this->context->countDetail(),'modelDetail'=>$modelDetail]),
+            'active' => false,
+             'options' => ['id' => 'tabID6'],
         ],
     ],
 ]);  
@@ -74,4 +89,4 @@ $this->params['breadcrumbs'][] = Yii::t('sta.labels', 'Update');
 
 </div>
     </div>
-<?=\common\widgets\spinnerWidget\spinnerWidget::widget(); ?>
+

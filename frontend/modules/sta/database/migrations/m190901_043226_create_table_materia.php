@@ -12,8 +12,8 @@ class m190901_043226_create_table_materia extends baseMigration
        $table=static::NAME_TABLE;
 if(!$this->existsTable($table)) {
     $this->createTable($table,  [
-                'id'=>$this->integer(11)->primaryKey(),
-               'codcur'=>$this->string(10)->append($this->collateColumn()),
+                'id'=>$this->primaryKey(),
+               'codcur'=>$this->string(10)->notNull()->append($this->collateColumn()),
                //'nomcur'=>$this->string(60)->append($this->collateColumn()),
              'activa'=>$this->char(1)->append($this->collateColumn()),
          'creditos'=>$this->integer(2),

@@ -15,8 +15,8 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         'abede361264e2ae69ec1eee813a101af' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/abs.php',
         '21a5860fbef5be28db5ddfbc3cca67c4' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acos.php',
         '1546e3f9d127f2a9bb2d1b6c31c26ef1' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acosh.php',
@@ -97,6 +97,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
             'yii2mod\\enum\\' => 13,
             'yii2mod\\editable\\' => 17,
             'yii2mod\\behaviors\\' => 18,
+            'yii2fullcalendar\\' => 17,
             'yidas\\yii\\fontawesome\\' => 22,
             'yidas\\adminlte\\' => 15,
         ),
@@ -118,6 +119,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'p' => 
         array (
+            'ptrnov\\fullcalendar\\' => 20,
             'phpDocumentor\\Reflection\\' => 25,
         ),
         'n' => 
@@ -137,6 +139,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'k' => 
         array (
             'kv4nt\\owlcarousel\\' => 18,
+            'kriss\\calendarSchedule\\' => 23,
             'kartik\\widgets\\' => 15,
             'kartik\\typeahead\\' => 17,
             'kartik\\touchspin\\' => 17,
@@ -240,6 +243,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'F' => 
         array (
+            'Fxp\\Composer\\AssetPlugin\\' => 25,
             'Faker\\' => 6,
             'Facebook\\WebDriver\\' => 19,
         ),
@@ -316,6 +320,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/yii2mod/yii2-behaviors',
         ),
+        'yii2fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/philippfrenzel/yii2fullcalendar',
+        ),
         'yidas\\yii\\fontawesome\\' => 
         array (
             0 => __DIR__ . '/..' . '/yidas/yii2-fontawesome/src',
@@ -352,6 +360,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/reportico/yii2-reportico',
         ),
+        'ptrnov\\fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ptrnov/yii2-scheduler-fullcalendar',
+        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
@@ -381,6 +393,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'kv4nt\\owlcarousel\\' => 
         array (
             0 => __DIR__ . '/..' . '/kv4nt/yii2-owl-carousel2',
+        ),
+        'kriss\\calendarSchedule\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kriss/yii2-calendar-schedule/src',
         ),
         'kartik\\widgets\\' => 
         array (
@@ -674,6 +690,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
+        'Fxp\\Composer\\AssetPlugin\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fxp/composer-asset-plugin',
+        ),
         'Faker\\' => 
         array (
             0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
@@ -825,6 +845,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'PHPUnit\\Framework\\IncompleteTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/IncompleteTestCase.php',
         'PHPUnit\\Framework\\IncompleteTestError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/IncompleteTestError.php',
         'PHPUnit\\Framework\\InvalidCoversTargetException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/InvalidCoversTargetException.php',
+        'PHPUnit\\Framework\\InvalidParameterGroupException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/InvalidParameterGroupException.php',
         'PHPUnit\\Framework\\MissingCoversAnnotationException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MissingCoversAnnotationException.php',
         'PHPUnit\\Framework\\MockObject\\BadMethodCallException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Exception/BadMethodCallException.php',
         'PHPUnit\\Framework\\MockObject\\Builder\\Identity' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/Builder/Identity.php',
@@ -889,6 +910,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'PHPUnit\\Framework\\TestResult' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestResult.php',
         'PHPUnit\\Framework\\TestSuite' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestSuite.php',
         'PHPUnit\\Framework\\TestSuiteIterator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/TestSuiteIterator.php',
+        'PHPUnit\\Framework\\UnexpectedValueException' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/UnexpectedValueException.php',
         'PHPUnit\\Framework\\UnintentionallyCoveredCodeError' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/UnintentionallyCoveredCodeError.php',
         'PHPUnit\\Framework\\Warning' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Warning.php',
         'PHPUnit\\Framework\\WarningTestCase' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/WarningTestCase.php',

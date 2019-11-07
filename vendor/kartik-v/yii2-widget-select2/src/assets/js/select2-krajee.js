@@ -1,6 +1,6 @@
 /*!
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2018
- * @version 2.1.3
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2019
+ * @version 2.1.4
  *
  * Additional enhancements for Select2 widget extension for Yii 2.0.
  *
@@ -65,13 +65,7 @@ var initS2ToggleAll = function () {
                 flag = false;
                 ev = 'unselectall';
             }
-            
-            $('#select2-' + id + '-results').find('[role="treeitem"]').each(function (k,v) {
-                var elemData = $(v).data('data'),
-                    optElem = typeof elemData.element !== "undefined" ? $(elemData.element) : [];
-                if(optElem.length) optElem.prop('selected', flag);
-            });
-            
+            $el.find('option:not([disabled])').prop('selected', flag);            
             $el.select2('close').trigger('krajeeselect2:' + ev).trigger('change');
         });
     };

@@ -1,5 +1,5 @@
 /*!
- * bootstrap-fileinput v5.0.4
+ * bootstrap-fileinput v5.0.6
  * http://plugins.krajee.com/file-input
  *
  * Krajee default styling for bootstrap-fileinput.
@@ -201,8 +201,6 @@
 .file-preview-image {
     font: 40px Impact, Charcoal, sans-serif;
     color: #008000;
-    width: 100%;
-    height: 100%;
 }
 
 .krajee-default.file-preview-frame {
