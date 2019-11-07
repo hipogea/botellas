@@ -37,7 +37,7 @@ if(!$this->existsTable($table)) {
        */
         ],$this->collateTable());
     
-    $this->createIndex('index_'.$this->generateNameFk($table), 'codalu', true /*unique*/);
+    $this->createIndex('index_'.$this->generateNameFk($table), $table,'codalu', true /*unique*/);
          /* $this->addForeignKey($this->generateNameFk($table), $table,
               'profile_id', static::NAME_TABLE_PROFILE,'id');
              */     $this->addForeignKey($this->generateNameFk($table), $table,

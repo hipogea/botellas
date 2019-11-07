@@ -51,6 +51,26 @@ class comboHelper extends Combito
                ])->all(),
                 'codigotra','ap');
     }
+    
+    /*
+     * Devuelve todos los testPiscologicos
+     */
+     public static function getCboTests($idprograma=null){
+         
+       if($idprograma===null){
+           return ArrayHelper::map(
+           \frontend\modules\sta\models\Test::find()->all(),
+                'codtest','descripcion');
+       }else{
+           /*return ArrayHelper::map(
+           \frontend\modules\sta\models\Test::find()->
+                where([])->   
+                   all(),
+                'codtest','descripcion'); */
+       }
+         
+        }
+
 }
 
 

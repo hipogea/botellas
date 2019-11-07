@@ -11,7 +11,7 @@ use common\models\masters\Combovalores;
  */
 class baseMigration extends Migration
 {
-      
+    const TABLE_COMBO='{{%combovalores}}' ;
     public function isMySql(){
         return ($this->db->driverName === 'mysql')?true:false;
             
@@ -110,13 +110,29 @@ class baseMigration extends Migration
        $campos=$tableSchema->columns;
        $realNameTable=str_replace($this->getPrefix(),'',$tableSchema->name);
        $largo=$campos[$namefield]->size;unset($campos);
-       if($largo==1){
-         $code='A';  
-       }else{
-          $code=str_pad('1', $largo, '0', STR_PAD_RIGHT); 
+       $valor=(is_array($valor))?$valor:[$valor];
+       foreach($valor as $key=>$val){
+          if(!self::fillCboValor($key, $realNameTable, $namefield, $val,  $largo))
+            break;
        }
+      
         
-         ModelCombo::firstOrCreateStatic([
+        
+    }
+  
+    private static function fillCboValor($i,$realNameTable,$namefield,$valor,$largo){
+       
+        if($largo==1){
+              if($valor=='Z'){
+                  return false;
+              }else {
+                  $code=self::selectLetter($i);  
+                  return true;
+                  
+              }
+        }else{
+            $code='1'.str_pad($i, $largo-1, '0', STR_PAD_LEFT);
+           ModelCombo::firstOrCreateStatic([
             'parametro'=>$realNameTable.'.'.$namefield,
             'clavecentro'=>'0',
             ]);
@@ -125,10 +141,29 @@ class baseMigration extends Migration
             'codigo'=>$code,
              'valor'=>$valor,
             ]);
+          return true;
+        }
         
-        
+       
     }
-  
+    private static function selectLetter($i){
+       $letras='ABCDEFGHIJKLMNOPQRSTUWXYZ';
+       return substr($letras, $i, 1);
+    }
+    
+    public function deleteCombo($table,$namefield){
+        $tableSchema=$this->getTable($table);
+        
+       $campo=str_replace($this->getPrefix(),'',$tableSchema->name).'.'.$namefield;
+       unset($tableSchema);
+        
+        (new \yii\db\Query)
+    ->createCommand()
+    ->delete(self::TABLE_COMBO,"nombretabla=:valor",[":valor"=>$campo])
+    ->execute();
+    }
+     
+    
     private function getTable($table,$refresh=false){
      return $this->getDb()->getSchema()->getTableSchema($table,$refresh);   
     }

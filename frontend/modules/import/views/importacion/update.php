@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model frontend\modules\import\models\ImportCargamasiva */
 
-$this->title = Yii::t('import.labels', 'Update Import Cargamasiva: {name}', [
-    'name' => $model->id,
+$this->title = Yii::t('import.labels', 'Editar registro : {name}', [
+    'name' => $model->descripcion,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('import.labels', 'Import Cargamasivas'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('import.labels', 'Importaciones'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('import.labels', 'Update');
+$this->params['breadcrumbs'][] = Yii::t('import.labels', 'Editar');
 ?>
 <div class="import-cargamasiva-update">
 

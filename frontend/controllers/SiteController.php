@@ -15,6 +15,7 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use mdm\admin\components\UserStatus;
 use mdm\admin\models\searchs\User as UserSearch;
+use yii\helpers\Url;
 /**
  * Site controller
  */
@@ -76,18 +77,19 @@ class SiteController extends Controller
         // $this->layout="install";       
       
         $urlBackend=str_replace('frontend','backend',yii::$app->urlManager->baseUrl);
-        if(yii::$app->user->isGuest){            
+        //if(yii::$app->user->isGuest){            
             if(\backend\components\Installer::readEnv('APP_INSTALLED')=='false'){
                           
                 $this->redirect($urlBackend);             
-            }else{               
-               $this->redirect(\Yii::$app->urlManager->createUrl("/site/login"));
+            }else{  
+                return $this->render('index');
+               $this->redirect(\Yii::$app->urlManager->home);
             }
-        }else{     
+       // }else{     
           
          
-            return $this->render('index');
-        }
+           
+        //}
        
         
     }
@@ -299,7 +301,7 @@ class SiteController extends Controller
            if( h::app()->hasModule('bigitems')){
               h::settings()->invalidateCache();
               $datos['success']=yii::t('base.actions','
-The cache data Settings has been cleaned');
+Datos de caché de configuración han sido borrados');
             }
            h::response()->format = \yii\web\Response::FORMAT_JSON;
            return $datos;
@@ -366,5 +368,17 @@ The cache data Settings has been cleaned');
             'model' => $model,
         ]);
     }
+public function actionRutas(){
+   echo " Url::home()  :   ".Url::home()."<br>";
+   echo " Url::home('https')  :   ".Url::home('https')."<br>";
+   echo " Url::base()  :   ".Url::base()."<br>";
+   echo " Url::base(true)  :   ".Url::base(true)."<br>";
+   echo " Url::base('https')  :   ".Url::base('https')."<br>";
+   echo " Url::canonical()  :   ".Url::canonical()."<br>";
+   echo " Url::current()  :   ".Url::current()."<br>";
+   echo " Url::previous()  :   ".Url::previous()."<br>";
+
+}
+
 
 }

@@ -4,6 +4,7 @@ namespace frontend\modules\sta\database\migrations;
 use console\migrations\viewMigration;
 use frontend\modules\sta\models\Alumnos;
 use frontend\modules\sta\models\Talleresdet;
+use frontend\modules\sta\models\Materias;
 use common\models\masters\Trabajadores;
 //use common\helpers\FileHelper;
 class m191013_162159_create_view_alutaller extends viewMigration
@@ -34,15 +35,16 @@ public function safeDown()
  private function getFields(){
      return [ /*Alu*/'a.ap','a.am','a.nombres','a.codfac','a.dni','a.correo','a.celulares','a.fijos',
                   /*Talleresdet*/'b.id','b.codalu','b.talleres_id','b.fingreso','b.codtra',
-                  /*Materias*/ 'c.nomcur','c.creditos','c.ciclo',
+                 
                   
          ];
  }   
   private function getTables(){
      $tablas=[
-                  'Alumnos'=> Alumnos::tableName().' as a',
-                  'Talleresdet'=> Talleresdet::tableName().' as b',
-                  'Materias'=> Materias::tableName().' as c',                  
+                  'Alumnos'=> '{{%sta_alu}} as a',
+                  'Talleresdet'=> '{{%sta_talleresdet}} as b',
+                 // 'Materias'=> '{{%sta_materia}} as c',  
+                   // 'Cursos'=> '{{%sta_cursos}}  as d',  
                 ];
         return $this->prepareTables($tablas);
  }  
@@ -50,6 +52,7 @@ public function safeDown()
  
  public function getWhere(){
       return " b.codalu=a.codalu";//Talleres det Con Alumnos               
-              self::_AND."b.codcur=c.codcur"; //Alumnos Con Cursos
+             // self::_AND."b.codcur=c.codcur". //Alumnos Con Cursos
+             // self::_AND."c.codcur=d.codcur"; //Alumnos Con Cursos
  }
 }

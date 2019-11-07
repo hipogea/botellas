@@ -7,10 +7,12 @@ use yii\base\InvalidConfigException;
 class linkAjaxGridWidget extends Widget
 {
     public $id;
-   public $idGrilla;
-    public $evento;
-   public $family;   
-   public $type;
+   public $idGrilla; //Id del sectro Pjax par arefrescar luego de la accion 
+    public $evento; //tipode vento js : click, blur, change  etc
+   public $family;    //familia de la clase del elemento HTML para tomarlo como selector
+   public $type; //TIPO DE EVENTO AJAX  : GET POST 
+   public $confirm=false; //SI VA A PREGUNTAR ANTES DE EJECUTAR
+   public $question="Está seguro de efectuar esta acción?";
    //public $title; 
     
    // private $_varsJs=[];
@@ -35,39 +37,51 @@ class linkAjaxGridWidget extends Widget
         $this->makeJs();
         
     }
-    
+  
      
   private function makeJs(){
+      $cad=" beforeSend: function() {  
+             return confirm('".$this->question."');
+                        },";
+      $confirm=($this->confirm)?$cad:'';
      // $mesage=yii::t('base.verbs','Are you Sure to Delete this Record ?');
    $cadenaJs="$('div[id=\"".$this->idGrilla."\"] [family=\"".$this->family."\"]').on( '".$this->evento."', function() { 
             $.ajax({
               url: this.title,
               type: '".$this->type."',
               data:JSON.parse(this.id) ,
-              dataType: 'json',        
-             beforeSend: function() {  
-             return confirm('".yii::t('base.verbs','Are you Sure to Delete this Record ?')."');
-                        },
+              dataType: 'json',".$confirm." 
                error:  function(xhr, textStatus, error){               
                             var n = Noty('id');                      
                               $.noty.setText(n.options.id, error);
                               $.noty.setType(n.options.id, 'error');       
                                 }, 
               success: function(json) {
-              
+             
                //alert(typeof json['dfdfd']==='undefined');
                         var n = Noty('id');
-                       if ( typeof json['error']==='undefined' ) {
-                        $.pjax({container: '#".$this->idGrilla."'});
-                             $.noty.setText(n.options.id, json['success']);
-                             $.noty.setType(n.options.id, 'success'); 
-                            
-                            }else{
-                            $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
+                         $.pjax.reload({container: '#".$this->idGrilla."'});
+                       if ( !(typeof json['error']==='undefined') ) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['error']);
                               $.noty.setType(n.options.id, 'error');  
+                          }    
+
+                             if ( !(typeof json['warning']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['warning']);
+                              $.noty.setType(n.options.id, 'warning');  
+                             } 
+                          if ( !(typeof json['success']==='undefined' )) {
+                        $.noty.setText(n.options.id,'<span class=\'glyphicon glyphicon-trash\'></span>      '+ json['success']);
+                              $.noty.setType(n.options.id, 'success');  
+                             }       
+
+                           // }else{
+                          
+                           // }
+                            
                             }
                    
-                        }
+                        //}
                         });  "
             . "})";
        

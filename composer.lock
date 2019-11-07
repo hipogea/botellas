@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "c194d2e8ddabdf2268e3bcc4ebb6542c",
+=======
+    "content-hash": "2fc440a50ccb77f981e9149f56fb2980",
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -106,6 +110,7 @@
                 "web"
             ],
             "time": "2019-08-29T08:20:20+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "aminkt/yii2-tree-view-widget",
@@ -146,6 +151,8 @@
                 "yii"
             ],
             "time": "2017-11-20T18:49:32+00:00"
+=======
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
         },
         {
             "name": "behat/gherkin",
@@ -253,7 +260,12 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/nnnick/Chart.js/zipball/f1d12dc1499cddd709b6cb9939b4aad55398c16a",
+<<<<<<< HEAD
                 "reference": "f1d12dc1499cddd709b6cb9939b4aad55398c16a"
+=======
+                "reference": "f1d12dc1499cddd709b6cb9939b4aad55398c16a",
+                "shasum": null
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             },
             "type": "bower-asset",
             "license": [
@@ -291,7 +303,12 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fullcalendar/fullcalendar/zipball/ac20b8a1acb79c50c9f5a108bb92d2f54575b700",
+<<<<<<< HEAD
                 "reference": "ac20b8a1acb79c50c9f5a108bb92d2f54575b700"
+=======
+                "reference": "ac20b8a1acb79c50c9f5a108bb92d2f54575b700",
+                "shasum": null
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             },
             "type": "bower-asset"
         },
@@ -306,7 +323,12 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/fullcalendar/fullcalendar-scheduler/zipball/e9c7a8c92595c632be676fdf4b55051c0c2a937f",
+<<<<<<< HEAD
                 "reference": "e9c7a8c92595c632be676fdf4b55051c0c2a937f"
+=======
+                "reference": "e9c7a8c92595c632be676fdf4b55051c0c2a937f",
+                "shasum": null
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             },
             "type": "bower-asset"
         },
@@ -432,7 +454,12 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/OwlFonk/OwlCarousel2/zipball/af851f9b567630d115930abd5480ffebccc72372",
+<<<<<<< HEAD
                 "reference": "af851f9b567630d115930abd5480ffebccc72372"
+=======
+                "reference": "af851f9b567630d115930abd5480ffebccc72372",
+                "shasum": null
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             },
             "require": {
                 "bower-asset/jquery": ">=1.8.3"
@@ -1171,6 +1198,65 @@
                 "icon"
             ],
             "time": "2016-10-24T15:52:54+00:00"
+        },
+        {
+            "name": "fxp/composer-asset-plugin",
+            "version": "v1.4.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fxpio/composer-asset-plugin.git",
+                "reference": "886ece037849d3935c5a34cdcd984e46f2de5fae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fxpio/composer-asset-plugin/zipball/886ece037849d3935c5a34cdcd984e46f2de5fae",
+                "reference": "886ece037849d3935c5a34cdcd984e46f2de5fae",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "composer/composer": "^1.6.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Fxp\\Composer\\AssetPlugin\\FxpAssetPlugin",
+                "branch-alias": {
+                    "dev-master": "1.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Fxp\\Composer\\AssetPlugin\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Pluchino",
+                    "email": "francois.pluchino@gmail.com"
+                }
+            ],
+            "description": "NPM/Bower Dependency Manager for Composer",
+            "homepage": "https://github.com/fxpio/composer-asset-plugin",
+            "keywords": [
+                "asset",
+                "bower",
+                "composer",
+                "dependency manager",
+                "nodejs",
+                "npm",
+                "package"
+            ],
+            "time": "2019-08-08T18:36:07+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4210,7 +4296,13 @@
             "version": "3.10.1",
             "dist": {
                 "type": "tar",
+<<<<<<< HEAD
                 "url": "https://registry.npmjs.org/fullcalendar/-/fullcalendar-3.10.1.tgz"
+=======
+                "url": "https://registry.npmjs.org/fullcalendar/-/fullcalendar-3.10.1.tgz",
+                "reference": null,
+                "shasum": null
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             },
             "type": "npm-asset",
             "license": [
@@ -5249,6 +5341,61 @@
                 "simple-cache"
             ],
             "time": "2017-10-23T01:57:42+00:00"
+        },
+        {
+            "name": "ptrnov/yii2-scheduler-fullcalendar",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ptrnov/yii2-scheduler-fullcalendar.git",
+                "reference": "218bef1068b23dfd973c2adf846a955cc5fff03f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ptrnov/yii2-scheduler-fullcalendar/zipball/218bef1068b23dfd973c2adf846a955cc5fff03f",
+                "reference": "218bef1068b23dfd973c2adf846a955cc5fff03f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "yiisoft/yii2": "*",
+                "yiisoft/yii2-jui": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "ptrnov\\fullcalendar\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Piter Novian",
+                    "email": "ptr.nov@gmail.com"
+                }
+            ],
+            "description": "Yii2 scheduler fullcalendar widget",
+            "keywords": [
+                "calendar",
+                "event",
+                "fullcalendar",
+                "javascript",
+                "nov",
+                "ptr",
+                "ptrnov",
+                "scheduler",
+                "scheduler-fullcalendar",
+                "yii2"
+            ],
+            "time": "2016-09-19T06:45:51+00:00"
         },
         {
             "name": "ralouphie/getallheaders",

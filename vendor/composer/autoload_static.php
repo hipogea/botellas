@@ -119,6 +119,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'p' => 
         array (
+            'ptrnov\\fullcalendar\\' => 20,
             'phpDocumentor\\Reflection\\' => 25,
         ),
         'n' => 
@@ -246,6 +247,7 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         ),
         'F' => 
         array (
+            'Fxp\\Composer\\AssetPlugin\\' => 25,
             'Faker\\' => 6,
             'Facebook\\WebDriver\\' => 19,
         ),
@@ -361,6 +363,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'reportico\\reportico\\' => 
         array (
             0 => __DIR__ . '/..' . '/reportico/yii2-reportico',
+        ),
+        'ptrnov\\fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ptrnov/yii2-scheduler-fullcalendar',
         ),
         'phpDocumentor\\Reflection\\' => 
         array (
@@ -691,6 +697,10 @@ class ComposerStaticInitdb0b409cd7b5708c1b63db5a098648e5
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
+        ),
+        'Fxp\\Composer\\AssetPlugin\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fxp/composer-asset-plugin',
         ),
         'Faker\\' => 
         array (

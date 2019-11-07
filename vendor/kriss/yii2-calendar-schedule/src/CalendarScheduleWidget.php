@@ -102,7 +102,11 @@ class CalendarScheduleWidget extends Widget
     {
         parent::init();
         $this->draggableEvents = array_merge([
+<<<<<<< HEAD
             'title' => '事件',
+=======
+            'title' => 'TITULO',
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             'items' => [
                 /*['name' => '洗冰箱', 'color' => '#00c0ef'],
                 ['name' => '擦玻璃', 'color' => '#d81b60'],*/
@@ -112,7 +116,11 @@ class CalendarScheduleWidget extends Widget
         ], $this->draggableEvents);
 
         $this->createEvents = array_merge([
+<<<<<<< HEAD
             'title' => '创建事件',
+=======
+            'title' => 'eVENTOS',
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
             'colors' => ['#286090', '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f'],
         ], $this->createEvents);
 
@@ -177,12 +185,20 @@ class CalendarScheduleWidget extends Widget
 
         $removeAfterDrop = '';
         if ($draggableEvents['canSetRemoveAfterDrop']) {
+<<<<<<< HEAD
             $removeAfterDrop = '<div class="checkbox"> <label for="drop-remove"><input type="checkbox" id="drop-remove">拖动后删除</label></div>';
+=======
+            $removeAfterDrop = '<div class="checkbox"> <label for="drop-remove"><input type="checkbox" id="drop-remove">eLIMINAR</label></div>';
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
         }
 
         $dropToTrash = '';
         if ($draggableEvents['canDropToTrash']) {
+<<<<<<< HEAD
             $dropToTrash = Html::tag('div', '拖动到此处删除', ['id' => 'drop-to-cash', 'class' => 'alert alert-default']);
+=======
+            $dropToTrash = Html::tag('div', 'Eliminar', ['id' => 'drop-to-cash', 'class' => 'alert alert-default']);
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
         }
 
         $html = strtr($this->draggableEventsWrapTemplate, [
@@ -208,9 +224,15 @@ class CalendarScheduleWidget extends Widget
         $addButton = <<<HTML
 <form>
   <div class="input-group">
+<<<<<<< HEAD
     <input id="new-event-input" type="text" class="form-control" placeholder="事件名称">
     <div class="input-group-btn">
       <input type="submit" id="add-new-event" class="btn" style="background-color: {$btnDefaultColor} !important;" value="新增"/>
+=======
+    <input id="new-event-input" type="text" class="form-control" placeholder="PLACE">
+    <div class="input-group-btn">
+      <input type="submit" id="add-new-event" class="btn" style="background-color: {$btnDefaultColor} !important;" value="EVENTO"/>
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
     </div>
   </div>
 </form>

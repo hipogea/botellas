@@ -9,7 +9,7 @@ use console\migrations\baseMigration;
 class m190919_034012_create_table_entrega extends baseMigration
 {
      const NAME_TABLE='{{%sta_entregas}}';
-   const NAME_TABLE_FACU='{{%sta_facultades}}';
+   const NAME_TABLE_PERIODOS='{{%sta_periodos}}';
     // const NAME_TABLE_MATERIAS='{{%sta_materias}}';
        const NAME_TABLE_ALUMNOS='{{%sta_alu}}';
     public function safeUp()
@@ -40,11 +40,11 @@ if(!$this->existsTable($table)) {
        
         ],$this->collateTable());
    //$this->addPrimaryKey('pk_codmateria',$table, 'codcur');
-    $this->addForeignKey($this->generateNameFk($table), $table,
-              'codfac', static::NAME_TABLE_FACU,'codfac');
+  /*  $this->addForeignKey($this->generateNameFk($table), $table,
+              'codfac', static::NAME_TABLE_FACU,'codfac');*/
        
         $this->addForeignKey($this->generateNameFk($table), $table,
-              'codalu', static::NAME_TABLE_ALUMNOS,'codalu');
+              'codperiodo', static::NAME_TABLE_PERIODOS,'codperiodo');
                 /*  $this->addForeignKey($this->generateNameFk($table), $table,
               'codcar', static::NAME_TABLE_CARRERAS,'codcar');*/
             

@@ -40,7 +40,7 @@ class ImportLogcargamasiva extends \yii\db\ActiveRecord
             [['mensaje'], 'string', 'max' => 80],
             [['level'], 'string', 'max' => 1],
             [['fecha'], 'safe'],
-            [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasiva::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
+            [['cargamasiva_id'], 'exist', 'skipOnError' => true, 'targetClass' => ImportCargamasivaUser::className(), 'targetAttribute' => ['cargamasiva_id' => 'id']],
         ];
     }
 
@@ -64,9 +64,9 @@ class ImportLogcargamasiva extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCargamasiva()
+    public function getCargamasivaUser()
     {
-        return $this->hasOne(ImportCargamasiva::className(), ['id' => 'cargamasiva_id']);
+        return $this->hasOne(ImportCargamasivaUser::className(), ['id' => 'cargamasiva_id']);
     }
 
     /**

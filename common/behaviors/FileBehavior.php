@@ -17,7 +17,6 @@ class FileBehavior extends  Fileb
    
    
    
-   
    /*
     * Retorna un array de modelos 
     * con la info de archivos adjuntos filtrados por la extension
@@ -184,5 +183,6 @@ class FileBehavior extends  Fileb
       return $cad;   
     }
  
+  
    
 }

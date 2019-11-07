@@ -8,6 +8,7 @@ use yii;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use common\models\masters\Valoresdefault;
+use mdm\admin\models\User;
 class h {
      const DATE_FORMAT = 'php:Y-m-d';
     const DATETIME_FORMAT = 'php:Y-m-d H:i:s';
@@ -221,6 +222,10 @@ class h {
             \BaseHelper::DOC_BREVETE=>yii::t('base.names','BREVETE'),  
                 \BaseHelper::DOC_PPT=>yii::t('base.names','PPT'), 
       ];
+  }
+  
+  public static function getNameUserById($id){
+     return User::findIdentity($id)->username;
   }
    
 }

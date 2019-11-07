@@ -4,10 +4,14 @@ namespace frontend\modules\sta\models;
 use frontend\modules\sta\models\Aluriesgo;
 use frontend\modules\sta\models\UserFacultades;
 use frontend\modules\sta\models\Talleresdet;
+use frontend\modules\sta\models\Rangos;
 use common\models\masters\Trabajadores;
 use common\models\masters\Trabajadores AS Psicologo;
 use yii\helpers\ArrayHelper;
 use Yii;
+
+use common\helpers\h;
+USE \yii2mod\settings\models\enumerables\SettingType;
 
 /**
  * This is the model class for table "{{%sta_talleres}}".
@@ -34,6 +38,7 @@ class Talleres extends \common\models\base\DocumentBase
        'fopen'=> self::_FDATE,
          'fclose'=> self::_FDATE,
        ];
+   //public $hardFields=['codfac','codperiodo'];
     
     /**
      * {@inheritdoc}
@@ -53,7 +58,8 @@ class Talleres extends \common\models\base\DocumentBase
              [['descripcion','codfac','codperiodo','codtra','codtra_psico','fopen'], 'required'],
             [['codfac'], 'string', 'max' => 8],
             [['descripcion'], 'string', 'max' => 40],
-           // [['detalles'], 'string', 'max' => 40],
+            [['tolerancia','duracioncita'], 'safe'],
+            // [['descripcion'], 'string', 'max' => 40],
             [['codtra', 'codtra_psico', 'codperiodo'], 'string', 'max' => 6],
             [['fopen', 'fclose', 'codcur'], 'string', 'max' => 10],
             [['activa', 'electivo'], 'string', 'max' => 1],
@@ -97,7 +103,7 @@ class Talleres extends \common\models\base\DocumentBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodfac0()
+    public function getFacultad()
     {
         return $this->hasOne(Facultades::className(), ['codfac' => 'codfac']);
     }
@@ -105,7 +111,7 @@ class Talleres extends \common\models\base\DocumentBase
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCodperiodo0()
+    public function getPeriodo()
     {
         return $this->hasOne(Periodos::className(), ['codperiodo' => 'codperiodo']);
     }
@@ -118,6 +124,16 @@ class Talleres extends \common\models\base\DocumentBase
      public function getPsicologo()
     {
         return $this->hasOne(Psicologo::className(), ['codigotra' => 'codtra_psico']);
+    }
+    
+     public function getTutores()
+    {
+        return $this->hasMany(Tallerpsico::className(), ['talleres_id' => 'id']);
+    }
+    
+    public function getAlumnos()
+    {
+        return $this->hasMany(Talleresdet::className(), ['talleres_id' => 'id']);
     }
 
     /**
@@ -185,6 +201,62 @@ class Talleres extends \common\models\base\DocumentBase
        
        
    }
+   /*
+    * Obtiene la cantidad de alumnos asignados
+    * de tutor dentro del programa
+    */
+   public function busyStudents(){
+      return  Talleresdet::find()->where(['talleres_id'=>$this->id])->
+          andWhere(['not', ['codtra' => null]])        
+          ->all();
+       
+   }
+   
+   /*
+    * Obtiene la cantidad de alumnos libres
+    * de tutor dentro del programa
+    */
+   public function freeStudents(){
+      return  Talleresdet::find()->where(['talleres_id'=>$this->id])->
+          andWhere(['codtra' => null])        
+          ->all();
+       
+   }
+   
+   /*
+    * Esta funcion devuelve las cantidades de alunos or turor
+    */
+   public function countStudentsByTutor($tutor){
+      return  Talleresdet::find()->where(['talleres_id'=>$this->id])->
+          andWhere(['codtra' => $tutor])        
+          ->count();
+       
+   }
+   
+   /*
+    * Esta funcion devuelve las cantidades de alunos or turor
+    */
+   public function countStudentsFree(){
+      return  Talleresdet::find()->where(['talleres_id'=>$this->id])->
+          andWhere(['codtra' => null])        
+          ->count();
+       
+   }
+   
+   
+   
+   /*
+    * esta funcion sincroniza las cantidades con 
+    * las cantidades en la  tabla TALLER_PSICO
+    * Especialmente cuando se agregan o se retiran alumns del programa 
+    */
+   public function sincronizeCant(){
+       foreach($this->tutores as $filaTutor){
+           $filaTutor->setScenario($filaTutor::SCENARIO_CANTIDAD);
+           $filaTutor->nalumnos=$this->countStudentsByTutor($filaTutor->codtra);
+          if(!$filaTutor->save())yii::error($filaTutor->getFirstError(),__METHOD__);
+       }
+   }
    
    public function beforeSave($insert) {
        
@@ -196,5 +268,51 @@ class Talleres extends \common\models\base\DocumentBase
         
         return parent::beforeSave($insert);
        
+    }
+    
+    public function afterSave($insert,$changedAttributes) {
+       
+        if($insert){
+            //$this->prefijo=$this->codfac;
+           $this->refresh();
+          $this->createRangos($this->id); //Llena la tabla rangos por unica vez 
+        }
+        
+        return parent::afterSave($insert,$changedAttributes);
+       
+    }
+    
+    
+    /*
+     * Funcion que crea los rnago u horarios para los 7 días 
+     * de la semana
+     */
+    public function createRangos($id){
+        $attributes=[];
+        foreach(\common\helpers\timeHelper::daysOfWeek() as $key=>$day){
+            $attributes=[
+                        'nombredia'=>$day,
+                         'talleres_id'=>$id,
+                        'dia'=>$key,
+                        'hinicio'=> h::getIfNotPutSetting('sta','horainicio','09:00', SettingType::STRING_TYPE),
+                        'hfin'=> h::getIfNotPutSetting('sta','horafin','17:00', SettingType::STRING_TYPE),
+                        'tolerancia'=> h::getIfNotPutSetting('sta','tolerancia',0.1, SettingType::FLOAT_TYPE),
+                         'activo'=>(!in_array($key,[0,6]))?false:true,//SI ES SABADO O DOMINGO POR DEFAULT ES FALSE 
+                ];
+            yii::error(Rangos::firstOrCreateStatic($attributes));
+            yii::error($attributes);
+        }
+       return true;
+    }
+    
+    
+    /*
+     * Esta funcion extrae los rangos de 
+     * validos para programar las citas dentros de ellos 
+     */
+    
+    
+    public function rangesToDates(){
+        //Rangos::
     }
 }

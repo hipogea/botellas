@@ -1,6 +1,16 @@
+<<<<<<< HEAD
+<<<<<<< HEAD:vendor/select2/select2/docs/plugins/anchors/LICENSE
 The MIT License (MIT)
 
 Copyright (c) 2014 Grav
+=======
+Copyright (c) 2014-2019 François Pluchino
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355:vendor/fxp/composer-asset-plugin/LICENSE
+=======
+The MIT License (MIT)
+
+Copyright (c) 2014 Grav
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -17,5 +27,15 @@ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+<<<<<<< HEAD
+<<<<<<< HEAD:vendor/select2/select2/docs/plugins/anchors/LICENSE
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+=======
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355:vendor/fxp/composer-asset-plugin/LICENSE
+=======
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+>>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
