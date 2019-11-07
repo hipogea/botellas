@@ -13,7 +13,11 @@
 .yml
 .html
 .md
-
+.less
+.xlm
+.csv
+.gitignore
+common/config/.gitignore
 
 
 # directorios a ignorar
@@ -70,3 +74,6 @@ phpunit.phar
 *.yml
 *.html
 *.md
+*.less
+*xlm
+*.csv
