@@ -1,12 +1,4 @@
 <?php
-<<<<<<< HEAD
-\aminkt\widgets\tree\TreeView::widget([
-    'data'=>['uno'=>'uno'],
-    'remove'=>['bot-actions/category-remove'],
-    'edit'=>['bot-actions/categories'],
-]);
-?>
-=======
 /*
 use kriss\calendarSchedule\CalendarScheduleWidget;
 use yii\web\JsExpression;
@@ -48,4 +40,3 @@ echo CalendarScheduleWidget::widget([
 ]);
  * 
  * */
->>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355

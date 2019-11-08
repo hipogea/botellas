@@ -537,8 +537,6 @@ return array (
       '@kartik/datecontrol' => $vendorDir . '/kartik-v/yii2-datecontrol/src',
     ),
   ),
-<<<<<<< HEAD
-=======
   'philippfrenzel/yii2fullcalendar' => 
   array (
     'name' => 'philippfrenzel/yii2fullcalendar',
@@ -548,7 +546,6 @@ return array (
       '@yii2fullcalendar' => $vendorDir . '/philippfrenzel/yii2fullcalendar',
     ),
   ),
->>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
   'kartik-v/yii2-widget-select2' => 
   array (
     'name' => 'kartik-v/yii2-widget-select2',
@@ -576,33 +573,6 @@ return array (
       '@kartik/form' => $vendorDir . '/kartik-v/yii2-widget-activeform/src',
     ),
   ),
-<<<<<<< HEAD
-  'kriss/yii2-calendar-schedule' => 
-  array (
-    'name' => 'kriss/yii2-calendar-schedule',
-    'version' => '1.0.0.0',
-    'alias' => 
-    array (
-      '@kriss/calendarSchedule' => $vendorDir . '/kriss/yii2-calendar-schedule/src',
-    ),
-  ),
-  'philippfrenzel/yii2fullcalendar' => 
-  array (
-    'name' => 'philippfrenzel/yii2fullcalendar',
-    'version' => '4.0.2.0',
-    'alias' => 
-    array (
-      '@yii2fullcalendar' => $vendorDir . '/philippfrenzel/yii2fullcalendar',
-    ),
-  ),
-  'aminkt/yii2-tree-view-widget' => 
-  array (
-    'name' => 'aminkt/yii2-tree-view-widget',
-    'version' => '1.0.0.0',
-    'alias' => 
-    array (
-      '@aminkt/widgets/tree' => $vendorDir . '/aminkt/yii2-tree-view-widget',
-=======
   'ptrnov/yii2-scheduler-fullcalendar' => 
   array (
     'name' => 'ptrnov/yii2-scheduler-fullcalendar',
@@ -619,7 +589,6 @@ return array (
     'alias' => 
     array (
       '@kriss/calendarSchedule' => $vendorDir . '/kriss/yii2-calendar-schedule/src',
->>>>>>> 46c9670033d94783a3c0c3f438d4097f5fe28355
     ),
   ),
 );

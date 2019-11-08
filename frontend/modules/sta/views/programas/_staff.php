@@ -48,9 +48,9 @@ use common\widgets\linkajaxgridwidget\linkAjaxGridWidget;
          
 
            'codtra',
-            'trabajadores.ap',
-                             'trabajadores.am',
-                             'trabajadores.nombres',
+            'trabajador.ap',
+                             'trabajador.am',
+                             'trabajador.nombres',
             [
                 'attribute'=>'nalumnos',
                 'format'=>'raw',

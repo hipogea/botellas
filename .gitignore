@@ -14,16 +14,8 @@
 .yml
 .html
 .md
-<<<<<<< HEAD
-.less
-.xlm
-.csv
-.gitignore
-common/config/.gitignore
-=======
 .png
 
->>>>>>> f8f2f4208671e01c4da4530649a540d099b865c8
 
 
 # directorios a ignorar
@@ -80,10 +72,4 @@ phpunit.phar
 *.yml
 *.html
 *.md
-<<<<<<< HEAD
-*.less
-*xlm
-*.csv
-=======
 *.png
->>>>>>> f8f2f4208671e01c4da4530649a540d099b865c8

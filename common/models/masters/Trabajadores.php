@@ -182,7 +182,7 @@ class Trabajadores extends modelBase implements \common\interfaces\PersonInterfa
         
         
         
-     public function fullName($asc=TRUE,$ucase=true,$delimiter=''){       
+     public function fullName($asc=TRUE,$ucase=true,$delimiter=' '){       
          $strname=($asc)?$this->nombres.' '.$this->ap.' '.$this->am:$strname= $this->ap.' '.$this->am.' '.$this->nombres;
          $strname= ($ucase)?\yii\helpers\StringHelper::mb_ucwords($strname):$strname;
        return str_replace(' ',$delimiter, $strname);

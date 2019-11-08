@@ -101,7 +101,7 @@ class Tallerpsico extends \common\models\base\modelBase
     }
     
     
-    public function getTrabajadores()
+    public function getTrabajador()
     {
         return $this->hasOne(Trabajadores::className(), ['codigotra' => 'codtra']);
     }
